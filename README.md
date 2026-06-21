@@ -24,11 +24,11 @@ Let Kibo handle the community.
 
 Streamers spend a significant amount of time:
 
-* Answering repetitive questions
-* Managing chat
-* Moderating spam
-* Sharing links repeatedly
-* Handling community FAQs
+- Answering repetitive questions
+- Managing chat
+- Moderating spam
+- Sharing links repeatedly
+- Handling community FAQs
 
 Small creators often have no moderators.
 
@@ -48,11 +48,11 @@ It joins live chats and helps answer questions on behalf of creators.
 
 Examples:
 
-* What microphone do you use?
-* What game is this?
-* When is the next stream?
-* Where is the Discord server?
-* What setup do you use?
+- What microphone do you use?
+- What game is this?
+- When is the next stream?
+- Where is the Discord server?
+- What setup do you use?
 
 Kibo answers instantly.
 
@@ -64,10 +64,10 @@ Kibo answers instantly.
 
 Detect:
 
-* Spam
-* Toxicity
-* Repetitive messages
-* Rule violations
+- Spam
+- Toxicity
+- Repetitive messages
+- Rule violations
 
 ---
 
@@ -75,9 +75,9 @@ Detect:
 
 Answer viewer questions using:
 
-* FAQs
-* Creator profile
-* Custom knowledge base
+- FAQs
+- Creator profile
+- Custom knowledge base
 
 ---
 
@@ -85,11 +85,11 @@ Answer viewer questions using:
 
 Upload:
 
-* FAQs
-* Documents
-* Social links
-* Community rules
-* Creator biography
+- FAQs
+- Documents
+- Social links
+- Community rules
+- Creator biography
 
 ---
 
@@ -97,10 +97,10 @@ Upload:
 
 Track:
 
-* Questions answered
-* Chat activity
-* Viewer engagement
-* Moderator workload reduction
+- Questions answered
+- Chat activity
+- Viewer engagement
+- Moderator workload reduction
 
 ---
 
@@ -108,9 +108,9 @@ Track:
 
 Automatic messages:
 
-* Follow reminders
-* Discord invitations
-* Community announcements
+- Follow reminders
+- Discord invitations
+- Community announcements
 
 ---
 
@@ -122,13 +122,13 @@ Kibo becomes a Creator Brain.
 
 Future capabilities:
 
-* Stream memory
-* Stream summaries
-* Sponsor assistant
-* Community insights
-* Viewer intelligence
-* AI co-moderators
-* Multi-platform community management
+- Stream memory
+- Stream summaries
+- Sponsor assistant
+- Community insights
+- Viewer intelligence
+- AI co-moderators
+- Multi-platform community management
 
 ---
 
@@ -136,18 +136,18 @@ Future capabilities:
 
 Phase 1:
 
-* YouTube Live
-* Twitch
+- YouTube Live
+- Twitch
 
 Phase 2:
 
-* Discord
-* Kick
+- Discord
+- Kick
 
 Phase 3:
 
-* TikTok Live
-* Instagram Live
+- TikTok Live
+- Instagram Live
 
 ---
 
@@ -155,19 +155,19 @@ Phase 3:
 
 ## Landing Page
 
-* Hero Section
-* Features
-* Pricing
-* Testimonials
-* FAQ
+- Hero Section
+- Features
+- Pricing
+- Testimonials
+- FAQ
 
 ---
 
 ## Authentication
 
-* Login
-* Signup
-* Forgot Password
+- Login
+- Signup
+- Forgot Password
 
 ---
 
@@ -177,10 +177,10 @@ Overview of community activity.
 
 Metrics:
 
-* Questions answered
-* Active viewers
-* Response rate
-* Engagement score
+- Questions answered
+- Active viewers
+- Response rate
+- Engagement score
 
 ---
 
@@ -194,11 +194,11 @@ Manage all chatbot instances.
 
 Configure:
 
-* Name
-* Avatar
-* Personality
-* Welcome message
-* Auto messages
+- Name
+- Avatar
+- Personality
+- Welcome message
+- Auto messages
 
 ---
 
@@ -206,9 +206,9 @@ Configure:
 
 Upload:
 
-* Documents
-* FAQs
-* Links
+- Documents
+- FAQs
+- Links
 
 ---
 
@@ -216,9 +216,9 @@ Upload:
 
 Connect:
 
-* YouTube
-* Twitch
-* Discord
+- YouTube
+- Twitch
+- Discord
 
 ---
 
@@ -252,10 +252,10 @@ Creator preferences and account management.
 
 $0/month
 
-* 1 chatbot
-* 1 platform
-* 500 AI responses/month
-* Basic moderation
+- 1 chatbot
+- 1 platform
+- 500 AI responses/month
+- Basic moderation
 
 Best for new creators.
 
@@ -265,11 +265,11 @@ Best for new creators.
 
 $19/month
 
-* 1 chatbot
-* 2 platforms
-* 10,000 AI responses/month
-* Knowledge base
-* Analytics
+- 1 chatbot
+- 2 platforms
+- 10,000 AI responses/month
+- Knowledge base
+- Analytics
 
 Best for growing creators.
 
@@ -279,11 +279,11 @@ Best for growing creators.
 
 $49/month
 
-* 5 chatbots
-* Unlimited platforms
-* 100,000 AI responses/month
-* Advanced analytics
-* Team members
+- 5 chatbots
+- Unlimited platforms
+- 100,000 AI responses/month
+- Advanced analytics
+- Team members
 
 Best for professional creators.
 
@@ -293,11 +293,11 @@ Best for professional creators.
 
 $149/month
 
-* Unlimited chatbots
-* Unlimited responses
-* Priority support
-* Team collaboration
-* Dedicated infrastructure
+- Unlimited chatbots
+- Unlimited responses
+- Priority support
+- Team collaboration
+- Dedicated infrastructure
 
 Best for creator teams and agencies.
 

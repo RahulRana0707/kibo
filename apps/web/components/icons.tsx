@@ -1,9 +1,10 @@
-import { LucideProps, Send } from "lucide-react"
-
-export type IconProps = React.SVGProps<SVGSVGElement>
+import { LucideProps, Send, Loader2 } from "lucide-react"
 
 export const Icons = {
+  loader2: Loader2,
   send: Send,
+  // KiboLogo exposed as Icons.logo so signup/login/landing can use it uniformly
+  logo: (props: LucideProps) => <KiboLogo {...props} />,
   google: ({ ...props }: LucideProps) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -57,7 +58,7 @@ export function KiboLogo({
   width = "1em",
   height = "1em",
   ...props
-}: IconProps) {
+}: LucideProps) {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
