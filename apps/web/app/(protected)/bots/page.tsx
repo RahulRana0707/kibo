@@ -1,60 +1,44 @@
 import Link from "next/link"
-import { Button } from "@kibo/ui/components/button"
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@kibo/ui/components/card"
-import { BotIcon, PlusIcon, SparklesIcon } from "lucide-react"
+import { headers } from "next/headers"
+import { redirect } from "next/navigation"
 
-export default function BotsPage() {
+import { getBotsPageData } from "@/actions/bots/get-bots-page-data"
+import { auth } from "@/lib/auth"
+import { Button } from "@kibo/ui/components/button"
+import { PlusIcon } from "lucide-react"
+import { BotsList } from "@/components/bots/bots-list"
+
+export default async function BotsPage() {
+  const session = await auth.api.getSession({
+    headers: await headers(),
+  })
+
+  if (!session?.user.id) {
+    redirect("/login")
+  }
+
+  const { bots } = await getBotsPageData(session.user.id)
+
   return (
     <>
-      <section className="flex flex-col gap-2">
-        <h1 className="font-heading text-2xl font-semibold tracking-tight">
-          Bots
-        </h1>
-        <p className="max-w-2xl text-sm text-muted-foreground">
-          Create the community manager your viewers will meet in chat.
-        </p>
-      </section>
-
-      <Card>
-        <CardHeader>
-          <CardTitle>No bots yet</CardTitle>
-          <CardDescription>
-            Start with one Kibo bot for YouTube Live. Add personality and FAQs
-            before connecting it to a stream.
-          </CardDescription>
-        </CardHeader>
-        <CardContent className="flex items-start gap-3">
-          <div className="rounded-md bg-primary/10 p-2 text-primary">
-            <BotIcon />
-          </div>
-          <div className="flex flex-col gap-1">
-            <h2 className="text-sm font-medium">Recommended first bot</h2>
-            <p className="text-xs text-muted-foreground">
-              Friendly, concise, creator-approved answers with no autonomous
-              moderation until you enable it.
-            </p>
-          </div>
-        </CardContent>
-        <CardFooter className="gap-2">
-          <Button>
+      <section className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div className="flex flex-col gap-2">
+          <h1 className="font-heading text-2xl font-semibold tracking-tight">
+            Bots
+          </h1>
+          <p className="max-w-2xl text-sm text-muted-foreground">
+            Manage the bots you create for chat, moderation, and replies.
+          </p>
+        </div>
+        <Button asChild>
+          <Link href="/bots/new">
             <PlusIcon data-icon="inline-start" />
             Create bot
-          </Button>
-          <Button variant="outline" asChild>
-            <Link href="/knowledge-base">
-              <SparklesIcon data-icon="inline-start" />
-              Add knowledge first
-            </Link>
-          </Button>
-        </CardFooter>
-      </Card>
+          </Link>
+        </Button>
+      </section>
+
+      <BotsList bots={bots} />
     </>
   )
 }

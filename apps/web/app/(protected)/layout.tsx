@@ -39,7 +39,9 @@ export default async function ProtectedLayout({
           <RouteBreadcrumbs />
           <DashboardHeaderActions />
         </header>
-        <div className="flex flex-1 flex-col gap-6 p-6">{children}</div>
+        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-6 py-6">
+          {children}
+        </div>
       </SidebarInset>
     </SidebarProvider>
   )
