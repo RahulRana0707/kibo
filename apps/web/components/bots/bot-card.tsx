@@ -6,7 +6,6 @@ import { cn } from "@kibo/ui/lib/utils"
 
 import { BotActionsMenu } from "@/components/bots/bot-actions-menu"
 import { BotAvatar } from "@/components/bots/bot-avatar"
-import { isSeedBotId } from "@/components/bots/bot-seed-data"
 
 function formatStatus(status: string) {
   return status.replaceAll("_", " ").toLowerCase()
@@ -34,7 +33,7 @@ interface BotCardProps {
 
 export const BotCard = ({ bot }: BotCardProps) => {
   return (
-    <div className="flex flex-col gap-3 overflow-hidden rounded-xl bg-foreground/10 p-3">
+    <div className="flex flex-col gap-3 overflow-hidden rounded-xl bg-muted p-3">
       <div
         className="relative h-36 overflow-hidden rounded-xl"
         style={{
@@ -62,16 +61,12 @@ export const BotCard = ({ bot }: BotCardProps) => {
           </div>
         </div>
 
-        {!isSeedBotId(bot.id) ? (
-          <BotActionsMenu
-            botId={bot.id}
-            triggerClassName={cn(
-              "size-8 shrink-0 rounded-full border border-border/60 bg-background/80 shadow-sm hover:bg-muted"
-            )}
-          />
-        ) : (
-          <div className="size-8 shrink-0" />
-        )}
+        <BotActionsMenu
+          botId={bot.id}
+          triggerClassName={cn(
+            "size-8 shrink-0 rounded-full border border-border/60 bg-background/80 shadow-sm hover:bg-muted"
+          )}
+        />
       </div>
 
       <div className="mt-3 flex items-center gap-2">

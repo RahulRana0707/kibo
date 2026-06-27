@@ -61,7 +61,13 @@ export default async function EditBotPage({
           action={updateBotAction}
           submitLabel="Save changes"
           cancelHref="/bots"
-          values={bot}
+          values={{
+            botId: bot.id,
+            name: bot.name,
+            avatarUrl: bot.avatarUrl,
+            personality: bot.personality,
+            welcomeMessage: bot.welcomeMessage,
+          }}
         />
       </section>
 

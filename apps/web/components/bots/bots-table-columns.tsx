@@ -5,7 +5,6 @@ import type { ColumnDef } from "@tanstack/react-table"
 
 import { BotActionsMenu } from "@/components/bots/bot-actions-menu"
 import { BotAvatar } from "@/components/bots/bot-avatar"
-import { isSeedBotId } from "@/components/bots/bot-seed-data"
 import type { BotListItem } from "@/components/bots/types"
 
 function formatStatus(status: string) {
@@ -53,9 +52,7 @@ export function createBotColumns(): ColumnDef<BotListItem>[] {
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => (
         <div className="flex justify-end">
-          {!isSeedBotId(row.original.id) ? (
-            <BotActionsMenu botId={row.original.id} />
-          ) : null}
+          <BotActionsMenu botId={row.original.id} />
         </div>
       ),
     },

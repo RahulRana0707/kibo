@@ -1,9 +1,13 @@
+"use client"
+
 import Link from "next/link"
+import { useActionState } from "react"
 
 import { Button } from "@kibo/ui/components/button"
 import {
   Field,
   FieldDescription,
+  FieldError,
   FieldGroup,
   FieldLabel,
   FieldLegend,
@@ -12,18 +16,24 @@ import {
 import { Input } from "@kibo/ui/components/input"
 import { Textarea } from "@kibo/ui/components/textarea"
 
-type BotFormValues = {
-  name?: string | null
-  avatarUrl?: string | null
-  personality?: string | null
-  welcomeMessage?: string | null
-}
+import {
+  initialBotFormState,
+  type BotFormState,
+  type BotFormValues,
+} from "@/components/bots/bot-form-state"
 
 type BotFormProps = {
-  action: (formData: FormData) => Promise<void>
+  action: (
+    prevState: BotFormState,
+    formData: FormData
+  ) => Promise<BotFormState>
   submitLabel: string
   cancelHref?: string
   values?: BotFormValues
+}
+
+function errorMessages(errors?: string[]) {
+  return errors?.map((message) => ({ message }))
 }
 
 export function BotForm({
@@ -32,8 +42,26 @@ export function BotForm({
   cancelHref = "/bots",
   values,
 }: BotFormProps) {
+  const [state, formAction, pending] = useActionState(
+    action,
+    initialBotFormState
+  )
+
+  const formValues = {
+    ...values,
+    ...state.values,
+  }
+
   return (
-    <form action={action} className="space-y-8">
+    <form action={formAction} className="space-y-8">
+      {formValues.botId ? <input type="hidden" name="botId" value={formValues.botId} /> : null}
+
+      {state.formError ? (
+        <p className="text-sm text-destructive" aria-live="polite">
+          {state.formError}
+        </p>
+      ) : null}
+
       <FieldSet className="gap-6">
         <FieldLegend variant="legend">1. Identity</FieldLegend>
         <FieldDescription>
@@ -47,10 +75,12 @@ export function BotForm({
             <Input
               id="name"
               name="name"
-              defaultValue={values?.name ?? ""}
+              defaultValue={formValues.name ?? ""}
               maxLength={64}
               required
+              aria-invalid={!!state.fieldErrors?.name?.length}
             />
+            <FieldError errors={errorMessages(state.fieldErrors?.name)} />
           </Field>
           <Field>
             <FieldLabel htmlFor="avatarUrl">Avatar URL</FieldLabel>
@@ -59,8 +89,10 @@ export function BotForm({
               name="avatarUrl"
               type="url"
               placeholder="https://..."
-              defaultValue={values?.avatarUrl ?? ""}
+              defaultValue={formValues.avatarUrl ?? ""}
+              aria-invalid={!!state.fieldErrors?.avatarUrl?.length}
             />
+            <FieldError errors={errorMessages(state.fieldErrors?.avatarUrl)} />
           </Field>
         </FieldGroup>
       </FieldSet>
@@ -80,8 +112,12 @@ export function BotForm({
             <Input
               id="personality"
               name="personality"
-              defaultValue={values?.personality ?? ""}
+              defaultValue={formValues.personality ?? ""}
               maxLength={120}
+              aria-invalid={!!state.fieldErrors?.personality?.length}
+            />
+            <FieldError
+              errors={errorMessages(state.fieldErrors?.personality)}
             />
           </Field>
           <Field>
@@ -91,7 +127,11 @@ export function BotForm({
               name="welcomeMessage"
               rows={4}
               maxLength={280}
-              defaultValue={values?.welcomeMessage ?? ""}
+              defaultValue={formValues.welcomeMessage ?? ""}
+              aria-invalid={!!state.fieldErrors?.welcomeMessage?.length}
+            />
+            <FieldError
+              errors={errorMessages(state.fieldErrors?.welcomeMessage)}
             />
           </Field>
         </FieldGroup>
@@ -101,7 +141,9 @@ export function BotForm({
         <Button variant="outline" asChild>
           <Link href={cancelHref}>Cancel</Link>
         </Button>
-        <Button type="submit">{submitLabel}</Button>
+        <Button type="submit" disabled={pending}>
+          {pending ? "Saving..." : submitLabel}
+        </Button>
       </div>
     </form>
   )

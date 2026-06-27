@@ -5,8 +5,16 @@ import { redirect } from "next/navigation"
 
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import {
+  readBotFormValues,
+  validateBotFormValues,
+  type BotFormState,
+} from "@/components/bots/bot-form-state"
 
-export async function updateBotAction(formData: FormData) {
+export async function updateBotAction(
+  _prevState: BotFormState,
+  formData: FormData
+): Promise<BotFormState> {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -15,29 +23,39 @@ export async function updateBotAction(formData: FormData) {
     redirect("/login")
   }
 
-  const botId = String(formData.get("botId") ?? "").trim()
-  const name = String(formData.get("name") ?? "").trim()
-  const avatarUrl = String(formData.get("avatarUrl") ?? "").trim()
-  const personality = String(formData.get("personality") ?? "").trim()
-  const welcomeMessage = String(formData.get("welcomeMessage") ?? "").trim()
+  const values = readBotFormValues(formData)
 
-  if (!botId) {
-    throw new Error("Bot id is required")
+  if (!values.botId) {
+    return {
+      formError: "Bot id is required.",
+      fieldErrors: {},
+      values,
+    }
   }
 
-  if (!name) {
-    throw new Error("Bot name is required")
+  const validation = validateBotFormValues(values)
+
+  if (validation.formError) {
+    return validation
   }
 
-  await prisma.bot.updateMany({
-    where: { id: botId, userId: session.user.id },
+  const result = await prisma.bot.updateMany({
+    where: { id: values.botId, userId: session.user.id },
     data: {
-      name,
-      avatarUrl: avatarUrl || null,
-      personality: personality || null,
-      welcomeMessage: welcomeMessage || null,
+      name: values.name ?? "",
+      avatarUrl: values.avatarUrl || null,
+      personality: values.personality || null,
+      welcomeMessage: values.welcomeMessage || null,
     },
   })
+
+  if (!result.count) {
+    return {
+      formError: "We couldn't update that bot. Please try again.",
+      fieldErrors: {},
+      values,
+    }
+  }
 
   redirect("/bots")
 }
