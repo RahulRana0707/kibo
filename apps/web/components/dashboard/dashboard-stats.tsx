@@ -1,43 +1,58 @@
+import type { DashboardPageData } from "@/actions/dashboard/get-dashboard-page-data"
 import { cn } from "@kibo/ui/lib/utils"
 
-const stats = [
-  {
-    title: "Questions answered",
-    description: "Waiting for your first connected chat.",
-    value: "0",
-  },
-  {
-    title: "Active integrations",
-    description: "YouTube and Twitch are ready to connect.",
-    value: "0",
-  },
-  {
-    title: "Knowledge items",
-    description: "FAQs, links, rules, and creator context.",
-    value: "0",
-  },
-]
+export function DashboardStats({ data }: { data: DashboardPageData }) {
+  const knowledgeTypeCounts = new Map(
+    data.activeBotKnowledgeTypes.map((item) => [item.type, item.count])
+  )
+  const stats = [
+    {
+      title: "Knowledge health",
+      description: data.activeBot
+        ? `${knowledgeTypeCounts.get("FAQ") ?? 0} FAQs, ${knowledgeTypeCounts.get("RULE") ?? 0} rules, ${knowledgeTypeCounts.get("LINK") ?? 0} links.`
+        : "Create a bot to start building trusted knowledge.",
+      value: (data.activeBot?._count.knowledgeItems ?? 0).toString(),
+    },
+    {
+      title: "Connections",
+      description: data.activeBot?.integrations.length
+        ? data.activeBot.integrations
+            .map((integration) =>
+              integration.provider.replaceAll("_", " ").toLowerCase()
+            )
+            .join(", ")
+        : "No channels are connected to the active bot yet.",
+      value: data.connectedIntegrationCount.toString(),
+    },
+    {
+      title: "Live activity",
+      description: data.botReplyCount
+        ? `${data.openConversationCount} open conversation${data.openConversationCount === 1 ? "" : "s"} need watching.`
+        : "No bot replies yet. Activity will appear after chat is connected.",
+      value: data.botReplyCount.toString(),
+    },
+  ]
 
-export function DashboardStats() {
   return (
-    <section className="overflow-hidden rounded-2xl border border-border/60 bg-card/80 shadow-sm">
+    <section className="grid gap-2 md:grid-cols-3 motion-safe:animate-in motion-safe:fade-in motion-safe:slide-in-from-bottom-2 motion-safe:duration-200">
       {stats.map((stat, index) => (
         <div
           key={stat.title}
           className={cn(
-            "grid gap-2 px-5 py-4 sm:grid-cols-[auto_1fr] sm:items-end",
-            index !== stats.length - 1 && "border-b border-border/60"
+            "rounded-xl border border-border/60 bg-card/80 p-3 shadow-sm",
+            index === 0 && "md:rounded-l-2xl",
+            index === stats.length - 1 && "md:rounded-r-2xl"
           )}
         >
-          <div className="space-y-1">
+          <div className="flex items-start justify-between gap-3">
             <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
               {stat.title}
             </p>
-            <div className="font-heading text-3xl font-semibold leading-none text-foreground">
+            <div className="font-heading text-2xl font-semibold leading-none text-foreground">
               {stat.value}
             </div>
           </div>
-          <p className="max-w-xl text-sm text-muted-foreground sm:justify-self-end sm:text-right">
+          <p className="mt-3 text-sm leading-5 text-muted-foreground">
             {stat.description}
           </p>
         </div>

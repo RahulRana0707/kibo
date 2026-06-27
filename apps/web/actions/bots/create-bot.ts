@@ -1,10 +1,12 @@
 "use server"
 
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import {
+  logServerActionError,
+  requireActionUser,
+} from "@/lib/require-action-user"
 import {
   readBotFormValues,
   validateBotFormValues,
@@ -15,13 +17,7 @@ export async function createBotAction(
   _prevState: BotFormState,
   formData: FormData
 ): Promise<BotFormState> {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
-
-  if (!session?.user.id) {
-    redirect("/login")
-  }
+  const user = await requireActionUser()
 
   const values = readBotFormValues(formData)
   const validation = validateBotFormValues(values)
@@ -33,31 +29,41 @@ export async function createBotAction(
   // TODO: Check the user's plan here before allowing bot creation.
   // This is where we will enforce the 3-bot limit and other plan rules later.
 
-  const botCount = await prisma.bot.count({
-    where: { userId: session.user.id },
-  })
+  try {
+    const botCount = await prisma.bot.count({
+      where: { userId: user.id },
+    })
 
-  const bot = await prisma.bot.create({
-    data: {
-      userId: session.user.id,
-      name: values.name ?? "",
-      avatarUrl: values.avatarUrl || null,
-      personality: values.personality || null,
-      welcomeMessage: values.welcomeMessage || null,
-      status: "DRAFT",
-      meta: {
-        source: "manual",
-        botIndex: botCount + 1,
+    const bot = await prisma.bot.create({
+      data: {
+        userId: user.id,
+        name: values.name ?? "",
+        avatarUrl: values.avatarUrl || null,
+        personality: values.personality || null,
+        welcomeMessage: values.welcomeMessage || null,
+        status: "DRAFT",
+        meta: {
+          source: "manual",
+          botIndex: botCount + 1,
+        },
       },
-    },
-  })
+    })
 
-  await prisma.user.update({
-    where: { id: session.user.id },
-    data: {
-      activeBotId: bot.id,
-    },
-  })
+    await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        activeBotId: bot.id,
+      },
+    })
+  } catch (error) {
+    logServerActionError("createBotAction", error)
+
+    return {
+      formError: "We couldn't create that bot right now. Please try again.",
+      fieldErrors: {},
+      values,
+    }
+  }
 
   redirect("/bots")
 }

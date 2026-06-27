@@ -52,7 +52,10 @@ export function createBotColumns(): ColumnDef<BotListItem>[] {
       header: () => <div className="text-right">Actions</div>,
       cell: ({ row }) => (
         <div className="flex justify-end">
-          <BotActionsMenu botId={row.original.id} />
+          <BotActionsMenu
+            botId={row.original.id}
+            isActive={row.original.isActive}
+          />
         </div>
       ),
     },
