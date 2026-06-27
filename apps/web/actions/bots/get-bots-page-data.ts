@@ -3,7 +3,6 @@ import "server-only"
 import { formatRelativeTime } from "@/lib/format-relative-time"
 import { prisma } from "@/lib/prisma"
 
-import { seedBots } from "@/components/bots/bot-seed-data"
 import type { BotListItem } from "@/components/bots/types"
 
 export async function getBotsPageData(sessionUserId: string) {
@@ -42,5 +41,5 @@ export async function getBotsPageData(sessionUserId: string) {
     isActive: user?.activeBotId === bot.id,
   }))
 
-  return { user, bots: [...createdBots] }
+  return { user, bots: createdBots }
 }

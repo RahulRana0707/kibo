@@ -5,8 +5,16 @@ import { redirect } from "next/navigation"
 
 import { auth } from "@/lib/auth"
 import { prisma } from "@/lib/prisma"
+import {
+  readBotFormValues,
+  validateBotFormValues,
+  type BotFormState,
+} from "@/components/bots/bot-form-state"
 
-export async function createBotAction(formData: FormData) {
+export async function createBotAction(
+  _prevState: BotFormState,
+  formData: FormData
+): Promise<BotFormState> {
   const session = await auth.api.getSession({
     headers: await headers(),
   })
@@ -15,13 +23,11 @@ export async function createBotAction(formData: FormData) {
     redirect("/login")
   }
 
-  const name = String(formData.get("name") ?? "").trim()
-  const avatarUrl = String(formData.get("avatarUrl") ?? "").trim()
-  const personality = String(formData.get("personality") ?? "").trim()
-  const welcomeMessage = String(formData.get("welcomeMessage") ?? "").trim()
+  const values = readBotFormValues(formData)
+  const validation = validateBotFormValues(values)
 
-  if (!name) {
-    throw new Error("Bot name is required")
+  if (validation.formError) {
+    return validation
   }
 
   // TODO: Check the user's plan here before allowing bot creation.
@@ -34,10 +40,10 @@ export async function createBotAction(formData: FormData) {
   const bot = await prisma.bot.create({
     data: {
       userId: session.user.id,
-      name,
-      avatarUrl: avatarUrl || null,
-      personality: personality || null,
-      welcomeMessage: welcomeMessage || null,
+      name: values.name ?? "",
+      avatarUrl: values.avatarUrl || null,
+      personality: values.personality || null,
+      welcomeMessage: values.welcomeMessage || null,
       status: "DRAFT",
       meta: {
         source: "manual",

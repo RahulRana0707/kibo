@@ -48,6 +48,12 @@ export function useBreadcrumb() {
       return items
     }
 
+    if (segments[0] === "bots" && segments[1] === "new") {
+      items.push({ title: "Bots", href: "/bots" })
+      items.push({ title: "Create bot" })
+      return items
+    }
+
     let href = ""
 
     segments.forEach((segment, index) => {

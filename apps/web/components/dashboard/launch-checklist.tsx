@@ -1,5 +1,4 @@
 import { Button } from "@kibo/ui/components/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@kibo/ui/components/card"
 import Link from "next/link"
 import { BotIcon, CableIcon, CircleHelpIcon } from "lucide-react"
 
@@ -23,32 +22,44 @@ const checklist = [
 
 export function LaunchChecklist() {
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Launch checklist</CardTitle>
-        <CardDescription>
+    <section className="rounded-2xl border border-border/60 bg-card/80 p-5 shadow-sm">
+      <div className="space-y-1">
+        <p className="text-xs uppercase tracking-[0.14em] text-muted-foreground">
+          Launch checklist
+        </p>
+        <h2 className="font-heading text-lg font-semibold tracking-tight">
           The shortest path to a useful Kibo for your next stream.
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-3">
-        {checklist.map((item) => (
-          <div key={item.title} className="flex gap-3 rounded-md border bg-background p-3">
-            <item.icon className="mt-0.5 text-primary" />
+        </h2>
+      </div>
+
+      <ol className="mt-5 space-y-3">
+        {checklist.map((item, index) => (
+          <li
+            key={item.title}
+            className="flex gap-3 rounded-xl border border-border/60 bg-background/60 p-3"
+          >
+            <div className="flex size-8 shrink-0 items-center justify-center rounded-full bg-muted text-xs font-medium text-foreground">
+              {index + 1}
+            </div>
             <div className="flex flex-col gap-1">
-              <h2 className="text-sm font-medium">{item.title}</h2>
+              <div className="flex items-center gap-2">
+                <item.icon className="size-4 text-primary" />
+                <h3 className="text-sm font-medium">{item.title}</h3>
+              </div>
               <p className="text-xs text-muted-foreground">{item.text}</p>
             </div>
-          </div>
+          </li>
         ))}
-      </CardContent>
-      <CardFooter className="gap-2">
+      </ol>
+
+      <div className="mt-5 flex flex-wrap gap-2">
         <Button asChild>
           <Link href="/bots/new">Create bot</Link>
         </Button>
         <Button variant="outline" asChild>
           <Link href="/integrations">Connect chat</Link>
         </Button>
-      </CardFooter>
-    </Card>
+      </div>
+    </section>
   )
 }
