@@ -1,6 +1,7 @@
 import { headers } from "next/headers"
 
 import { AppSidebar } from "@/components/app-sidebar"
+import { DashboardHeaderActions } from "@/components/dashboard-header-actions"
 import { RouteBreadcrumbs } from "@/components/route-breadcrumbs"
 import { auth } from "@/lib/auth"
 import { Separator } from "@kibo/ui/components/separator"
@@ -36,6 +37,7 @@ export default async function ProtectedLayout({
             className="mr-2 data-vertical:h-4 data-vertical:self-auto"
           />
           <RouteBreadcrumbs />
+          <DashboardHeaderActions />
         </header>
         <div className="flex flex-1 flex-col gap-6 p-6">{children}</div>
       </SidebarInset>
