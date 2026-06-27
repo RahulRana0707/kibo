@@ -33,7 +33,7 @@ interface BotCardProps {
 
 export const BotCard = ({ bot }: BotCardProps) => {
   return (
-    <div className="flex flex-col gap-3 overflow-hidden rounded-xl bg-muted p-3">
+    <div className="flex flex-col gap-3 overflow-hidden rounded-xl bg-card p-3 ring-1 ring-foreground/10">
       <div
         className="relative h-36 overflow-hidden rounded-xl"
         style={{
@@ -63,6 +63,7 @@ export const BotCard = ({ bot }: BotCardProps) => {
 
         <BotActionsMenu
           botId={bot.id}
+          isActive={bot.isActive}
           triggerClassName={cn(
             "size-8 shrink-0 rounded-full border border-border/60 bg-background/80 shadow-sm hover:bg-muted"
           )}

@@ -29,8 +29,8 @@ export default async function ProtectedLayout({
   return (
     <SidebarProvider>
       <AppSidebar user={user} />
-      <SidebarInset>
-        <header className="flex h-14 shrink-0 items-center gap-2 border-b px-4">
+      <SidebarInset className="h-svh min-w-0 overflow-hidden">
+        <header className="sticky top-0 z-10 flex h-14 shrink-0 items-center gap-2 border-b bg-background px-4">
           <SidebarTrigger className="-ml-1" />
           <Separator
             orientation="vertical"
@@ -39,8 +39,10 @@ export default async function ProtectedLayout({
           <RouteBreadcrumbs />
           <DashboardHeaderActions />
         </header>
-        <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-6 py-6">
-          {children}
+        <div className="min-h-0 flex-1 overflow-y-auto">
+          <div className="mx-auto flex w-full max-w-7xl flex-col gap-6 px-6 py-6">
+            {children}
+          </div>
         </div>
       </SidebarInset>
     </SidebarProvider>
