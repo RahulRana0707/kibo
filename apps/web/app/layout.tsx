@@ -3,6 +3,8 @@ import { Geist, Geist_Mono, Montserrat } from "next/font/google"
 
 import "@kibo/ui/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "@kibo/ui/components/sonner"
+import { TooltipProvider } from "@kibo/ui/components/tooltip"
 import { cn } from "@kibo/ui/lib/utils"
 
 const geistHeading = Geist({ subsets: ["latin"], variable: "--font-heading" })
@@ -62,7 +64,10 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          {children}
+          <TooltipProvider>
+            {children}
+            <Toaster />
+          </TooltipProvider>
         </ThemeProvider>
       </body>
     </html>

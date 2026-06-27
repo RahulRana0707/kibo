@@ -64,7 +64,7 @@ export default function SignupPage() {
   const handleSocialLogin = (provider: "google" | "github") => {
     console.log(provider)
     toast.info(
-      `${provider.charAt(0).toUpperCase() + provider.slice(1)} integration triggered. Check the developer console!`
+      `${provider.charAt(0).toUpperCase() + provider.slice(1)} sign-up is not connected yet.`
     )
   }
 
@@ -80,7 +80,7 @@ export default function SignupPage() {
               Create your account
             </CardTitle>
             <CardDescription className="text-muted-foreground">
-              Get started with Pulse today
+              Start building your Kibo workspace
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">

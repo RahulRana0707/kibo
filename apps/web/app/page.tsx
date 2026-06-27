@@ -43,11 +43,14 @@ export default function Home() {
       {/* Hero */}
       <main className="relative z-20 mx-auto flex max-w-4xl flex-1 flex-col items-center justify-center gap-8 px-4 text-center">
         <div className="flex flex-col gap-5">
-          <h1 className="text-5xl font-extrabold leading-tight tracking-tight text-foreground md:text-7xl">
-            Let Kibo handle<br className="hidden md:block" /> the chat.
+          <h1 className="text-5xl leading-tight font-extrabold tracking-tight text-foreground md:text-7xl">
+            Let Kibo handle
+            <br className="hidden md:block" /> the chat.
           </h1>
           <p className="mx-auto max-w-2xl text-lg leading-relaxed text-foreground md:text-xl">
-            Kibo joins your live stream, answers viewer questions, moderates spam, and keeps your community engaged — so you can focus on creating.
+            Kibo joins your live stream, answers viewer questions, moderates
+            spam, and keeps your community engaged — so you can focus on
+            creating.
           </p>
         </div>
 

@@ -7,9 +7,19 @@ export async function proxy(request: NextRequest) {
     headers: await headers(),
   })
 
-  const isDashboardRoute = request.nextUrl.pathname.startsWith("/dashboard")
+  const protectedRoutes = [
+    "/analytics",
+    "/bots",
+    "/dashboard",
+    "/integrations",
+    "/knowledge-base",
+    "/settings",
+  ]
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    request.nextUrl.pathname.startsWith(route)
+  )
 
-  if (isDashboardRoute && !session) {
+  if (isProtectedRoute && !session) {
     return NextResponse.redirect(new URL("/login", request.url))
   }
 
@@ -25,5 +35,14 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup"],
+  matcher: [
+    "/analytics/:path*",
+    "/bots/:path*",
+    "/dashboard/:path*",
+    "/integrations/:path*",
+    "/knowledge-base/:path*",
+    "/settings/:path*",
+    "/login",
+    "/signup",
+  ],
 }

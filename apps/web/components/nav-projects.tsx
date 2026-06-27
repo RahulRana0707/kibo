@@ -1,9 +1,11 @@
 "use client"
 
+import Link from "next/link"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuGroup,
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@kibo/ui/components/dropdown-menu"
@@ -16,7 +18,11 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@kibo/ui/components/sidebar"
-import { MoreHorizontalIcon, FolderIcon, ArrowRightIcon, Trash2Icon } from "lucide-react"
+import {
+  ArrowRightIcon,
+  CheckCircle2Icon,
+  MoreHorizontalIcon,
+} from "lucide-react"
 
 export function NavProjects({
   projects,
@@ -24,22 +30,22 @@ export function NavProjects({
   projects: {
     name: string
     url: string
-    icon: React.ReactNode
+    icon: React.ComponentType<React.SVGProps<SVGSVGElement>>
   }[]
 }) {
   const { isMobile } = useSidebar()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>Projects</SidebarGroupLabel>
+      <SidebarGroupLabel>Next steps</SidebarGroupLabel>
       <SidebarMenu>
         {projects.map((item) => (
           <SidebarMenuItem key={item.name}>
             <SidebarMenuButton asChild>
-              <a href={item.url}>
-                {item.icon}
+              <Link href={item.url}>
+                <item.icon />
                 <span>{item.name}</span>
-              </a>
+              </Link>
             </SidebarMenuButton>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
@@ -47,8 +53,7 @@ export function NavProjects({
                   showOnHover
                   className="aria-expanded:bg-muted"
                 >
-                  <MoreHorizontalIcon
-                  />
+                  <MoreHorizontalIcon />
                   <span className="sr-only">More</span>
                 </SidebarMenuAction>
               </DropdownMenuTrigger>
@@ -57,32 +62,26 @@ export function NavProjects({
                 side={isMobile ? "bottom" : "right"}
                 align={isMobile ? "end" : "start"}
               >
-                <DropdownMenuItem>
-                  <FolderIcon
-                  />
-                  <span>View Project</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem>
-                  <ArrowRightIcon
-                  />
-                  <span>Share Project</span>
-                </DropdownMenuItem>
+                <DropdownMenuGroup>
+                  <DropdownMenuItem asChild>
+                    <Link href={item.url}>
+                      <ArrowRightIcon />
+                      <span>Open</span>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem>
+                    <CheckCircle2Icon />
+                    <span>Mark done</span>
+                  </DropdownMenuItem>
+                </DropdownMenuGroup>
                 <DropdownMenuSeparator />
-                <DropdownMenuItem variant="destructive">
-                  <Trash2Icon
-                  />
-                  <span>Delete Project</span>
+                <DropdownMenuItem>
+                  <span>Keep this step visible</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
-          <SidebarMenuButton className="text-sidebar-foreground/70">
-            <MoreHorizontalIcon className="text-sidebar-foreground/70" />
-            <span>More</span>
-          </SidebarMenuButton>
-        </SidebarMenuItem>
       </SidebarMenu>
     </SidebarGroup>
   )
