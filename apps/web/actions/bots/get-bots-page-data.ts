@@ -42,5 +42,5 @@ export async function getBotsPageData(sessionUserId: string) {
     isActive: user?.activeBotId === bot.id,
   }))
 
-  return { user, bots: [...createdBots, ...seedBots] }
+  return { user, bots: [...createdBots] }
 }
