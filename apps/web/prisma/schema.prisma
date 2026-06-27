@@ -12,16 +12,115 @@ datasource db {
   provider = "postgresql"
 }
 
+enum BotStatus {
+  DRAFT
+  READY
+  ACTIVE
+  PAUSED
+  ARCHIVED
+}
+
+enum KnowledgeItemType {
+  FAQ
+  LINK
+  RULE
+  NOTE
+}
+
+enum IntegrationProvider {
+  YOUTUBE
+  TWITCH
+  DISCORD
+}
+
+enum IntegrationStatus {
+  PENDING
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+enum ConversationStatus {
+  OPEN
+  CLOSED
+  ARCHIVED
+}
+
+enum ConversationChannelType {
+  YOUTUBE_LIVE
+  TWITCH_CHAT
+  DISCORD_CHANNEL
+}
+
+enum MessageSenderType {
+  VIEWER
+  BOT
+  CREATOR
+  MODERATOR
+  SYSTEM
+}
+
+enum EventSeverity {
+  INFO
+  WARN
+  ERROR
+  CRITICAL
+}
+
+enum EventType {
+  CONVERSATION_STARTED
+  CONVERSATION_ENDED
+  KNOWLEDGE_LOOKUP
+  ANSWER_GENERATED
+  REPLY_SENT
+  MODERATION_FLAGGED
+  MODERATION_ACTION
+  INTEGRATION_CONNECTED
+  INTEGRATION_DISCONNECTED
+  ONBOARDING_BLOCKED
+  ERROR
+  SYSTEM
+}
+
+enum PricingPlanCode {
+  STARTER
+  CREATOR
+  STUDIO
+}
+
+enum PricingInterval {
+  MONTHLY
+  YEARLY
+}
+
+enum SubscriptionStatus {
+  TRIALING
+  ACTIVE
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  MANUAL
+}
+
 model User {
-  id            String    @id
-  name          String
-  email         String
-  emailVerified Boolean   @default(false)
-  image         String?
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
-  sessions      Session[]
-  accounts      Account[]
+  id             String            @id
+  name           String
+  email          String
+  emailVerified  Boolean           @default(false)
+  image          String?
+  activeBotId    String?           @unique
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+  sessions       Session[]
+  accounts       Account[]
+  bots           Bot[]
+  activeBot      Bot?              @relation("ActiveBot", fields: [activeBotId], references: [id], onDelete: SetNull)
+  knowledgeItems KnowledgeItem[]
+  integrations   Integration[]
+  conversations  Conversation[]
+  messages       Message[]
+  events         Event[]
+  subscription   UserSubscription?
 
   @@unique([email])
   @@map("user")
@@ -73,4 +172,209 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+model Bot {
+  id             String          @id @default(cuid())
+  userId         String
+  name           String
+  personality    String?
+  welcomeMessage String?
+  avatarUrl      String?
+  status         BotStatus       @default(DRAFT)
+  meta           Json?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @updatedAt
+  user           User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  activeForUser  User?           @relation("ActiveBot")
+  knowledgeItems KnowledgeItem[]
+  integrations   Integration[]
+  conversations  Conversation[]
+  messages       Message[]
+  events         Event[]
+
+  @@index([userId])
+  @@index([userId, status])
+  @@map("bot")
+}
+
+model KnowledgeItem {
+  id        String            @id @default(cuid())
+  userId    String
+  botId     String
+  type      KnowledgeItemType
+  title     String?
+  question  String?
+  answer    String?
+  content   String?
+  sourceUrl String?
+  isActive  Boolean           @default(true)
+  sortOrder Int               @default(0)
+  meta      Json?
+  createdAt DateTime          @default(now())
+  updatedAt DateTime          @updatedAt
+  user      User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot       Bot               @relation(fields: [botId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([botId, type])
+  @@index([botId, isActive])
+  @@map("knowledge_item")
+}
+
+model Integration {
+  id                String              @id @default(cuid())
+  userId            String
+  botId             String
+  provider          IntegrationProvider
+  status            IntegrationStatus   @default(PENDING)
+  externalAccountId String?
+  externalChannelId String?
+  accessToken       String?
+  refreshToken      String?
+  tokenExpiresAt    DateTime?
+  config            Json?
+  meta              Json?
+  createdAt         DateTime            @default(now())
+  updatedAt         DateTime            @updatedAt
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot               Bot                 @relation(fields: [botId], references: [id], onDelete: Cascade)
+  conversations     Conversation[]
+
+  @@unique([botId, provider])
+  @@index([userId])
+  @@index([externalAccountId])
+  @@map("integration")
+}
+
+model Conversation {
+  id                     String                  @id @default(cuid())
+  userId                 String
+  botId                  String
+  integrationId          String
+  externalConversationId String?
+  channelType            ConversationChannelType
+  status                 ConversationStatus      @default(OPEN)
+  startedAt              DateTime                @default(now())
+  endedAt                DateTime?
+  meta                   Json?
+  createdAt              DateTime                @default(now())
+  updatedAt              DateTime                @updatedAt
+  user                   User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot                    Bot                     @relation(fields: [botId], references: [id], onDelete: Cascade)
+  integration            Integration             @relation(fields: [integrationId], references: [id], onDelete: Cascade)
+  messages               Message[]
+  events                 Event[]
+
+  @@unique([botId, externalConversationId])
+  @@index([userId])
+  @@index([botId, startedAt])
+  @@index([integrationId, startedAt])
+  @@map("conversation")
+}
+
+model Message {
+  id                String            @id @default(cuid())
+  userId            String
+  botId             String
+  conversationId    String
+  externalMessageId String?
+  senderType        MessageSenderType
+  senderName        String?
+  content           String
+  meta              Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot               Bot               @relation(fields: [botId], references: [id], onDelete: Cascade)
+  conversation      Conversation      @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  events            Event[]
+
+  @@unique([conversationId, externalMessageId])
+  @@index([userId])
+  @@index([botId, createdAt])
+  @@index([conversationId, createdAt])
+  @@map("message")
+}
+
+model Event {
+  id             String        @id @default(cuid())
+  userId         String
+  botId          String
+  conversationId String?
+  messageId      String?
+  type           EventType
+  severity       EventSeverity @default(INFO)
+  payload        Json?
+  createdAt      DateTime      @default(now())
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  bot            Bot           @relation(fields: [botId], references: [id], onDelete: Cascade)
+  conversation   Conversation? @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  message        Message?      @relation(fields: [messageId], references: [id], onDelete: SetNull)
+
+  @@index([userId, createdAt])
+  @@index([botId, createdAt])
+  @@index([conversationId, createdAt])
+  @@index([messageId])
+  @@map("event")
+}
+
+model PricingPlan {
+  id                 String               @id @default(cuid())
+  code               PricingPlanCode      @unique
+  name               String
+  description        String?
+  isFeatured         Boolean              @default(false)
+  isActive           Boolean              @default(true)
+  priceCents         Int?
+  currency           String               @default("USD")
+  interval           PricingInterval      @default(MONTHLY)
+  botLimit           Int?
+  integrationLimit   Int?
+  knowledgeItemLimit Int?
+  meta               Json?
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
+  features           PricingPlanFeature[]
+  subscriptions      UserSubscription[]
+
+  @@map("pricing_plan")
+}
+
+model PricingPlanFeature {
+  id            String      @id @default(cuid())
+  pricingPlanId String
+  label         String
+  description   String?
+  sortOrder     Int         @default(0)
+  isIncluded    Boolean     @default(true)
+  meta          Json?
+  createdAt     DateTime    @default(now())
+  updatedAt     DateTime    @updatedAt
+  pricingPlan   PricingPlan @relation(fields: [pricingPlanId], references: [id], onDelete: Cascade)
+
+  @@index([pricingPlanId, sortOrder])
+  @@map("pricing_plan_feature")
+}
+
+model UserSubscription {
+  id                     String             @id @default(cuid())
+  userId                 String             @unique
+  pricingPlanId          String
+  status                 SubscriptionStatus @default(MANUAL)
+  billingProvider        String?
+  externalCustomerId     String?
+  externalSubscriptionId String?
+  currentPeriodStart     DateTime?
+  currentPeriodEnd       DateTime?
+  cancelAtPeriodEnd      Boolean            @default(false)
+  meta                   Json?
+  createdAt              DateTime           @default(now())
+  updatedAt              DateTime           @updatedAt
+  user                   User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pricingPlan            PricingPlan        @relation(fields: [pricingPlanId], references: [id], onDelete: Restrict)
+
+  @@index([pricingPlanId, status])
+  @@index([billingProvider, externalCustomerId])
+  @@map("user_subscription")
 }
