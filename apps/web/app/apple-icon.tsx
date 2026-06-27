@@ -13,7 +13,7 @@ export default function AppleIcon() {
         alignItems: "center",
         justifyContent: "center",
         borderRadius: "40px",
-        background: "#047857", /* --primary: oklch(0.508 0.118 165.612) */
+        background: "#047857",
         overflow: "hidden",
       }}
     >
@@ -23,21 +23,24 @@ export default function AppleIcon() {
         width="180"
         height="180"
       >
-        <rect width="100" height="100" rx="22" fill="#047857" />
-        <g transform="translate(0, 4)">
-          <path
-            d="M 22 28 C 22 18, 30 11, 40 11 L 60 11 C 70 11, 78 18, 78 28 L 78 52 C 78 62, 70 69, 60 69 L 44 69 L 24 83 L 24 67 C 22.5 64, 22 58, 22 52 Z"
-            fill="none"
-            stroke="#FFFFFF"
-            stroke-width="6"
-            stroke-linejoin="round"
-            stroke-linecap="round"
-          />
-          <path
-            d="M 50 23 C 50 31, 54 37, 63 40 C 54 43, 50 49, 50 57 C 50 49, 46 43, 37 40 C 46 37, 50 31, 50 23 Z"
-            fill="#FFFFFF"
-          />
-        </g>
+        <rect width="100" height="100" rx="24" fill="#047857" />
+        <path
+          d="M30 26V74"
+          fill="none"
+          stroke="#FFFFFF"
+          strokeWidth="10"
+          strokeLinecap="round"
+        />
+        <path
+          d="M66 27L42 50L68 73"
+          fill="none"
+          stroke="#FFFFFF"
+          strokeWidth="10"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+        <circle cx="72" cy="27" r="6" fill="#A7F3D0" />
+        <circle cx="72" cy="27" r="2.5" fill="#047857" />
       </svg>
     </div>,
     { ...size }
