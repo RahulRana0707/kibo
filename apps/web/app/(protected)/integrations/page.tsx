@@ -1,6 +1,24 @@
-import { EmptyState } from "@/components/empty-state"
+import { redirect } from "next/navigation"
 
-export default function IntegrationsPage() {
+import { EmptyState } from "@/components/empty-state"
+import { IntegrationsManager } from "@/components/integrations/integrations-manager"
+import { getCurrentSession } from "@/lib/api/auth.server"
+import { getIntegrationsPageData } from "@/lib/api/integrations.server"
+
+export default async function IntegrationsPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ botId?: string }>
+}) {
+  const session = await getCurrentSession()
+
+  if (!session?.user.id) {
+    redirect("/login")
+  }
+
+  const { botId } = await searchParams
+  const data = await getIntegrationsPageData(botId)
+
   return (
     <>
       <section className="flex flex-col gap-2">
@@ -12,12 +30,16 @@ export default function IntegrationsPage() {
         </p>
       </section>
 
-      <EmptyState
-        iconName="bot"
-        title="No integrations connected yet"
-        description="Start with YouTube Live or Twitch so Kibo can read live chat. Once the first connection is in place, the rest of the setup becomes much easier."
-        primaryAction={{ label: "Connect YouTube", href: "/integrations#youtube" }}
-      />
+      {data.selectedBot ? (
+        <IntegrationsManager data={data} />
+      ) : (
+        <EmptyState
+          iconName="bot"
+          title="Create a bot first"
+          description="Create your first bot before connecting YouTube Live or Twitch. Each integration belongs to the bot that will answer chat."
+          primaryAction={{ label: "Create bot", href: "/bots/new" }}
+        />
+      )}
     </>
   )
 }

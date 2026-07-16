@@ -1,23 +1,20 @@
 import Link from "next/link"
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { getBotsPageData } from "@/actions/bots/get-bots-page-data"
-import { auth } from "@/lib/auth"
+import { getCurrentSession } from "@/lib/api/auth.server"
+import { getBotsPageData } from "@/lib/api/bots.server"
 import { Button } from "@kibo/ui/components/button"
 import { PlusIcon } from "lucide-react"
 import { BotsList } from "@/components/bots/bots-list"
 
 export default async function BotsPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getCurrentSession()
 
   if (!session?.user.id) {
     redirect("/login")
   }
 
-  const { bots } = await getBotsPageData(session.user.id)
+  const { bots } = await getBotsPageData()
 
   return (
     <>

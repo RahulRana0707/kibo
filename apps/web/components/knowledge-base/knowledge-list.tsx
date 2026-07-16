@@ -3,9 +3,9 @@
 import { SearchIcon, Trash2Icon } from "lucide-react"
 import { useState } from "react"
 
-import { deleteKnowledgeItemAction } from "@/actions/knowledge-base/delete-knowledge-item"
 import { KnowledgeEditDialog } from "@/components/knowledge-base/knowledge-edit-dialog"
 import type { KnowledgeBaseItem } from "@/components/knowledge-base/types"
+import { useKnowledgeBasePage } from "@/components/knowledge-base/use-knowledge-base-page"
 import { Badge } from "@kibo/ui/components/badge"
 import { Button } from "@kibo/ui/components/button"
 import { Input } from "@kibo/ui/components/input"
@@ -38,6 +38,7 @@ function searchableText(item: KnowledgeBaseItem) {
 export function KnowledgeList({ items }: { items: KnowledgeBaseItem[] }) {
   const [query, setQuery] = useState("")
   const [typeFilter, setTypeFilter] = useState<TypeFilter>("ALL")
+  const { deleteKnowledge, isDeletingKnowledge } = useKnowledgeBasePage()
 
   if (!items.length) {
     return (
@@ -123,13 +124,18 @@ export function KnowledgeList({ items }: { items: KnowledgeBaseItem[] }) {
 
               <div className="flex items-center gap-1 md:justify-self-end">
                 <KnowledgeEditDialog item={item} />
-                <form action={deleteKnowledgeItemAction}>
-                  <input type="hidden" name="itemId" value={item.id} />
-                  <Button type="submit" variant="ghost" size="icon">
-                    <Trash2Icon />
-                    <span className="sr-only">Delete knowledge item</span>
-                  </Button>
-                </form>
+                <Button
+                  type="button"
+                  variant="ghost"
+                  size="icon"
+                  disabled={isDeletingKnowledge}
+                  onClick={() => {
+                    void deleteKnowledge(item.id)
+                  }}
+                >
+                  <Trash2Icon />
+                  <span className="sr-only">Delete knowledge item</span>
+                </Button>
               </div>
             </article>
           ))}

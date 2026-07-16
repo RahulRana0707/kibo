@@ -1,20 +1,17 @@
 import Link from "next/link"
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
 import { BotForm } from "@/components/bots/bot-form"
-import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
-import { updateBotAction } from "@/actions/bots/update-bot"
+import { getCurrentSession } from "@/lib/api/auth.server"
+import { ApiError } from "@/lib/api/error"
+import { getBot } from "@/lib/api/bots.server"
 
 export default async function EditBotPage({
   params,
 }: {
   params: Promise<{ botId: string }>
 }) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getCurrentSession()
 
   if (!session?.user.id) {
     redirect("/login")
@@ -22,16 +19,17 @@ export default async function EditBotPage({
 
   const { botId } = await params
 
-  const bot = await prisma.bot.findFirst({
-    where: { id: botId, userId: session.user.id },
-    select: {
-      id: true,
-      name: true,
-      avatarUrl: true,
-      personality: true,
-      welcomeMessage: true,
-    },
-  })
+  let bot
+
+  try {
+    bot = await getBot(botId)
+  } catch (error) {
+    if (error instanceof ApiError && error.status === 404) {
+      redirect("/bots")
+    }
+
+    throw error
+  }
 
   if (!bot) {
     redirect("/bots")
@@ -58,7 +56,6 @@ export default async function EditBotPage({
         </div>
 
         <BotForm
-          action={updateBotAction}
           submitLabel="Save changes"
           cancelHref="/bots"
           values={{

@@ -1,11 +1,28 @@
 import { NextRequest, NextResponse } from "next/server"
-import { headers } from "next/headers"
-import { auth } from "@/lib/auth"
+
+const API_URL = process.env.API_URL ?? "http://localhost:4000"
+
+async function getProxySession(request: NextRequest) {
+  try {
+    const response = await fetch(new URL("/auth/session", API_URL), {
+      headers: {
+        cookie: request.headers.get("cookie") ?? "",
+      },
+      cache: "no-store",
+    })
+
+    if (!response.ok) {
+      return null
+    }
+
+    return (await response.json()) as { user?: { id?: string } } | null
+  } catch {
+    return null
+  }
+}
 
 export async function proxy(request: NextRequest) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getProxySession(request)
 
   const protectedRoutes = [
     "/analytics",

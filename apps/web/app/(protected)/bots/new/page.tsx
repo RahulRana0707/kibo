@@ -1,23 +1,19 @@
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 import Link from "next/link"
 
-import { auth } from "@/lib/auth"
-import { prisma } from "@/lib/prisma"
+import { getCurrentSession } from "@/lib/api/auth.server"
 import { CreateBotForm } from "@/components/bots/create-bot-form"
+import { getBotsPageData } from "@/lib/api/bots.server"
 
 export default async function NewBotPage() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getCurrentSession()
 
   if (!session?.user.id) {
     redirect("/login")
   }
 
-  const botCount = await prisma.bot.count({
-    where: { userId: session.user.id },
-  })
+  const { bots } = await getBotsPageData()
+  const botCount = bots.length
 
   return (
     <div className="grid gap-10 xl:grid-cols-[minmax(0,1fr)_280px]">

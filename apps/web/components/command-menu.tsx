@@ -76,6 +76,10 @@ function isTypingTarget(target: EventTarget | null) {
   )
 }
 
+function getKeyboardKey(event: KeyboardEvent) {
+  return typeof event.key === "string" ? event.key.toLowerCase() : ""
+}
+
 export function CommandMenu() {
   const router = useRouter()
   const [open, setOpen] = React.useState(false)
@@ -90,7 +94,7 @@ export function CommandMenu() {
         return
       }
 
-      if ((event.metaKey || event.ctrlKey) && event.key.toLowerCase() === "k") {
+      if ((event.metaKey || event.ctrlKey) && getKeyboardKey(event) === "k") {
         event.preventDefault()
         setOpen((current) => !current)
       }

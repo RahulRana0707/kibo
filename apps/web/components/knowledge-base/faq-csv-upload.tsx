@@ -1,13 +1,13 @@
 "use client"
 
-import { useActionState, useEffect, useRef, useState } from "react"
+import { type FormEvent, useRef, useState } from "react"
 import { UploadIcon } from "lucide-react"
 
-import { importFaqCsvAction } from "@/actions/knowledge-base/import-faq-csv"
 import {
   initialKnowledgeFormState,
   type KnowledgeFormState,
 } from "@/components/knowledge-base/knowledge-form-state"
+import { useKnowledgeBasePage } from "@/components/knowledge-base/use-knowledge-base-page"
 import {
   FileUpload,
   type FileUploadItem,
@@ -30,10 +30,10 @@ export function FaqCsvUpload({ botId }: { botId: string }) {
   const [items, setItems] = useState<FileUploadItem[]>([])
   const [previewRows, setPreviewRows] = useState<ParsedFaqRow[]>([])
   const [previewError, setPreviewError] = useState<string | null>(null)
-  const [state, formAction, pending] = useActionState<KnowledgeFormState, FormData>(
-    importFaqCsvAction,
+  const [state, setState] = useState<KnowledgeFormState>(
     initialKnowledgeFormState
   )
+  const { importFaqCsv, isImportingFaqCsv } = useKnowledgeBasePage()
   const file = items[0]?.file ?? null
 
   function syncFile(nextFile: File | null) {
@@ -82,14 +82,45 @@ export function FaqCsvUpload({ botId }: { botId: string }) {
     setPreviewError(null)
   }
 
-  useEffect(() => {
-    if (state.formSuccess) {
-      clearFile()
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    if (!file || !previewRows.length) {
+      setState({
+        formError: "Choose a CSV file to import.",
+        fieldErrors: { csv: ["CSV file is required."] },
+        values: { botId },
+      })
+      return
     }
-  }, [state.formSuccess])
+
+    try {
+      const result = await importFaqCsv({
+        botId,
+        rows: previewRows,
+        filename: file.name,
+      })
+
+      clearFile()
+      setState({
+        formSuccess: `${result.importedCount} ${
+          result.importedCount === 1 ? "FAQ" : "FAQs"
+        } imported.`,
+        importedCount: result.importedCount,
+        fieldErrors: {},
+        values: { botId },
+      })
+    } catch {
+      setState({
+        formError: "We couldn't import that CSV right now. Please try again.",
+        fieldErrors: {},
+        values: { botId },
+      })
+    }
+  }
 
   return (
-    <form action={formAction} className="flex flex-col gap-4">
+    <form onSubmit={onSubmit} className="flex flex-col gap-4">
       <input type="hidden" name="botId" value={botId} />
       <input
         ref={inputRef}
@@ -143,7 +174,7 @@ export function FaqCsvUpload({ botId }: { botId: string }) {
           accept=".csv,text/csv"
           multiple={false}
           maxFiles={1}
-          disabled={pending}
+          disabled={isImportingFaqCsv}
           title="Drop a FAQ CSV here"
           description="Preview question and answer rows before importing."
           browseLabel="Choose CSV"
@@ -196,10 +227,12 @@ export function FaqCsvUpload({ botId }: { botId: string }) {
       <div className="flex justify-end">
         <Button
           type="submit"
-          disabled={pending || !file || !previewRows.length || !!previewError}
+          disabled={
+            isImportingFaqCsv || !file || !previewRows.length || !!previewError
+          }
         >
           <UploadIcon data-icon="inline-start" />
-          {pending ? "Importing..." : "Import FAQs"}
+          {isImportingFaqCsv ? "Importing..." : "Import FAQs"}
         </Button>
       </div>
     </form>

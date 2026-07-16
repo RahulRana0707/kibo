@@ -1,7 +1,17 @@
 {
   "$schema": "https://turbo.build/schema.json",
   "ui": "tui",
-  "globalEnv": ["DATABASE_URL", "BETTER_AUTH_SECRET"],
+  "globalEnv": [
+    "DATABASE_URL",
+    "BETTER_AUTH_SECRET",
+    "API_URL",
+    "NEXT_PUBLIC_API_URL",
+    "WEB_URL",
+    "GOOGLE_YOUTUBE_CLIENT_ID",
+    "GOOGLE_YOUTUBE_CLIENT_SECRET",
+    "GOOGLE_YOUTUBE_REDIRECT_URI",
+    "NODE_ENV"
+  ],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],

@@ -1,23 +1,20 @@
-import { headers } from "next/headers"
 import { redirect } from "next/navigation"
 
-import { getDashboardPageData } from "@/actions/dashboard/get-dashboard-page-data"
 import { AnswerQueue } from "@/components/dashboard/answer-queue"
 import { DashboardCommandCenter } from "@/components/dashboard/dashboard-command-center"
 import { DashboardStats } from "@/components/dashboard/dashboard-stats"
 import { LaunchChecklist } from "@/components/dashboard/launch-checklist"
-import { auth } from "@/lib/auth"
+import { getCurrentSession } from "@/lib/api/auth.server"
+import { getDashboardPageData } from "@/lib/api/dashboard.server"
 
 export default async function Page() {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getCurrentSession()
 
   if (!session?.user.id) {
     redirect("/login")
   }
 
-  const data = await getDashboardPageData(session.user.id)
+  const data = await getDashboardPageData()
 
   return (
     <>

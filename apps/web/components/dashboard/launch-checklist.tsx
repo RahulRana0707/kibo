@@ -6,7 +6,7 @@ import {
   CircleHelpIcon,
 } from "lucide-react"
 
-import type { DashboardPageData } from "@/actions/dashboard/get-dashboard-page-data"
+import type { DashboardPageData } from "@/lib/api/types"
 import { Button } from "@kibo/ui/components/button"
 
 function getNextStep(data: DashboardPageData) {

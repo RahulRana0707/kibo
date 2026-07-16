@@ -1,14 +1,16 @@
 "use client"
 
-import { useActionState, useEffect, useState } from "react"
+import { type FormEvent, useState } from "react"
 import { PencilIcon, SaveIcon } from "lucide-react"
 
-import { updateKnowledgeItemAction } from "@/actions/knowledge-base/update-knowledge-item"
 import {
   initialKnowledgeFormState,
   type KnowledgeFormState,
+  readKnowledgeEditFormValues,
+  validateKnowledgeEditValues,
 } from "@/components/knowledge-base/knowledge-form-state"
 import type { KnowledgeBaseItem } from "@/components/knowledge-base/types"
+import { useKnowledgeBasePage } from "@/components/knowledge-base/use-knowledge-base-page"
 import { Button } from "@kibo/ui/components/button"
 import {
   Dialog,
@@ -44,17 +46,68 @@ function itemTypeLabel(type: string) {
 
 export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
   const [open, setOpen] = useState(false)
-  const [state, formAction, pending] = useActionState<KnowledgeFormState, FormData>(
-    updateKnowledgeItemAction,
+  const [state, setState] = useState<KnowledgeFormState>(
     initialKnowledgeFormState
   )
+  const { updateKnowledge, isUpdatingKnowledge } = useKnowledgeBasePage()
   const typeLabel = itemTypeLabel(item.type)
 
-  useEffect(() => {
-    if (state.formSuccess) {
-      setOpen(false)
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const values = readKnowledgeEditFormValues(new FormData(event.currentTarget))
+    const validation = validateKnowledgeEditValues(values)
+
+    if (validation.formError) {
+      setState(validation)
+      return
     }
-  }, [state.formSuccess])
+
+    try {
+      if (values.type === "FAQ") {
+        await updateKnowledge({
+          itemId: item.id,
+          values: {
+            type: "FAQ",
+            question: values.question ?? "",
+            answer: values.answer ?? "",
+          },
+        })
+      } else if (values.type === "LINK") {
+        await updateKnowledge({
+          itemId: item.id,
+          values: {
+            type: "LINK",
+            title: values.title ?? "",
+            content: values.sourceUrl ?? "",
+            sourceUrl: values.sourceUrl,
+          },
+        })
+      } else if (values.type === "RULE" || values.type === "NOTE") {
+        await updateKnowledge({
+          itemId: item.id,
+          values: {
+            type: values.type,
+            title: values.title ?? "",
+            content: values.content ?? "",
+          },
+        })
+      }
+
+      setState({
+        formSuccess: "Knowledge updated.",
+        fieldErrors: {},
+        values,
+      })
+      setOpen(false)
+    } catch {
+      setState({
+        formError: "We couldn't update that knowledge right now. Please try again.",
+        fieldErrors: {},
+        values,
+      })
+    }
+  }
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -73,7 +126,7 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
           </DialogDescription>
         </DialogHeader>
 
-        <form action={formAction} className="flex flex-col gap-4">
+        <form onSubmit={onSubmit} className="flex flex-col gap-4">
           <input type="hidden" name="itemId" value={item.id} />
           <input type="hidden" name="type" value={item.type} />
 
@@ -91,7 +144,7 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
                   id={`question-${item.id}`}
                   name="question"
                   defaultValue={state.values?.question ?? item.question ?? ""}
-                  disabled={pending}
+                  disabled={isUpdatingKnowledge}
                   aria-invalid={!!state.fieldErrors?.question?.length}
                 />
                 <FieldError errors={errorMessages(state.fieldErrors?.question)} />
@@ -106,7 +159,7 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
                   name="answer"
                   defaultValue={state.values?.answer ?? item.answer ?? ""}
                   rows={5}
-                  disabled={pending}
+                  disabled={isUpdatingKnowledge}
                   aria-invalid={!!state.fieldErrors?.answer?.length}
                 />
                 <FieldDescription>
@@ -123,7 +176,7 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
                   id={`title-${item.id}`}
                   name="title"
                   defaultValue={state.values?.title ?? item.title ?? ""}
-                  disabled={pending}
+                  disabled={isUpdatingKnowledge}
                   aria-invalid={!!state.fieldErrors?.title?.length}
                 />
                 <FieldError errors={errorMessages(state.fieldErrors?.title)} />
@@ -139,7 +192,7 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
                     defaultValue={
                       state.values?.sourceUrl ?? item.sourceUrl ?? ""
                     }
-                    disabled={pending}
+                    disabled={isUpdatingKnowledge}
                     aria-invalid={!!state.fieldErrors?.sourceUrl?.length}
                   />
                   <FieldDescription>
@@ -159,7 +212,7 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
                     name="content"
                     defaultValue={state.values?.content ?? item.content ?? ""}
                     rows={5}
-                    disabled={pending}
+                    disabled={isUpdatingKnowledge}
                     aria-invalid={!!state.fieldErrors?.content?.length}
                   />
                   <FieldError
@@ -172,13 +225,17 @@ export function KnowledgeEditDialog({ item }: { item: KnowledgeBaseItem }) {
 
           <DialogFooter>
             <DialogClose asChild>
-              <Button type="button" variant="outline" disabled={pending}>
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isUpdatingKnowledge}
+              >
                 Cancel
               </Button>
             </DialogClose>
-            <Button type="submit" disabled={pending}>
+            <Button type="submit" disabled={isUpdatingKnowledge}>
               <SaveIcon data-icon="inline-start" />
-              {pending ? "Saving..." : "Save changes"}
+              {isUpdatingKnowledge ? "Saving..." : "Save changes"}
             </Button>
           </DialogFooter>
         </form>

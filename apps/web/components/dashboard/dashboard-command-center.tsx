@@ -7,8 +7,8 @@ import {
   SparklesIcon,
 } from "lucide-react"
 
-import type { DashboardPageData } from "@/actions/dashboard/get-dashboard-page-data"
 import { BotAvatar } from "@/components/bots/bot-avatar"
+import type { DashboardPageData } from "@/lib/api/types"
 import { Badge } from "@kibo/ui/components/badge"
 import { Button } from "@kibo/ui/components/button"
 

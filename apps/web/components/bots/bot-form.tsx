@@ -1,8 +1,9 @@
 "use client"
 
 import Link from "next/link"
-import { useActionState } from "react"
+import { type FormEvent, useState } from "react"
 
+import { useBotForm } from "@/components/bots/use-bot-form"
 import { Button } from "@kibo/ui/components/button"
 import {
   Field,
@@ -20,13 +21,11 @@ import {
   initialBotFormState,
   type BotFormState,
   type BotFormValues,
+  readBotFormValues,
+  validateBotFormValues,
 } from "@/components/bots/bot-form-state"
 
 type BotFormProps = {
-  action: (
-    prevState: BotFormState,
-    formData: FormData
-  ) => Promise<BotFormState>
   submitLabel: string
   cancelHref?: string
   values?: BotFormValues
@@ -37,24 +36,52 @@ function errorMessages(errors?: string[]) {
 }
 
 export function BotForm({
-  action,
   submitLabel,
   cancelHref = "/bots",
   values,
 }: BotFormProps) {
-  const [state, formAction, pending] = useActionState(
-    action,
-    initialBotFormState
-  )
+  const [state, setState] = useState<BotFormState>(initialBotFormState)
+  const { saveBot, isSavingBot } = useBotForm(values?.botId)
 
   const formValues = {
     ...values,
     ...state.values,
   }
 
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const nextValues = readBotFormValues(new FormData(event.currentTarget))
+    const validation = validateBotFormValues(nextValues)
+
+    if (validation.formError) {
+      setState(validation)
+      return
+    }
+
+    setState({ fieldErrors: {}, values: nextValues })
+
+    try {
+      await saveBot({
+        name: nextValues.name ?? "",
+        avatarUrl: nextValues.avatarUrl,
+        personality: nextValues.personality,
+        welcomeMessage: nextValues.welcomeMessage,
+      })
+    } catch {
+      setState({
+        formError: "We couldn't save that bot right now. Please try again.",
+        fieldErrors: {},
+        values: nextValues,
+      })
+    }
+  }
+
   return (
-    <form action={formAction} className="space-y-8">
-      {formValues.botId ? <input type="hidden" name="botId" value={formValues.botId} /> : null}
+    <form onSubmit={onSubmit} className="space-y-8">
+      {formValues.botId ? (
+        <input type="hidden" name="botId" value={formValues.botId} />
+      ) : null}
 
       {state.formError ? (
         <p className="text-sm text-destructive" aria-live="polite">
@@ -78,6 +105,7 @@ export function BotForm({
               defaultValue={formValues.name ?? ""}
               maxLength={64}
               required
+              disabled={isSavingBot}
               aria-invalid={!!state.fieldErrors?.name?.length}
             />
             <FieldError errors={errorMessages(state.fieldErrors?.name)} />
@@ -90,6 +118,7 @@ export function BotForm({
               type="url"
               placeholder="https://..."
               defaultValue={formValues.avatarUrl ?? ""}
+              disabled={isSavingBot}
               aria-invalid={!!state.fieldErrors?.avatarUrl?.length}
             />
             <FieldError errors={errorMessages(state.fieldErrors?.avatarUrl)} />
@@ -114,6 +143,7 @@ export function BotForm({
               name="personality"
               defaultValue={formValues.personality ?? ""}
               maxLength={120}
+              disabled={isSavingBot}
               aria-invalid={!!state.fieldErrors?.personality?.length}
             />
             <FieldError
@@ -128,6 +158,7 @@ export function BotForm({
               rows={4}
               maxLength={280}
               defaultValue={formValues.welcomeMessage ?? ""}
+              disabled={isSavingBot}
               aria-invalid={!!state.fieldErrors?.welcomeMessage?.length}
             />
             <FieldError
@@ -141,8 +172,8 @@ export function BotForm({
         <Button variant="outline" asChild>
           <Link href={cancelHref}>Cancel</Link>
         </Button>
-        <Button type="submit" disabled={pending}>
-          {pending ? "Saving..." : submitLabel}
+        <Button type="submit" disabled={isSavingBot}>
+          {isSavingBot ? "Saving..." : submitLabel}
         </Button>
       </div>
     </form>

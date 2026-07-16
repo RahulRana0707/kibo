@@ -1,13 +1,15 @@
 "use client"
 
-import { useActionState } from "react"
+import { type FormEvent, useRef, useState } from "react"
 import { PlusIcon } from "lucide-react"
 
-import { createFaqAction } from "@/actions/knowledge-base/create-faq"
 import {
   initialKnowledgeFormState,
   type KnowledgeFormState,
+  readFaqFormValues,
+  validateFaqValues,
 } from "@/components/knowledge-base/knowledge-form-state"
+import { useKnowledgeBasePage } from "@/components/knowledge-base/use-knowledge-base-page"
 import { Button } from "@kibo/ui/components/button"
 import {
   Field,
@@ -24,13 +26,53 @@ function errorMessages(errors?: string[]) {
 }
 
 export function FaqForm({ botId }: { botId: string }) {
-  const [state, formAction, pending] = useActionState<KnowledgeFormState, FormData>(
-    createFaqAction,
+  const formRef = useRef<HTMLFormElement>(null)
+  const [state, setState] = useState<KnowledgeFormState>(
     initialKnowledgeFormState
   )
+  const { createKnowledge, isCreatingKnowledge } = useKnowledgeBasePage()
+
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const values = readFaqFormValues(new FormData(event.currentTarget))
+    const validation = validateFaqValues(values)
+
+    if (validation.formError) {
+      setState(validation)
+      return
+    }
+
+    try {
+      await createKnowledge({
+        botId,
+        type: "FAQ",
+        question: values.question ?? "",
+        answer: values.answer ?? "",
+      })
+
+      formRef.current?.reset()
+      setState({
+        formSuccess: "FAQ added.",
+        fieldErrors: {},
+        values: { botId },
+      })
+    } catch {
+      setState({
+        formError: "We couldn't add that FAQ right now. Please try again.",
+        fieldErrors: {},
+        values,
+      })
+    }
+  }
 
   return (
-    <form action={formAction} className="flex flex-col gap-4" id="faqs">
+    <form
+      ref={formRef}
+      onSubmit={onSubmit}
+      className="flex flex-col gap-4"
+      id="faqs"
+    >
       <input type="hidden" name="botId" value={botId} />
 
       <div className="flex flex-col gap-1">
@@ -62,6 +104,7 @@ export function FaqForm({ botId }: { botId: string }) {
             name="question"
             defaultValue={state.values?.question ?? ""}
             placeholder="What microphone do you use?"
+            disabled={isCreatingKnowledge}
             aria-invalid={!!state.fieldErrors?.question?.length}
           />
           <FieldError errors={errorMessages(state.fieldErrors?.question)} />
@@ -75,6 +118,7 @@ export function FaqForm({ botId }: { botId: string }) {
             rows={4}
             defaultValue={state.values?.answer ?? ""}
             placeholder="I use a Shure SM7B with a clean gain setup."
+            disabled={isCreatingKnowledge}
             aria-invalid={!!state.fieldErrors?.answer?.length}
           />
           <FieldDescription>
@@ -85,9 +129,9 @@ export function FaqForm({ botId }: { botId: string }) {
       </FieldGroup>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={isCreatingKnowledge}>
           <PlusIcon data-icon="inline-start" />
-          {pending ? "Adding..." : "Add FAQ"}
+          {isCreatingKnowledge ? "Adding..." : "Add FAQ"}
         </Button>
       </div>
     </form>

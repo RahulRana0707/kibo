@@ -1,13 +1,15 @@
 "use client"
 
-import { useActionState, useEffect, useRef } from "react"
+import { type FormEvent, useRef, useState } from "react"
 import { PlusIcon } from "lucide-react"
 
-import { createKnowledgeItemAction } from "@/actions/knowledge-base/create-knowledge-item"
 import {
   initialKnowledgeFormState,
   type KnowledgeFormState,
+  readKnowledgeItemFormValues,
+  validateKnowledgeItemValues,
 } from "@/components/knowledge-base/knowledge-form-state"
+import { useKnowledgeBasePage } from "@/components/knowledge-base/use-knowledge-base-page"
 import { Button } from "@kibo/ui/components/button"
 import {
   Field,
@@ -51,21 +53,59 @@ export function KnowledgeItemForm({
   type: KnowledgeType
 }) {
   const formRef = useRef<HTMLFormElement>(null)
-  const [state, formAction, pending] = useActionState<KnowledgeFormState, FormData>(
-    createKnowledgeItemAction,
+  const [state, setState] = useState<KnowledgeFormState>(
     initialKnowledgeFormState
   )
-
-  useEffect(() => {
-    if (state.formSuccess) {
-      formRef.current?.reset()
-    }
-  }, [state.formSuccess])
+  const { createKnowledge, isCreatingKnowledge } = useKnowledgeBasePage()
 
   const selectedType = KNOWLEDGE_TYPES.find((item) => item.value === type)
 
+  async function onSubmit(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault()
+
+    const values = readKnowledgeItemFormValues(new FormData(event.currentTarget))
+    const validation = validateKnowledgeItemValues(values)
+
+    if (validation.formError) {
+      setState(validation)
+      return
+    }
+
+    try {
+      if (type === "LINK") {
+        await createKnowledge({
+          botId,
+          type,
+          title: values.title ?? "",
+          content: values.sourceUrl ?? "",
+          sourceUrl: values.sourceUrl,
+        })
+      } else {
+        await createKnowledge({
+          botId,
+          type,
+          title: values.title ?? "",
+          content: values.content ?? "",
+        })
+      }
+
+      formRef.current?.reset()
+      setState({
+        formSuccess: `${type.toLowerCase()} added.`,
+        fieldErrors: {},
+        values: { botId, type },
+      })
+    } catch {
+      setState({
+        formError: "We couldn't add that knowledge right now. Please try again.",
+        fieldErrors: {},
+        values,
+      })
+    }
+  }
+
   return (
-    <form ref={formRef} action={formAction} className="flex flex-col gap-4">
+    <form ref={formRef} onSubmit={onSubmit} className="flex flex-col gap-4">
       <input type="hidden" name="botId" value={botId} />
       <input type="hidden" name="type" value={type} />
 
@@ -97,7 +137,7 @@ export function KnowledgeItemForm({
             id="knowledge-title"
             name="title"
             placeholder="Refund policy"
-            disabled={pending}
+            disabled={isCreatingKnowledge}
             aria-invalid={!!state.fieldErrors?.title?.length}
             defaultValue={state.values?.title ?? ""}
           />
@@ -112,7 +152,7 @@ export function KnowledgeItemForm({
               name="sourceUrl"
               type="url"
               placeholder="https://example.com/help/refunds"
-              disabled={pending}
+              disabled={isCreatingKnowledge}
               aria-invalid={!!state.fieldErrors?.sourceUrl?.length}
               defaultValue={state.values?.sourceUrl ?? ""}
             />
@@ -135,7 +175,7 @@ export function KnowledgeItemForm({
                   : "Our pro plan includes priority onboarding for teams."
               }
               rows={4}
-              disabled={pending}
+              disabled={isCreatingKnowledge}
               aria-invalid={!!state.fieldErrors?.content?.length}
               defaultValue={state.values?.content ?? ""}
             />
@@ -145,9 +185,9 @@ export function KnowledgeItemForm({
       </FieldGroup>
 
       <div className="flex justify-end">
-        <Button type="submit" disabled={pending}>
+        <Button type="submit" disabled={isCreatingKnowledge}>
           <PlusIcon data-icon="inline-start" />
-          {pending ? "Adding..." : "Add knowledge"}
+          {isCreatingKnowledge ? "Adding..." : "Add knowledge"}
         </Button>
       </div>
     </form>

@@ -34,6 +34,10 @@ function isTypingTarget(target: EventTarget | null) {
   )
 }
 
+function getKeyboardKey(event: KeyboardEvent) {
+  return typeof event.key === "string" ? event.key.toLowerCase() : ""
+}
+
 function ThemeHotkey() {
   const { resolvedTheme, setTheme } = useTheme()
 
@@ -47,7 +51,7 @@ function ThemeHotkey() {
         return
       }
 
-      if (event.key.toLowerCase() !== "d") {
+      if (getKeyboardKey(event) !== "d") {
         return
       }
 

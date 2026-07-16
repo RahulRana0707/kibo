@@ -1,9 +1,7 @@
-import { headers } from "next/headers"
-
 import { AppSidebar } from "@/components/app-sidebar"
 import { DashboardHeaderActions } from "@/components/dashboard-header-actions"
 import { RouteBreadcrumbs } from "@/components/route-breadcrumbs"
-import { auth } from "@/lib/auth"
+import { getCurrentSession } from "@/lib/api/auth.server"
 import { Separator } from "@kibo/ui/components/separator"
 import {
   SidebarInset,
@@ -16,9 +14,7 @@ export default async function ProtectedLayout({
 }: Readonly<{
   children: React.ReactNode
 }>) {
-  const session = await auth.api.getSession({
-    headers: await headers(),
-  })
+  const session = await getCurrentSession()
 
   const user = {
     name: session?.user.name ?? "Creator",

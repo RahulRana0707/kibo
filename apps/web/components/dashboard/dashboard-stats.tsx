@@ -1,4 +1,4 @@
-import type { DashboardPageData } from "@/actions/dashboard/get-dashboard-page-data"
+import type { DashboardPageData } from "@/lib/api/types"
 import { cn } from "@kibo/ui/lib/utils"
 
 export function DashboardStats({ data }: { data: DashboardPageData }) {

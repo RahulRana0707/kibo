@@ -2,8 +2,7 @@
 
 import Link from "next/link"
 
-import { deleteBotAction } from "@/actions/bots/delete-bot"
-import { setActiveBotAction } from "@/actions/bots/set-active-bot"
+import { useBotActions } from "@/components/bots/use-bot-actions"
 import { Button } from "@kibo/ui/components/button"
 import {
   DropdownMenu,
@@ -30,17 +29,15 @@ export function BotActionsMenu({
   isActive?: boolean
   triggerClassName?: string
 }) {
-  const deleteFormId = `delete-bot-${botId}`
-  const activeFormId = `set-active-bot-${botId}`
+  const {
+    deleteBot,
+    isDeletingBot,
+    setActiveBot,
+    isSettingActiveBot,
+  } = useBotActions()
+  const isPending = isDeletingBot || isSettingActiveBot
 
   return (
-    <>
-      <form id={deleteFormId} action={deleteBotAction} className="hidden">
-        <input type="hidden" name="botId" value={botId} />
-      </form>
-      <form id={activeFormId} action={setActiveBotAction} className="hidden">
-        <input type="hidden" name="botId" value={botId} />
-      </form>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button
@@ -65,35 +62,30 @@ export function BotActionsMenu({
               <span>Active bot</span>
             </DropdownMenuItem>
           ) : (
-            <DropdownMenuItem asChild>
-              <button
-                type="submit"
-                form={activeFormId}
-                className="flex w-full items-center gap-2 text-left outline-none"
-              >
-                <RadioIcon />
-                <span>Make active</span>
-              </button>
+            <DropdownMenuItem
+              disabled={isPending}
+              onClick={() => {
+                void setActiveBot(botId)
+              }}
+            >
+              <RadioIcon />
+              <span>Make active</span>
             </DropdownMenuItem>
           )}
           <DropdownMenuSeparator />
-          <DropdownMenuItem asChild variant="destructive">
-            <button
-              type="submit"
-              form={deleteFormId}
-              className="flex w-full items-center gap-2 text-left outline-none"
-              onClick={(event) => {
-                if (!window.confirm("Delete this bot?")) {
-                  event.preventDefault()
-                }
-              }}
-            >
-              <Trash2Icon />
-              <span>Delete</span>
-            </button>
+          <DropdownMenuItem
+            disabled={isPending}
+            variant="destructive"
+            onClick={() => {
+              if (window.confirm("Delete this bot?")) {
+                void deleteBot(botId)
+              }
+            }}
+          >
+            <Trash2Icon />
+            <span>Delete</span>
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </>
   )
 }
