@@ -1,0 +1,50 @@
+export const metadata = {
+  title: "The 20 questions every stream gets — and how to answer them once",
+  description:
+    "We looked at what viewers ask most across gaming, IRL and music streams. Here’s how to turn them into FAQs your bot can answer.",
+  category: "Guides",
+  date: "2026-10-07",
+  readMinutes: 8,
+  author: { name: "Marcus Lee", role: "Community lead", initials: "ML" },
+  featured: true,
+}
+
+## The usual suspects
+
+Whatever you stream, most questions fall into five buckets: **what** you’re doing (game, song, recipe), **when** you stream next, **what you use** (gear, settings), **where else** to find you, and **how to join in** (Discord, giveaways, viewer games).
+
+Write one FAQ for each, and Kibo can cover most of the repeat questions in a typical stream on day one.
+
+<figure className="flex flex-col gap-3 rounded-xl border border-transparent bg-raised p-4 shadow-border">
+  <ChatFeed>
+    <ChatMessage author="lowkeyLiam" platform="youtube" tag={<MessageTag tone="question">Question</MessageTag>}>
+      what game is this
+    </ChatMessage>
+    <ChatMessage author="Pip" bot source="Live context · Category">
+      @lowkeyLiam It’s Valorant! Mira’s grinding ranked to Immortal this week.
+    </ChatMessage>
+  </ChatFeed>
+  <figcaption className="text-caption text-muted-foreground">
+    Kibo pulls the current game from your stream category, so you never need a “what game” FAQ.
+  </figcaption>
+</figure>
+
+## Write answers like you talk
+
+Short beats complete. One sentence, one link. If an answer needs a paragraph, it probably needs a command like `!setup` that links to a page.
+
+### Do
+
+“0.32 at 800 DPI, scoped 1.0. Full settings: !setup”
+
+### Don’t
+
+“My sensitivity settings are as follows: in-game sensitivity is set to 0.32 and my mouse DPI is…”
+
+## Keep them fresh
+
+Schedules and sponsors change. Knowledge health flags items you haven’t touched in 60 days, and conflicting answers, so your bot never quotes last month’s promo code.
+
+## Let chat teach you
+
+Everything Kibo can’t answer lands in the Unanswered inbox, grouped by meaning. Spend five minutes after each stream answering the top few and your coverage climbs every week.
