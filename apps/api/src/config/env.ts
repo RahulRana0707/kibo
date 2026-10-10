@@ -9,9 +9,6 @@ const envSchema = z.object({
   BETTER_AUTH_SECRET: z.string().optional(),
   WEB_URL: z.url().default('http://localhost:3005'),
   API_URL: z.url().default('http://localhost:4000'),
-  GOOGLE_YOUTUBE_CLIENT_ID: z.string().optional(),
-  GOOGLE_YOUTUBE_CLIENT_SECRET: z.string().optional(),
-  GOOGLE_YOUTUBE_REDIRECT_URI: z.url().optional(),
 });
 
 export const env = envSchema.parse(process.env);

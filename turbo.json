@@ -7,9 +7,6 @@
     "API_URL",
     "NEXT_PUBLIC_API_URL",
     "WEB_URL",
-    "GOOGLE_YOUTUBE_CLIENT_ID",
-    "GOOGLE_YOUTUBE_CLIENT_SECRET",
-    "GOOGLE_YOUTUBE_REDIRECT_URI",
     "NODE_ENV"
   ],
   "tasks": {
