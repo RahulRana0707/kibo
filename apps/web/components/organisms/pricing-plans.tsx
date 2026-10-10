@@ -4,7 +4,7 @@ import { useState } from "react"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { PlanCard } from "@/components/molecules/plan-card"
-import { SegmentedControl } from "@/components/molecules/segmented-control"
+import { SegmentedControl } from "@kibo/ui/components/segmented-control"
 import { plans } from "@/lib/marketing/plans"
 
 type Period = "monthly" | "yearly"
@@ -21,7 +21,7 @@ export function PricingPlans({ heading }: { heading: React.ReactNode }) {
           <SegmentedControl
             label="Billing period"
             value={period}
-            onChange={setPeriod}
+            onValueChange={setPeriod}
             options={[
               { value: "monthly", label: "Monthly" },
               { value: "yearly", label: "Yearly · save 20%" },

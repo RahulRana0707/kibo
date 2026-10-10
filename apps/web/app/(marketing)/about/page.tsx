@@ -8,7 +8,7 @@ import { Container } from "@/components/atoms/container"
 import { Placeholder } from "@/components/atoms/placeholder"
 import { Prose } from "@/components/atoms/prose"
 import { Section } from "@/components/atoms/section"
-import { Heading } from "@/components/atoms/typography"
+import { Heading } from "@kibo/ui/components/typography"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
 

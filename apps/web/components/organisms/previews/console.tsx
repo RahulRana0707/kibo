@@ -3,10 +3,10 @@ import { PauseIcon } from "lucide-react"
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { DemoButton } from "@/components/atoms/demo-button"
 import { MessageTag } from "@/components/atoms/message-tag"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { Stat } from "@/components/atoms/stat"
 import { StatusPill } from "@/components/atoms/status-pill"
-import { Eyebrow } from "@/components/atoms/typography"
+import { Eyebrow } from "@kibo/ui/components/typography"
 import { ChatFeed, ChatMessage } from "@/components/molecules/chat-message"
 
 /** Live numbers and quick actions, for the product overview. */
@@ -85,7 +85,7 @@ export function ConsoleMock() {
             <div className="flex flex-wrap gap-2">
               <DemoButton variant="ghost">Edit</DemoButton>
               <DemoButton variant="ghost">Reject</DemoButton>
-              <DemoButton variant="default">Approve</DemoButton>
+              <DemoButton variant="primary">Approve</DemoButton>
             </div>
           </Panel>
         </Panel>

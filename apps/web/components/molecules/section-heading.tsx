@@ -1,6 +1,6 @@
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Eyebrow, Heading, Lede } from "@/components/atoms/typography"
+import { Eyebrow, Heading, Lede } from "@kibo/ui/components/typography"
 
 /** Eyebrow, heading and lede at the top of a marketing section. */
 export function SectionHeading({

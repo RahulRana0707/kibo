@@ -7,21 +7,27 @@ const sizes = {
   sm: { text: "text-[1.125rem]", mark: "size-6 rounded-[7px] text-xs" },
 }
 
-/** The Kibo mark and wordmark. Used everywhere the product is named. */
+/**
+ * The Kibo mark and wordmark, always a link home. `markOnly` drops the
+ * word and names the link “Kibo home”.
+ */
 export function BrandLogo({
   href = "/",
   size = "md",
+  markOnly = false,
   className,
 }: {
   href?: string
   size?: keyof typeof sizes
+  markOnly?: boolean
   className?: string
 }) {
   return (
     <Link
       href={href}
+      aria-label={markOnly ? "Kibo home" : undefined}
       className={cn(
-        "inline-flex items-center gap-2 font-semibold tracking-[-0.01em] text-foreground no-underline",
+        "inline-flex items-center gap-2 font-semibold transition-opacity duration-fast hover:opacity-80 max-sm:min-h-11 tracking-[-0.01em] text-foreground no-underline",
         sizes[size].text,
         className
       )}
@@ -35,7 +41,7 @@ export function BrandLogo({
       >
         K
       </span>
-      Kibo
+      {markOnly ? null : "Kibo"}
     </Link>
   )
 }

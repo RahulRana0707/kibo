@@ -6,11 +6,11 @@ import { buttonVariants } from "@kibo/ui/components/button"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { Container } from "@/components/atoms/container"
-import { Monogram } from "@/components/atoms/monogram"
+import { Avatar } from "@kibo/ui/components/avatar"
 import { Placeholder } from "@/components/atoms/placeholder"
 import { Prose } from "@/components/atoms/prose"
 import { Section } from "@/components/atoms/section"
-import { Heading, Lede } from "@/components/atoms/typography"
+import { Heading, Lede } from "@kibo/ui/components/typography"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
 import { TableOfContents } from "@/components/organisms/table-of-contents"
 import {
@@ -64,7 +64,7 @@ export default async function BlogPostPage({ params }: Props) {
             <Heading as="h1">{metadata.title}</Heading>
             <Lede>{metadata.description}</Lede>
             <div className="flex flex-wrap items-center gap-3 text-caption text-muted-foreground">
-              <Monogram initials={metadata.author.initials} size="sm" />
+              <Avatar name={metadata.author.initials} initials={metadata.author.initials} size="sm" />
               <span className="font-medium text-foreground">
                 {metadata.author.name}, {metadata.author.role}
               </span>

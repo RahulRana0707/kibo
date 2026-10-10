@@ -1,7 +1,7 @@
 import type { Metadata } from "next"
 
 import { Container } from "@/components/atoms/container"
-import { Heading, Lede } from "@/components/atoms/typography"
+import { Heading, Lede } from "@kibo/ui/components/typography"
 import { BlogIndex } from "@/components/organisms/blog-index"
 import { NewsletterSignup } from "@/components/organisms/newsletter-signup"
 import { getPostSummaries } from "@/lib/marketing/posts"

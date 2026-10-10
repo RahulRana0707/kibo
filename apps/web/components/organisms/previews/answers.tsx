@@ -1,9 +1,9 @@
 import { Badge } from "@kibo/ui/components/badge"
 
-import { Chip } from "@/components/atoms/chip"
+import { Chip } from "@kibo/ui/components/chip"
 import { MessageTag } from "@/components/atoms/message-tag"
-import { Panel } from "@/components/atoms/panel"
-import { Eyebrow } from "@/components/atoms/typography"
+import { Panel } from "@kibo/ui/components/panel"
+import { Eyebrow } from "@kibo/ui/components/typography"
 import { ChatFeed, ChatMessage } from "@/components/molecules/chat-message"
 import { ListRow } from "@/components/molecules/list-row"
 
@@ -109,7 +109,7 @@ export function PersonalityChips() {
   return (
     <div className="flex flex-wrap gap-2">
       {personalities.map((name) => (
-        <Chip key={name} selected={name === "Hype"}>
+        <Chip key={name} variant={name === "Hype" ? "selected" : "default"}>
           {name}
         </Chip>
       ))}

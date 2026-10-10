@@ -45,33 +45,68 @@ const sizes = {
  * Pass `label` when the icon carries meaning on its own; omit it when text
  * beside the icon already names the platform.
  */
+const statusDots = {
+  connected: { className: "bg-success", word: "connected" },
+  disconnected: { className: "bg-border-strong", word: "not connected" },
+  reconnect: { className: "bg-warning", word: "needs reconnect" },
+}
+
+/**
+ * A brand mark on a white tile, so official colors read in both themes.
+ * Pass `label` when the icon carries meaning on its own; omit it when text
+ * beside the icon already names the platform. `muted` is for platforms that
+ * are coming soon and always sits next to a Soon label. `status` adds a
+ * connection dot, and its word joins the label.
+ */
 export function PlatformIcon({
   platform,
   size = "sm",
   label,
   muted = false,
+  status,
   className,
 }: {
   platform: Platform
   size?: keyof typeof sizes
   label?: string
   muted?: boolean
+  status?: keyof typeof statusDots
   className?: string
 }) {
-  return (
+  const image = (
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={`/brands/${platform}.svg`}
-      alt={label ?? ""}
+      alt={
+        label && status ? `${label}, ${statusDots[status].word}` : (label ?? "")
+      }
       width={24}
       height={24}
       className={cn(
         "inline-block shrink-0 bg-white object-contain align-middle shadow-[inset_0_0_0_1px_var(--vi-border-subtle)]",
         sizes[size],
-        muted && "opacity-45",
-        className
+        muted && "opacity-55 grayscale",
+        !status && className
       )}
     />
+  )
+
+  if (!status) {
+    return image
+  }
+
+  return (
+    <span className={cn("relative inline-flex shrink-0", className)}>
+      {image}
+      <span
+        aria-hidden="true"
+        className={cn(
+          "absolute -inset-e-0.5 -bottom-0.5 rounded-full ring-2 ring-page",
+          size === "sm" ? "size-2" : "size-3",
+          statusDots[status].className
+        )}
+      />
+    </span>
   )
 }
 

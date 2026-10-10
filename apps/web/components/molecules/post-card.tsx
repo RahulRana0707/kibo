@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Badge } from "@kibo/ui/components/badge"
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Monogram } from "@/components/atoms/monogram"
+import { Avatar } from "@kibo/ui/components/avatar"
 import { Placeholder } from "@/components/atoms/placeholder"
 
 export type PostSummary = {
@@ -51,7 +51,7 @@ export function PostCard({
           </Title>
           <p className="text-muted-foreground">{post.description}</p>
           <span className="flex items-center gap-2 text-caption">
-            <Monogram initials={post.author.initials} size="sm" />
+            <Avatar name={post.author.initials} initials={post.author.initials} size="sm" />
             {post.author.name}, {post.author.role}
           </span>
         </div>

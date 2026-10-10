@@ -4,7 +4,7 @@ import { buttonVariants } from "@kibo/ui/components/button"
 
 import { Container } from "@/components/atoms/container"
 import { Section } from "@/components/atoms/section"
-import { Heading, Lede } from "@/components/atoms/typography"
+import { Heading, Lede } from "@kibo/ui/components/typography"
 
 /** The closing call to action at the bottom of a marketing page. */
 export function CtaBanner({

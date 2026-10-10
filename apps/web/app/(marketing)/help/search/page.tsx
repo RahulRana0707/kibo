@@ -12,9 +12,9 @@ import {
   EmptyTitle,
 } from "@kibo/ui/components/empty"
 
-import { chipLinkClassName } from "@/components/atoms/chip"
+import { chipVariants } from "@kibo/ui/components/chip"
 import { Container } from "@/components/atoms/container"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
 import { HelpSearchForm } from "@/components/organisms/help-search-form"
 import { getHelpArticles, getPlainText } from "@/lib/content"
@@ -115,7 +115,7 @@ export default async function HelpSearchPage({ searchParams }: Props) {
                 <Link
                   href={hrefFor()}
                   aria-current={!topic ? "page" : undefined}
-                  className={chipLinkClassName(!topic)}
+                  className={chipVariants({ variant: !topic ? "selected" : "default" })}
                 >
                   All topics
                 </Link>
@@ -124,7 +124,7 @@ export default async function HelpSearchPage({ searchParams }: Props) {
                     key={slug}
                     href={hrefFor(slug)}
                     aria-current={topic === slug ? "page" : undefined}
-                    className={chipLinkClassName(topic === slug)}
+                    className={chipVariants({ variant: topic === slug ? "selected" : "default" })}
                   >
                     {getHelpCategory(slug)?.title}
                   </Link>

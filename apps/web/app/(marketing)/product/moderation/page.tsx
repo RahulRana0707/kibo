@@ -1,9 +1,9 @@
 import type { Metadata } from "next"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Chip } from "@/components/atoms/chip"
+import { Chip } from "@kibo/ui/components/chip"
 import { Container } from "@/components/atoms/container"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { Section } from "@/components/atoms/section"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
@@ -112,7 +112,7 @@ export default function ModerationPage() {
                       →
                     </span>
                   ) : null}
-                  <Chip selected={item.on}>{item.step}</Chip>
+                  <Chip variant={item.on ? "selected" : "default"}>{item.step}</Chip>
                 </li>
               ))}
             </ol>

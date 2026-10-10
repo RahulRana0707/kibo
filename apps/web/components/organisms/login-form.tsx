@@ -7,7 +7,7 @@ import { Button } from "@kibo/ui/components/button"
 import { Input } from "@kibo/ui/components/input"
 import { Label } from "@kibo/ui/components/label"
 
-import { DividerText } from "@/components/atoms/divider-text"
+import { DividerText } from "@kibo/ui/components/separator"
 import { Callout } from "@/components/molecules/callout"
 import { PasswordField } from "@/components/molecules/password-field"
 import { SocialSignIn } from "@/components/molecules/social-sign-in"

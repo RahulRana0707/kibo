@@ -19,13 +19,13 @@ import { Container } from "@/components/atoms/container"
 import { DemoButton } from "@/components/atoms/demo-button"
 import { IconTile } from "@/components/atoms/icon-tile"
 import { MessageTag } from "@/components/atoms/message-tag"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { PlatformIcon, type Platform } from "@/components/atoms/platform-icon"
 import { Section } from "@/components/atoms/section"
 import { Confidence, SourceChip } from "@/components/atoms/source-chip"
 import { Stat } from "@/components/atoms/stat"
 import { StatusPill } from "@/components/atoms/status-pill"
-import { Eyebrow, Heading, Lede } from "@/components/atoms/typography"
+import { Eyebrow, Heading, Lede } from "@kibo/ui/components/typography"
 import { ChatFeed, ChatMessage } from "@/components/molecules/chat-message"
 import { FeatureItem, FeatureLinkCard } from "@/components/molecules/feature"
 import { PlanCard } from "@/components/molecules/plan-card"
@@ -376,7 +376,7 @@ export default function LandingPage() {
                 value={item.value}
                 label={item.label}
                 labelFirst={false}
-                size="lg"
+                size="xl"
               />
             ))}
           </AutoGrid>
@@ -438,7 +438,7 @@ export default function LandingPage() {
                 </span>
                 <span className="flex gap-2">
                   <DemoButton variant="ghost">Reject</DemoButton>
-                  <DemoButton variant="default">Approve</DemoButton>
+                  <DemoButton variant="primary">Approve</DemoButton>
                 </span>
               </Panel>
             </Panel>

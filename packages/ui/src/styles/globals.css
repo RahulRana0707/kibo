@@ -348,6 +348,21 @@
   outline-offset: -1px;
 }
 
+/* Violet motion durations: hover on rows and ghosts, press and exits,
+   sheets and drawers, entrances and icon cross-fades. */
+@utility duration-instant {
+  transition-duration: 100ms;
+}
+@utility duration-fast {
+  transition-duration: 150ms;
+}
+@utility duration-moderate {
+  transition-duration: 200ms;
+}
+@utility duration-slow {
+  transition-duration: 300ms;
+}
+
 @utility press {
   transition-property: scale, background-color, box-shadow, color;
   transition-duration: 150ms;
@@ -356,6 +371,50 @@
     &:not(:disabled):not([aria-disabled="true"]):active {
       scale: 0.96;
     }
+  }
+}
+
+/* Skeletons pulse 1 → 0.55 → 1 and only appear after 300ms, so fast loads
+   don't flash. */
+@keyframes vi-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes vi-appear {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+@utility animate-skeleton {
+  animation: vi-appear 0ms 300ms both;
+  @media (prefers-reduced-motion: no-preference) {
+    animation:
+      vi-appear 0ms 300ms both,
+      vi-pulse 1.6s ease-out 300ms infinite;
+  }
+}
+
+/* Indeterminate progress: a bar sliding across the track. */
+@keyframes vi-indeterminate {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
+  }
+}
+
+@utility animate-indeterminate {
+  animation: vi-indeterminate 1.2s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: vi-pulse 1.6s ease-out infinite;
+    translate: 75% 0;
   }
 }
 

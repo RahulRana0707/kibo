@@ -61,7 +61,7 @@ export function PlanCard({
           <Link
             href={`/signup?plan=${plan.code}`}
             className={buttonVariants({
-              variant: plan.featured ? "default" : "secondary",
+              variant: plan.featured ? "primary" : "secondary",
             })}
           >
             Start free trial

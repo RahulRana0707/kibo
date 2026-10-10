@@ -1,7 +1,7 @@
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Meter } from "@/components/atoms/meter"
-import { Monogram } from "@/components/atoms/monogram"
-import { Panel } from "@/components/atoms/panel"
+import { Meter } from "@kibo/ui/components/meter"
+import { Avatar } from "@kibo/ui/components/avatar"
+import { Panel } from "@kibo/ui/components/panel"
 import { PlatformIcon } from "@/components/atoms/platform-icon"
 import { Stat } from "@/components/atoms/stat"
 import { StatusPill } from "@/components/atoms/status-pill"
@@ -73,7 +73,7 @@ export function GiveawayAndLeaderboard() {
                     <span className="text-muted-foreground tabular">
                       {index + 1}
                     </span>
-                    <Monogram initials={leader.initials} size="sm" />
+                    <Avatar name={leader.initials} initials={leader.initials} size="sm" />
                   </>
                 }
                 trailing={

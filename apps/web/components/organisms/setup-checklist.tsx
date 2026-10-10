@@ -1,7 +1,7 @@
 import { Badge } from "@kibo/ui/components/badge"
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Meter } from "@/components/atoms/meter"
+import { Meter } from "@kibo/ui/components/meter"
 
 export type SetupStep = { title: string; detail?: string }
 

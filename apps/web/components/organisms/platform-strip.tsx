@@ -2,7 +2,7 @@ import { cn } from "@kibo/ui/lib/utils"
 
 import { Container } from "@/components/atoms/container"
 import { PlatformIcon, type Platform } from "@/components/atoms/platform-icon"
-import { Eyebrow } from "@/components/atoms/typography"
+import { Eyebrow } from "@kibo/ui/components/typography"
 
 const strip: { platform: Platform; label: string; soon?: boolean }[] = [
   { platform: "youtube", label: "YouTube Live" },

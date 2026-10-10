@@ -3,7 +3,7 @@ import { FileTextIcon, GlobeIcon } from "lucide-react"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { Container } from "@/components/atoms/container"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import {
   GlyphTile,
   PlatformIcon,

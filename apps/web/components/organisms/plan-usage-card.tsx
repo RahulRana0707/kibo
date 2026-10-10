@@ -1,6 +1,6 @@
 import Link from "next/link"
 
-import { Meter } from "@/components/atoms/meter"
+import { Meter } from "@kibo/ui/components/meter"
 
 /** Plan and usage at the foot of the sidebar. No plan until billing ships. */
 export function PlanUsageCard() {

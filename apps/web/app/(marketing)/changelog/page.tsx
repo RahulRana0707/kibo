@@ -4,7 +4,7 @@ import Link from "next/link"
 import { buttonVariants } from "@kibo/ui/components/button"
 
 import { Container } from "@/components/atoms/container"
-import { Heading, Lede } from "@/components/atoms/typography"
+import { Heading, Lede } from "@kibo/ui/components/typography"
 import { formatDate, getChangelog } from "@/lib/content"
 
 export const metadata: Metadata = {

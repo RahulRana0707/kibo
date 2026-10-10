@@ -12,8 +12,8 @@ import {
 } from "@kibo/ui/components/empty"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Panel } from "@/components/atoms/panel"
-import { Heading } from "@/components/atoms/typography"
+import { Panel } from "@kibo/ui/components/panel"
+import { Heading } from "@kibo/ui/components/typography"
 import { SetupChecklist } from "@/components/organisms/setup-checklist"
 import { getCurrentSession } from "@/lib/api/auth.server"
 

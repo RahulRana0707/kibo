@@ -2,7 +2,7 @@ import { cn } from "@kibo/ui/lib/utils"
 
 import { Container } from "@/components/atoms/container"
 import { Section } from "@/components/atoms/section"
-import { Eyebrow, Heading, Lede } from "@/components/atoms/typography"
+import { Eyebrow, Heading, Lede } from "@kibo/ui/components/typography"
 import { Breadcrumbs, type Crumb } from "@/components/molecules/breadcrumbs"
 
 /**

@@ -5,7 +5,7 @@ import { useState } from "react"
 import { Button } from "@kibo/ui/components/button"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { ChipButton } from "@/components/atoms/chip"
+import { ChipButton } from "@kibo/ui/components/chip"
 import { PostCard, type PostSummary } from "@/components/molecules/post-card"
 
 const categories = [

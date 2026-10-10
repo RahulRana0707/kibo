@@ -14,7 +14,7 @@ export function PasswordField({
   invalid = false,
   describedBy,
   ...props
-}: Omit<React.ComponentProps<"input">, "type"> & {
+}: Omit<React.ComponentProps<"input">, "type" | "size"> & {
   id: string
   label?: string
   labelAside?: React.ReactNode

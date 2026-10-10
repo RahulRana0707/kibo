@@ -4,7 +4,7 @@ import { useMemo, useState } from "react"
 import Link from "next/link"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { ChipButton } from "@/components/atoms/chip"
+import { ChipButton } from "@kibo/ui/components/chip"
 import { IntegrationCard } from "@/components/molecules/integration-card"
 import { SearchField } from "@/components/molecules/search-field"
 import {

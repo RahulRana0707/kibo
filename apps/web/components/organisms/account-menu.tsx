@@ -11,11 +11,10 @@ import {
   DropdownMenuTrigger,
 } from "@kibo/ui/components/dropdown-menu"
 
-import { Monogram } from "@/components/atoms/monogram"
-import { SoonLabel } from "@/components/molecules/soon-label"
+import { Avatar } from "@kibo/ui/components/avatar"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
 import { ThemeMenuSwitch } from "@/components/molecules/theme-switch"
 import { useLogOut } from "@/hooks/use-log-out"
-import { initialsOf } from "@/lib/initials"
 
 export type AccountUser = { name: string; email: string }
 
@@ -31,12 +30,12 @@ export function AccountMenu({ user }: { user: AccountUser }) {
           size="icon"
           aria-label={`Account menu, ${user.name}`}
         >
-          <Monogram initials={initialsOf(user.name)} />
+          <Avatar name={user.name} />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end" className="w-70 p-1.5">
         <div className="flex items-center gap-3 p-2.5">
-          <Monogram initials={initialsOf(user.name)} />
+          <Avatar name={user.name} />
           <span className="flex min-w-0 flex-col">
             <span className="truncate font-semibold">{user.name}</span>
             <span className="truncate text-caption text-muted-foreground">

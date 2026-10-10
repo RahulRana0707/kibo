@@ -3,8 +3,8 @@ import Link from "next/link"
 
 import { buttonVariants } from "@kibo/ui/components/button"
 
-import { chipLinkClassName } from "@/components/atoms/chip"
-import { Panel } from "@/components/atoms/panel"
+import { chipVariants } from "@kibo/ui/components/chip"
+import { Panel } from "@kibo/ui/components/panel"
 import { PlatformIcon, type Platform } from "@/components/atoms/platform-icon"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { CtaBanner } from "@/components/organisms/cta-banner"
@@ -130,7 +130,7 @@ export default function ProductPage() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={chipLinkClassName()}
+                className={chipVariants()}
               >
                 {link.label}
               </Link>

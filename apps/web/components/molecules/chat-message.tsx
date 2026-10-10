@@ -1,6 +1,6 @@
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Monogram } from "@/components/atoms/monogram"
+import { Avatar } from "@kibo/ui/components/avatar"
 import {
   PlatformIcon,
   platforms,
@@ -49,7 +49,7 @@ export function ChatMessage({
       )}
     >
       {bot ? (
-        <Monogram initials={author.charAt(0)} bot size="sm" />
+        <Avatar name={author} variant="bot" size="sm" />
       ) : platform ? (
         <PlatformIcon platform={platform} label={platforms[platform]} />
       ) : null}

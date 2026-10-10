@@ -14,7 +14,7 @@ import {
 } from "@kibo/ui/components/sheet"
 
 import { BrandLogo } from "@/components/atoms/brand-logo"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { BotStatus, PauseBotButton } from "@/components/molecules/bot-controls"
 import {
   AccountMenu,

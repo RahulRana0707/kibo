@@ -14,7 +14,7 @@ import {
   CommandList,
 } from "@kibo/ui/components/command"
 
-import { SoonLabel } from "@/components/molecules/soon-label"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
 import { useLogOut } from "@/hooks/use-log-out"
 import { appNavigation } from "@/lib/app-navigation"
 

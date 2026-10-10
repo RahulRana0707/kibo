@@ -11,7 +11,7 @@ import { StatusPill } from "@/components/atoms/status-pill"
 /** The bot's state beside the kill switch. Offline until a bot is running. */
 export function BotStatus({ className }: { className?: string }) {
   return (
-    <StatusPill tone="ready" className={className}>
+    <StatusPill tone="offline" className={className}>
       <span role="status">Offline</span>
     </StatusPill>
   )

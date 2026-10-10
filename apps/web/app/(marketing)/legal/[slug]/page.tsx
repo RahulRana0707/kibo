@@ -3,7 +3,7 @@ import { notFound } from "next/navigation"
 
 import { Container } from "@/components/atoms/container"
 import { Prose } from "@/components/atoms/prose"
-import { Heading } from "@/components/atoms/typography"
+import { Heading } from "@kibo/ui/components/typography"
 import { Callout } from "@/components/molecules/callout"
 import { TabLinks } from "@/components/molecules/tab-links"
 import { TableOfContents } from "@/components/organisms/table-of-contents"

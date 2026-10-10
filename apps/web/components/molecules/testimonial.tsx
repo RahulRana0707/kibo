@@ -1,6 +1,6 @@
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Monogram } from "@/components/atoms/monogram"
+import { Avatar } from "@kibo/ui/components/avatar"
 import {
   PlatformIcon,
   platforms,
@@ -17,7 +17,7 @@ type Person = {
 function Attribution({ person }: { person: Person }) {
   return (
     <figcaption className="flex items-center gap-3">
-      <Monogram initials={person.initials} />
+      <Avatar name={person.initials} initials={person.initials} />
       <span className="flex flex-col gap-1">
         <span className="text-body-sm font-medium">{person.name}</span>
         <span className="flex items-center gap-1 text-caption text-muted-foreground">

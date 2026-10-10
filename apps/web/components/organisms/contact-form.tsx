@@ -11,8 +11,8 @@ import { Textarea } from "@kibo/ui/components/textarea"
 import { cn } from "@kibo/ui/lib/utils"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { chipClassName } from "@/components/atoms/chip"
-import { NativeSelect } from "@/components/atoms/native-select"
+import { chipVariants } from "@kibo/ui/components/chip"
+import { NativeSelect } from "@kibo/ui/components/select"
 
 const platformOptions = ["YouTube", "Twitch", "Kick", "TikTok"]
 
@@ -150,11 +150,8 @@ export function ContactForm() {
               <label
                 key={platform}
                 className={cn(
-                  chipClassName,
-                  "cursor-pointer",
-                  checked
-                    ? "bg-primary-subtle text-link shadow-[inset_0_0_0_1px_var(--vi-accent-border)]"
-                    : "bg-raised shadow-border"
+                  chipVariants({ variant: checked ? "selected" : "default" }),
+                  "cursor-pointer has-focus-visible:outline-2 has-focus-visible:outline-offset-2 has-focus-visible:outline-ring"
                 )}
               >
                 <input

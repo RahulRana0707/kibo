@@ -12,9 +12,8 @@ import {
 } from "@kibo/ui/components/dropdown-menu"
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Monogram } from "@/components/atoms/monogram"
-import { SoonLabel } from "@/components/molecules/soon-label"
-import { initialsOf } from "@/lib/initials"
+import { Avatar } from "@kibo/ui/components/avatar"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
 
 /** The current workspace, with the menu to switch or create one. */
 export function WorkspaceSwitcher({
@@ -32,7 +31,7 @@ export function WorkspaceSwitcher({
           large ? "min-h-14 px-3 py-2.5" : "px-2.5 py-2"
         )}
       >
-        <Monogram initials={initialsOf(workspace)} size="sm" />
+        <Avatar name={workspace} size="sm" shape="square" />
         <span className="flex min-w-0 flex-1 flex-col">
           <span className="text-caption text-muted-foreground">Workspace</span>
           <span className="truncate text-body-sm font-medium">{workspace}</span>
@@ -47,7 +46,7 @@ export function WorkspaceSwitcher({
           Your workspaces
         </DropdownMenuLabel>
         <DropdownMenuItem className="min-h-11 bg-hovered">
-          <Monogram initials={initialsOf(workspace)} size="sm" />
+          <Avatar name={workspace} size="sm" shape="square" />
           <span className="flex min-w-0 flex-1 flex-col">
             <span className="truncate font-medium text-foreground">
               {workspace}

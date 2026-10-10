@@ -6,11 +6,11 @@ import { Badge } from "@kibo/ui/components/badge"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { Container } from "@/components/atoms/container"
-import { Monogram } from "@/components/atoms/monogram"
-import { Panel } from "@/components/atoms/panel"
+import { Avatar } from "@kibo/ui/components/avatar"
+import { Panel } from "@kibo/ui/components/panel"
 import { PlatformIcon, platforms } from "@/components/atoms/platform-icon"
 import { Stat } from "@/components/atoms/stat"
-import { Eyebrow, Heading } from "@/components/atoms/typography"
+import { Eyebrow, Heading } from "@kibo/ui/components/typography"
 import {
   ChartAxis,
   ChartLegend,
@@ -46,7 +46,7 @@ export default async function SharedSummaryPage({ params }: Props) {
       <header className="border-b border-separator bg-background">
         <Container className="flex min-h-16 max-w-[1040px] flex-wrap items-center justify-between gap-3 py-3">
           <span className="flex items-center gap-3">
-            <Monogram initials={summary.creator.initials} />
+            <Avatar name={summary.creator.initials} initials={summary.creator.initials} />
             <span className="flex flex-col">
               <span className="font-semibold">{summary.creator.name}</span>
               <span className="text-caption text-muted-foreground">

@@ -3,7 +3,7 @@ import { Label } from "@kibo/ui/components/label"
 import { Textarea } from "@kibo/ui/components/textarea"
 
 import { DemoButton } from "@/components/atoms/demo-button"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { ListRow } from "@/components/molecules/list-row"
 
 const items = [
@@ -88,7 +88,7 @@ export function UnansweredCard() {
         <DemoButton variant="ghost" size="default">
           Dismiss
         </DemoButton>
-        <DemoButton variant="default" size="default">
+        <DemoButton variant="primary" size="default">
           Save as FAQ
         </DemoButton>
       </div>

@@ -1,6 +1,6 @@
 import { DemoButton } from "@/components/atoms/demo-button"
 import { MessageTag } from "@/components/atoms/message-tag"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import {
   PlatformIcon,
   platforms,

@@ -2,7 +2,7 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { Container } from "@/components/atoms/container"
-import { Heading, Lede } from "@/components/atoms/typography"
+import { Heading, Lede } from "@kibo/ui/components/typography"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
 import { LinkList } from "@/components/molecules/link-list"
 import { SearchField } from "@/components/molecules/search-field"

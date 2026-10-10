@@ -2,9 +2,9 @@ import type { Metadata } from "next"
 import Link from "next/link"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { Stat } from "@/components/atoms/stat"
-import { Eyebrow, Heading } from "@/components/atoms/typography"
+import { Eyebrow, Heading } from "@kibo/ui/components/typography"
 import { LoginForm } from "@/components/organisms/login-form"
 import { AuthTemplate } from "@/components/templates/auth-template"
 

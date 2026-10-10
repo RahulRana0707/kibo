@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@kibo/ui/components/dropdown-menu"
 
-import { SoonLabel } from "@/components/molecules/soon-label"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
 
 /** Switches the active bot. Shows "No bot yet" until bots exist. */
 export function BotSwitcher() {

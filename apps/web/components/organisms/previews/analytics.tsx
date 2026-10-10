@@ -1,6 +1,6 @@
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { DemoButton } from "@/components/atoms/demo-button"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { Stat } from "@/components/atoms/stat"
 import {
   BarChart,
