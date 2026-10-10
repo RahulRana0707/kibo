@@ -1,20 +1,17 @@
-import { Controller, Get, Req } from '@nestjs/common';
-import type { Request } from 'express';
+import { Controller, Get, UseGuards } from '@nestjs/common';
 
-import { AuthService } from '../auth/auth.service';
-import { requireSessionUser } from '../auth/require-session';
+import { CurrentUser } from '../auth/current-user.decorator';
+import type { SessionUser } from '../auth/session-user';
+import { SessionGuard } from '../auth/session.guard';
 import { DashboardService } from './dashboard.service';
 
 @Controller('dashboard')
+@UseGuards(SessionGuard)
 export class DashboardController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly dashboardService: DashboardService,
-  ) {}
+  constructor(private readonly dashboardService: DashboardService) {}
 
   @Get()
-  async getPageData(@Req() request: Request) {
-    const user = await requireSessionUser(this.authService, request);
+  async getPageData(@CurrentUser() user: SessionUser) {
     return this.dashboardService.getPageData(user.id);
   }
 }

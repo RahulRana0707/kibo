@@ -16,7 +16,7 @@ GOOGLE_YOUTUBE_REDIRECT_URI="http://localhost:4000/integrations/youtube/callback
 frontend. For local development:
 
 ```bash
-WEB_URL="http://localhost:3000"
+WEB_URL="http://localhost:3005"
 API_URL="http://localhost:4000"
 ```
 

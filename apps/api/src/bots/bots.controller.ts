@@ -6,63 +6,64 @@ import {
   Param,
   Patch,
   Post,
-  Req,
+  UseGuards,
 } from '@nestjs/common';
-import type { Request } from 'express';
 
-import { AuthService } from '../auth/auth.service';
-import { requireSessionUser } from '../auth/require-session';
+import { CurrentUser } from '../auth/current-user.decorator';
+import type { SessionUser } from '../auth/session-user';
+import { SessionGuard } from '../auth/session.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { botInputSchema, type BotInputDto } from './dto/bot.dto';
 import { BotsService } from './bots.service';
 
 @Controller('bots')
+@UseGuards(SessionGuard)
 export class BotsController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly botsService: BotsService,
-  ) {}
+  constructor(private readonly botsService: BotsService) {}
 
   @Get()
-  async list(@Req() request: Request) {
-    const user = await requireSessionUser(this.authService, request);
+  async list(@CurrentUser() user: SessionUser) {
     return this.botsService.list(user.id);
   }
 
   @Get(':botId')
-  async getOne(@Req() request: Request, @Param('botId') botId: string) {
-    const user = await requireSessionUser(this.authService, request);
+  async getOne(
+    @CurrentUser() user: SessionUser,
+    @Param('botId') botId: string,
+  ) {
     return this.botsService.getOne(user.id, botId);
   }
 
   @Post()
   async create(
-    @Req() request: Request,
+    @CurrentUser() user: SessionUser,
     @Body(new ZodValidationPipe(botInputSchema)) body: BotInputDto,
   ) {
-    const user = await requireSessionUser(this.authService, request);
     return this.botsService.create(user.id, body);
   }
 
   @Patch(':botId')
   async update(
-    @Req() request: Request,
+    @CurrentUser() user: SessionUser,
     @Param('botId') botId: string,
     @Body(new ZodValidationPipe(botInputSchema)) body: BotInputDto,
   ) {
-    const user = await requireSessionUser(this.authService, request);
     return this.botsService.update(user.id, botId, body);
   }
 
   @Delete(':botId')
-  async delete(@Req() request: Request, @Param('botId') botId: string) {
-    const user = await requireSessionUser(this.authService, request);
+  async delete(
+    @CurrentUser() user: SessionUser,
+    @Param('botId') botId: string,
+  ) {
     return this.botsService.delete(user.id, botId);
   }
 
   @Post(':botId/active')
-  async setActive(@Req() request: Request, @Param('botId') botId: string) {
-    const user = await requireSessionUser(this.authService, request);
+  async setActive(
+    @CurrentUser() user: SessionUser,
+    @Param('botId') botId: string,
+  ) {
     return this.botsService.setActive(user.id, botId);
   }
 }

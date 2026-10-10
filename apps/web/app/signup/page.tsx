@@ -8,6 +8,7 @@ import { toast } from "sonner"
 import { Button } from "@kibo/ui/components/button"
 import { Input } from "@kibo/ui/components/input"
 import { FieldGroup, Field, FieldLabel } from "@kibo/ui/components/field"
+import { PasswordInput } from "@/components/password-input"
 import {
   Card,
   CardHeader,
@@ -114,14 +115,13 @@ export default function SignupPage() {
 
                 <Field data-disabled={isLoading}>
                   <FieldLabel htmlFor="password">Password</FieldLabel>
-                  <Input
+                  <PasswordInput
                     id="password"
-                    type="password"
+                    autoComplete="new-password"
                     placeholder="••••••••"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
-                    className="h-10 rounded-xl border border-input bg-background px-3 text-foreground placeholder-muted-foreground focus-visible:ring-primary"
                   />
                 </Field>
               </FieldGroup>

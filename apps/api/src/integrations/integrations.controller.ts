@@ -1,8 +1,17 @@
-import { Body, Controller, Get, Post, Query, Req, Res } from '@nestjs/common';
-import type { Request, Response } from 'express';
+import {
+  Body,
+  Controller,
+  Get,
+  Post,
+  Query,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
+import type { Response } from 'express';
 
-import { AuthService } from '../auth/auth.service';
-import { requireSessionUser } from '../auth/require-session';
+import { CurrentUser } from '../auth/current-user.decorator';
+import type { SessionUser } from '../auth/session-user';
+import { SessionGuard } from '../auth/session.guard';
 import { ZodValidationPipe } from '../common/pipes/zod-validation.pipe';
 import { env } from '../config/env';
 import {
@@ -13,27 +22,25 @@ import { IntegrationsService } from './integrations.service';
 import { YOUTUBE_OAUTH_STATE_COOKIE } from './youtube/youtube-oauth.service';
 
 @Controller('integrations')
+@UseGuards(SessionGuard)
 export class IntegrationsController {
-  constructor(
-    private readonly authService: AuthService,
-    private readonly integrationsService: IntegrationsService,
-  ) {}
+  constructor(private readonly integrationsService: IntegrationsService) {}
 
   @Get()
-  async getPageData(@Req() request: Request, @Query('botId') botId?: string) {
-    const user = await requireSessionUser(this.authService, request);
+  async getPageData(
+    @CurrentUser() user: SessionUser,
+    @Query('botId') botId?: string,
+  ) {
     return this.integrationsService.getPageData(user.id, botId);
   }
 
   @Post('start')
   async start(
-    @Req() request: Request,
+    @CurrentUser() user: SessionUser,
     @Res({ passthrough: true }) response: Response,
     @Body(new ZodValidationPipe(startIntegrationSchema))
     body: StartIntegrationDto,
   ) {
-    const user = await requireSessionUser(this.authService, request);
-
     const result = await this.integrationsService.start(
       user.id,
       body.botId,
