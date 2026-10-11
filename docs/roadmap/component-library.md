@@ -48,14 +48,14 @@ Every board has a variant grid, forced states, phone width, a spec strip with to
 | Menus | Items vary | 36px items, `radius-md`, `bg-hover` highlight, destructive item last. Phone opens a bottom sheet. |
 | Command menu | Accent highlight | 44px rows, `bg-hover` highlight, recent searches, no results, loading |
 | Notifications | "You're all caught up" | Notifications are Soon: the bell tooltip says Soon and the panel explains what's coming |
-| Top bar | Search on the left, bot on the right | The library spec puts the bot switcher, status and Pause on the left and search, bell and avatar on the right. The live Topbar board still has search on the left. **To confirm.** |
+| Top bar | Search on the left, bot on the right | The library spec puts the bot switcher, status and Pause on the left and search, bell and avatar on the right. The live Topbar board still has search on the left. Decided: keep search left (see Decisions). |
 | Setup banner | One-off component | `SystemBanner`: one component with tones info, warning, danger and neutral, and kinds setup, trial, payment, reconnect, paused and maintenance |
 | Check list | One size | `sm`, `default` and `lg`, plus excluded rows |
 | Meter | One thickness | `default` 6 / `thin` 4, a strength variant, usage thresholds (80% warning, 100% danger), indeterminate `Progress` |
 | Spinner | Missing | `Spinner` sm 16 / md 20, shown after 300ms |
 | Route files | The landing page has 46 `className`s; 11 more pages have 9–34 | Pages only fill template slots; sections become organisms |
 
-Each built page (A, B, D, E and V1) still gets a side-by-side check against its frame, at 1440 and 390, when its components are rebuilt.
+Every row above is now fixed; see Status.
 
 ## Decisions (Oct 11, 2026)
 
@@ -63,6 +63,7 @@ Each built page (A, B, D, E and V1) still gets a side-by-side check against its 
 - **Renames:** adopt every rename the handoff proposes, including Button `default` → `primary`.
 - **Product cards:** build all 12 now as presentational components shown on `/design`, and wire them to data when each feature ships.
 - **Top bar:** keep ⌘K search on the left and the bot on the right, as on the live Topbar board and in code.
+- **When a page frame and a library board disagree, the board wins.** The boards are newer and carry the code handoff. The page frames (A, B, D, E, V1) set layout, copy and spacing.
 
 ## Where components live
 
@@ -82,7 +83,7 @@ The boards' code labels write every import as `@/components/<layer>/…`, Button
 - **atoms:** BrandLogo, StatusPill, PlatformIcon, MessageTag, SourceChip and Confidence, IconTile, Stat, SoonLabel, Section, Container, Prose
 - **molecules:** PasswordField, SearchField, SectionHeading, TabLinks and SideNav, CheckList, DetailList, ListRow, ChatMessage, Charts, the feature, integration, plan and post cards, SocialSignIn, BotControls, NotificationItem, OnboardingStepper, SetupChecklist, …
 - **organisms,** grouped in folders: `marketing/`, `auth/`, `app-shell/`, `data/` (page header, filter bar, settings, feature locked), `cards/` (the 12 product cards)
-- **templates:** marketing, auth, app, onboarding, settings, list-detail, error
+- **templates:** marketing, auth, app, onboarding, settings, list-detail, error, share
 
 **Rules:**
 - Imports go one way only: `app` → templates → organisms → molecules → atoms → `@kibo/ui`.
@@ -118,8 +119,70 @@ The boards' code labels write every import as `@/components/<layer>/…`, Button
 
 Each step ends with lint, type-check, build and a showcase check against the boards.
 
+## Status (Oct 11, 2026)
+
+Steps 1 to 5 are done. Every board has a component and a `/design` showcase entry. Lint and type-check pass.
+
+### Screen pass
+
+Every built page was compared side by side with its frame, rendered locally from the canvas, at 1440 and 390: the 24 marketing routes, sign up, log in, logged out, the app shell, the new dashboard, the share page and 404. Fixes made:
+
+- **Type:** DM Sans now loads its optical-size axis (`axes: ["opsz"]`). Without it, large headings ran wider than the design and wrapped early on every page.
+- **Charts:** rebuilt to the charts board:
+  - bars with a muted comparison
+  - a line chart with a comparison line, crosshair and tooltip
+  - sparkline, mood bar, donut and heatmap
+  - legend and axis
+  - empty, loading and error states
+
+  The line chart keeps the board's headroom above the peak.
+- **CTA banner:** now the board's dark section: an inset card with the copy beside the actions, or `flush` (full bleed and centered). It takes an optional outlined secondary action.
+- **Integration card:**
+  - Directory card: stacked as on the board (a 40px logo, the category badge or Soon at top right, then the name and one line).
+  - `compact`: shows the category.
+  - The landing page's integration strip uses `compact`.
+- **Detail list:** values of 24 characters or fewer stay beside their label down to 220px wide (the board's rule), so the integration sidebar reads label left, value right.
+- **Feature item:** `boxed="raised"` for boxes inside an alt section, where the surface box disappeared (moderation, engagement and both use cases).
+- **Smaller fixes:**
+  - The /product hero is padded 96 and its chips sit on one line.
+  - The /about heading spans the column (`SectionHeading wide`).
+  - Pull quotes are balanced.
+  - Help topic cards are stacked.
+  - The landing hero keeps 80 top padding on phones.
+  - Step 1 now reads “Create an account, then connect YouTube or Twitch.”
+- **Bugs:**
+  - Opening the account menu crashed: `DropdownMenuItem asChild` passed Radix's Slot two children. The fix affects every link item in every menu.
+  - Help search snippets showed raw Markdown links.
+
+Intended differences from the frames, because a newer board says otherwise:
+
+- the footer (`bg-page`, platform marks)
+- the “Most popular” plan (a 2px accent inset)
+- social sign-in (Google and Twitch, Soon)
+- the article feedback buttons (“Yes” / “No”)
+- the reconnect status tone (warning)
+- the phone banner action (a full-width block under the message)
+
+### Routes now only fill slots
+
+Page-level layout moved into organisms. The most `className`s in any marketing or share route went from 46 to 11. New pieces:
+
+- **`MarketingSection`:** a section, container and heading around any content.
+- **Landing page:** `LandingHero`, `ChatShowcase`, `TrustControls`.
+- **Share page:** the `summary/` organisms (`SummaryTitle`, `SummaryStats`, `SummaryChatChart`, `SummaryHighlights`, `SummaryTopQuestions`, `SummarySponsor`) and a `ShareTemplate`.
+- **Integration detail:** `IntegrationHeader`, `IntegrationDetails`, `IntegrationAside`.
+- **Help:** `HelpHero`, `HelpTopics`, `HelpStillStuck`, and the search results organisms.
+- **About:** `StorySection`, `TeamGrid`, `CareersCallout`.
+- **Blog post:** `ArticleHeader`, `ArticleTrialNote`, `KeepReading`.
+- **Atoms:** `MainAside`, for main-and-aside columns.
+
+### Still open
+
+- Placeholder art (team photos, blog covers, changelog and help screenshots) stays until real images exist. The handoff asks for real images with the placeholder text as alt.
+- Product screens beyond the dashboard (C, F–W) haven't been built. Their cards and templates exist on `/design`.
+
 ## New dependencies to expect
 
 - `react-day-picker`, for the date pickers (shadcn Calendar)
-- `@tanstack/react-table`, for the data table
-- Charts stay hand-drawn SVG, as today, unless line charts with tooltips turn out to need a library. That decision is made at step 3.
+- `@tanstack/react-table`, for the data table. Not needed: `DataTable` covers sorting, selection, bulk and row actions and phone cards on its own.
+- Charts stay hand-drawn SVG. Decided at step 3: the line chart's tooltip, crosshair and keyboard support didn't need a library.
