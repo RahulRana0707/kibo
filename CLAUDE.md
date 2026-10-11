@@ -11,3 +11,11 @@
   ```
 - `gh` commands: run them as RahulRana0707 without switching the active account, by prefixing `GH_TOKEN="$(gh auth token --user RahulRana0707)"`.
 - Never add a Claude or Anthropic co-author or attribution line to commit messages or PR descriptions.
+
+# Development account
+
+- Use this account for every local login and browser test. Don't create throwaway users.
+  - Email: `mira@kibo.test`
+  - Password: `kibo-dev-pass-1`
+  - Name: Mira Okafor (the design's sample creator)
+- It lives in the local Postgres only. After a database reset, recreate it with the API running: `pnpm --filter api seed:dev-user`. The script is safe to run again. It refuses to run when `NODE_ENV=production`.

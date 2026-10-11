@@ -86,7 +86,7 @@ export function PlanCard({
         current
           ? "bg-surface"
           : plan.featured && relation.kind === "marketing"
-            ? "bg-raised shadow-[inset_0_0_0_2px_var(--vi-accent-solid)]"
+            ? "bg-primary-subtle shadow-[inset_0_0_0_1px_var(--vi-accent-border)]"
             : "bg-raised shadow-border"
       )}
     >
