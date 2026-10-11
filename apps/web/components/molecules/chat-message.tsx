@@ -41,6 +41,8 @@ type ChatMessageProps = {
   footnote?: React.ReactNode
   /** Clamp long messages to two lines with Show more. */
   clamp?: boolean
+  /** Caption-size text for an outcome line (“Message deleted…”). */
+  quiet?: boolean
   className?: string
   children: React.ReactNode
 }
@@ -65,6 +67,7 @@ export function ChatMessage({
   actions,
   footnote,
   clamp = false,
+  quiet = false,
   className,
   children,
 }: ChatMessageProps) {
@@ -115,7 +118,7 @@ export function ChatMessage({
         </div>
         <div
           className={cn(
-            muted ? "text-caption text-muted-foreground" : "text-body-sm",
+            muted || quiet ? "text-caption text-muted-foreground" : "text-body-sm",
             status === "removed" && "italic line-through"
           )}
         >

@@ -16,10 +16,10 @@ import { FeatureItem } from "@/components/molecules/feature"
 import { ListRow } from "@/components/molecules/list-row"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { PullQuote } from "@/components/molecules/testimonial"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
-import { UseCaseNav } from "@/components/organisms/use-case-nav"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
+import { UseCaseNav } from "@/components/organisms/marketing/use-case-nav"
 
 export const metadata: Metadata = {
   title: "Kibo for agencies",

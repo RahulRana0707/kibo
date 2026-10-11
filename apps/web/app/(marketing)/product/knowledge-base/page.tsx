@@ -13,13 +13,13 @@ import { Section } from "@/components/atoms/section"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { TrialLink } from "@/components/molecules/trial-link"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
 import {
   KnowledgeList,
   UnansweredCard,
-} from "@/components/organisms/previews/knowledge"
+} from "@/components/organisms/marketing/previews/knowledge"
 
 export const metadata: Metadata = {
   title: "Knowledge Base",

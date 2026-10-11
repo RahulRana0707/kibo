@@ -1,3 +1,5 @@
+"use client"
+
 import {
   BookOpenIcon,
   MessageSquareIcon,
@@ -28,13 +30,13 @@ import {
   ChartAxis,
   ChartLegend,
   ChartState,
-  ChartTooltip,
   DonutChart,
   Heatmap,
   LineChart,
   MoodChart,
   Sparkline,
 } from "@/components/molecules/charts"
+import { Separator } from "@kibo/ui/components/separator"
 import { CheckList } from "@/components/molecules/check-list"
 import { DetailList } from "@/components/molecules/detail-list"
 import { FeatureItem, FeatureLinkCard } from "@/components/molecules/feature"
@@ -397,65 +399,136 @@ export function ChatBoard() {
   )
 }
 
+/** A chart card as on the board: title, code label, chart. */
+function ChartCard({
+  title,
+  code,
+  children,
+}: {
+  title: string
+  code: string
+  children: React.ReactNode
+}) {
+  return (
+    <div className="flex min-w-0 flex-col gap-3 rounded-xl bg-raised p-5 shadow-border">
+      <div className="flex items-center justify-between gap-3">
+        <b className="text-body-sm font-semibold">{title}</b>
+        <code className="font-mono text-[0.75rem] text-muted-foreground">{code}</code>
+      </div>
+      {children}
+    </div>
+  )
+}
+
+const streamTimes = ["7 pm", "", "", "8 pm", "", "", "9 pm", "", "", "10 pm", ""]
+
 export function ChartsBoard() {
-  const days = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+  const answered = [44, 50, 41, 58, 55, 62, 60, 71, 68, 80, 88, 100]
+  const perMinute = [30, 48, 60, 52, 84, 120, 142, 128, 100, 88, 70]
+  const lastStream = [20, 30, 34, 40, 50, 62, 66, 68, 60, 50, 44]
+  const heat: (0 | 1 | 2 | 3 | 4)[][] = [
+    [0, 0, 1, 1, 2, 2, 3, 3, 2, 1, 0, 0],
+    [0, 1, 1, 2, 3, 3, 4, 3, 2, 1, 1, 0],
+    [0, 1, 1, 2, 3, 4, 4, 3, 2, 1, 1, 0],
+    [1, 1, 2, 2, 3, 4, 4, 4, 3, 2, 1, 1],
+    [1, 2, 2, 3, 3, 3, 2, 2, 1, 1, 0, 0],
+  ]
+
   return (
     <Board
       id="charts"
       layer="Molecules"
       title="Charts"
-      description="Small, honest charts: one accent series, a muted comparison, numbers always available as text."
-      importLine='import { BarChart, LineChart, Sparkline, DonutChart, Heatmap, … } from "@/components/molecules/charts"'
+      description="Small, honest charts for streams and analytics. One accent series, muted comparison, numbers always available as text. Colors carry meaning only alongside a legend or label."
+      importLine='import { BarChart, LineChart, Sparkline, MoodChart, DonutChart, Heatmap, ChartAxis, ChartLegend, ChartTooltip } from "@/components/molecules/charts"'
     >
-      <Group title="Kinds" className="grid w-full grid-cols-2 gap-8 max-lg:grid-cols-1">
-        <div className="flex flex-col gap-3">
-          <ChartLegend items={[{ label: "This week", tone: "accent" }, { label: "Last week", tone: "muted" }]} />
+      <Group title="Kinds" className="grid w-full grid-cols-3 gap-6 max-lg:grid-cols-1">
+        <ChartCard title="Questions answered per stream" code='BarChart size="md"'>
           <BarChart
-            values={[40, 65, 30, 80, 55, 90, 70]}
-            compare={[35, 50, 45, 60, 50, 70, 65]}
-            summary="Questions answered peaked on Saturday."
+            summary="Questions answered over the last 12 streams, rising from 180 to 412"
+            bars={answered.map((value, index) => ({
+              label: `Stream ${index + 1}`,
+              value,
+              muted: index < 4,
+            }))}
           />
-          <ChartAxis labels={days} />
-        </div>
-        <div className="flex flex-col gap-3">
-          <ChartLegend items={[{ label: "Messages", tone: "accent" }, { label: "Last stream", tone: "dashed" }]} />
+          <ChartAxis labels={["Sep 12", "Sep 26", "Oct 10"]} />
+          <ChartLegend items={[{ label: "Since Pip", tone: "accent" }, { label: "Before Pip", tone: "muted" }]} />
+        </ChartCard>
+        <ChartCard title="Chat messages per minute" code="LineChart · area">
           <LineChart
-            summary="Chat activity rose to 62 messages a minute at 9:40 PM."
-            points={[12, 18, 15, 32, 48, 41, 62].map((value, index) => ({ label: `${7 + Math.floor(index / 2)}:${index % 2 ? "30" : "00"}`, value }))}
-            compare={[10, 14, 20, 25, 30, 28, 35].map((value, index) => ({ label: String(index), value }))}
+            summary="Messages per minute during the Oct 9 stream, peak 142 at 8:20 pm"
+            points={perMinute.map((value, index) => ({
+              label: index === 6 ? "8:20 pm · raid from nightowl_gg" : `${streamTimes[index] || "·"}`,
+              value,
+            }))}
+            compare={lastStream.map((value, index) => ({ label: String(index), value }))}
+            formatValue={(value) => `${value} msgs/min`}
+            defaultHighlight={6}
           />
-        </div>
-        <div className="flex flex-col gap-3">
-          <MoodChart label="Chat mood stayed positive, dipping at 9:10 PM." />
-          <div className="relative w-fit">
-            <ChartTooltip label="Sat, Oct 10" value="312 answered" compare="Last week 248" />
+          <ChartAxis labels={["7 pm", "8 pm", "9 pm", "10 pm"]} />
+          <ChartLegend items={[{ label: "Oct 9", tone: "accent", line: true }, { label: "Oct 7", tone: "muted", line: true }]} />
+          <code className="font-mono text-[0.75rem] text-muted-foreground">ChartTooltip on hover / focus</code>
+        </ChartCard>
+        <ChartCard title="Chat mood" code="MoodChart">
+          <MoodChart positive={68} neutral={27} toxic={5} />
+          <Separator />
+          <div className="flex items-center justify-between gap-3">
+            <b className="text-body-sm font-semibold">Questions by source</b>
+            <code className="font-mono text-[0.75rem] text-muted-foreground">DonutChart</code>
           </div>
-        </div>
-        <div className="flex flex-col gap-6">
           <DonutChart
-            summary="78% of questions were answered automatically."
+            summary="Answers by source: FAQ 62%, Integrations 24%, Commands 14%"
             segments={[
-              { label: "Answered", value: 78, tone: "accent" },
-              { label: "Held for you", value: 15, tone: "muted" },
-              { label: "Skipped", value: 7, tone: "negative" },
+              { label: "FAQ", value: 62, tone: "accent" },
+              { label: "Integrations", value: 24, tone: "second" },
+              { label: "Commands", value: 14, tone: "muted" },
             ]}
           />
+        </ChartCard>
+        <ChartCard title="Best times to stream" code="Heatmap">
           <Heatmap
-            summary="Your chat is busiest Saturday from 7 to 10 PM."
-            rows={days}
-            columns={Array.from({ length: 12 }, (_, index) => `${index * 2}h`)}
-            values={days.map((_, row) => Array.from({ length: 12 }, (_, col) => (col >= 9 && col <= 11 ? (row === 5 ? 1 : 0.5) : col > 6 ? 0.2 : 0)))}
+            summary="Chat activity by day and hour; busiest Saturday 8 to 10 pm"
+            rows={["Mon", "Tue", "Thu", "Sat", "Sun"]}
+            columns={["2p", "3p", "4p", "5p", "6p", "7p", "8p", "9p", "10p", "11p", "12a", "1a"]}
+            values={heat}
           />
-        </div>
-        <div className="w-48">
-          <Sparkline values={[12, 18, 15, 32, 48, 41, 56]} summary="Chat peaked at 9:40 PM." />
-          <BarChart size="sm" values={[30, 50, 40, 80, 60, 90, 70]} />
-        </div>
+        </ChartCard>
+        <ChartCard title="Sparkline · small bars" code='Sparkline · BarChart size="sm"'>
+          <Sparkline summary="Rising" values={[10, 14, 12, 22, 20, 30, 38]} />
+          <BarChart
+            size="sm"
+            summary="Answers per stream, last 7 streams"
+            bars={[40, 55, 35, 70, 60, 90, 100].map((value, index) => ({ label: String(index), value }))}
+          />
+          <code className="font-mono text-[0.75rem] text-muted-foreground">no axis, no legend · always next to a Stat</code>
+        </ChartCard>
+        <ChartCard title="Bar hover" code="tooltip">
+          <BarChart
+            summary="Questions per stream since Sep 26"
+            defaultHighlight={3}
+            bars={[
+              { value: 55, label: "Sep 26", tooltip: { context: "Sep 26 · Valorant ranked", value: "222 questions" } },
+              { value: 62, label: "Sep 28", tooltip: { context: "Sep 28 · Cozy Sunday", value: "250 questions" } },
+              { value: 60, label: "Oct 1", tooltip: { context: "Oct 1 · Valorant ranked", value: "243 questions" } },
+              { value: 71, label: "Oct 3", tooltip: { context: "Oct 3 · Valorant ranked", value: "286 questions" } },
+              { value: 68, label: "Oct 6", tooltip: { context: "Oct 6 · Scrims", value: "274 questions" } },
+              { value: 80, label: "Oct 10", tooltip: { context: "Oct 10 · Valorant ranked", value: "322 questions" } },
+            ]}
+          />
+          <ChartAxis labels={["Sep 26", "Oct 10"]} />
+        </ChartCard>
       </Group>
       <Group title="Empty · loading · error" className="grid w-full grid-cols-3 gap-6 max-lg:grid-cols-1">
-        <ChartState state="empty" />
-        <ChartState state="loading" />
-        <ChartState state="error" />
+        <ChartCard title="Chat messages per minute" code={`state="empty"`}>
+          <ChartState state="empty" />
+        </ChartCard>
+        <ChartCard title="Chat messages per minute" code={`state="loading"`}>
+          <ChartState state="loading" />
+        </ChartCard>
+        <ChartCard title="Chat messages per minute" code={`state="error"`}>
+          <ChartState state="error" onRetry={() => undefined} />
+        </ChartCard>
       </Group>
     </Board>
   )

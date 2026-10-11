@@ -16,7 +16,7 @@ import { chipVariants } from "@kibo/ui/components/chip"
 import { Container } from "@/components/atoms/container"
 import { Panel } from "@kibo/ui/components/panel"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
-import { HelpSearchForm } from "@/components/organisms/help-search-form"
+import { HelpSearchForm } from "@/components/organisms/marketing/help-search-form"
 import { getHelpArticles, getPlainText } from "@/lib/content"
 import { getHelpCategory } from "@/lib/marketing/help"
 

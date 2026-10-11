@@ -12,7 +12,7 @@ import { Prose } from "@/components/atoms/prose"
 import { Section } from "@/components/atoms/section"
 import { Heading, Lede } from "@kibo/ui/components/typography"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
-import { TableOfContents } from "@/components/organisms/table-of-contents"
+import { TableOfContents } from "@/components/organisms/marketing/table-of-contents"
 import {
   formatDate,
   getBlogPost,

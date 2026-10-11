@@ -18,7 +18,7 @@ import { Panel } from "@kibo/ui/components/panel"
 import { Section } from "@/components/atoms/section"
 import { Heading } from "@kibo/ui/components/typography"
 import { LinkPanel } from "@/components/molecules/link-list"
-import { HelpSearchForm } from "@/components/organisms/help-search-form"
+import { HelpSearchForm } from "@/components/organisms/marketing/help-search-form"
 import { getHelpArticles } from "@/lib/content"
 import { helpCategories } from "@/lib/marketing/help"
 

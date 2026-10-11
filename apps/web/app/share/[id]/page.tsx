@@ -14,10 +14,10 @@ import { Eyebrow, Heading } from "@kibo/ui/components/typography"
 import {
   ChartAxis,
   ChartLegend,
-  MoodChart,
+  LineChart,
 } from "@/components/molecules/charts"
 import { ListRow } from "@/components/molecules/list-row"
-import { sampleSummary } from "@/lib/marketing/sample-summary"
+import { sampleSummary, activityTrend, moodTrend } from "@/lib/marketing/sample-summary"
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -96,12 +96,19 @@ export default async function SharedSummaryPage({ params }: Props) {
               <h2 className="text-heading">Chat over the stream</h2>
               <ChartLegend
                 items={[
-                  { label: "Positive mood", tone: "accent" },
-                  { label: "Messages / min", tone: "muted" },
+                  { label: "Positive mood", tone: "accent", line: true },
+                  { label: "Messages / min", tone: "muted", line: true },
                 ]}
               />
             </div>
-            <MoodChart label="Chat activity and mood rise through the stream, peaking at 2:10 after the ace" />
+            <LineChart
+          summary="Chat activity and mood rise through the stream, peaking at 2:10 after the ace"
+          points={moodTrend}
+          compare={activityTrend}
+          compareStyle="solid"
+          compareLabel="Messages / min"
+          area={false}
+        />
             <ChartAxis labels={summary.axis} />
           </Panel>
 

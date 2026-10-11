@@ -31,10 +31,10 @@ import { FeatureItem, FeatureLinkCard } from "@/components/molecules/feature"
 import { PlanCard } from "@/components/molecules/plan-card"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { TestimonialCard } from "@/components/molecules/testimonial"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FaqList, type Faq } from "@/components/organisms/faq-list"
-import { HeroChatDemo } from "@/components/organisms/hero-chat-demo"
-import { PlatformStrip } from "@/components/organisms/platform-strip"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FaqList, type Faq } from "@/components/organisms/marketing/faq-list"
+import { HeroChatDemo } from "@/components/organisms/marketing/hero-chat-demo"
+import { PlatformStrip } from "@/components/organisms/marketing/platform-strip"
 import { plans } from "@/lib/marketing/plans"
 
 const problems = [
@@ -315,7 +315,7 @@ export default function LandingPage() {
                   platform="youtube"
                   tag={<MessageTag tone="toxic">Toxic</MessageTag>}
                   time="9:03 PM"
-                  note
+                  quiet
                 >
                   Message hidden · held for review
                 </ChatMessage>

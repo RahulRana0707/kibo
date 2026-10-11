@@ -55,3 +55,11 @@ export const sampleSummary = {
   ],
   sponsor: { name: "Hydrafuel", code: "MIRA10", mentions: "6", clicks: "184" },
 }
+
+/** Chat mood and messages per minute through a stream, sampled 13 times. */
+const ys = {
+  mood: [120, 112, 100, 104, 90, 80, 76, 70, 52, 20, 40, 46, 50],
+  activity: [150, 140, 130, 135, 110, 115, 90, 95, 70, 30, 60, 75, 85],
+}
+export const moodTrend = ys.mood.map((y, index) => ({ label: String(index), value: 180 - y }))
+export const activityTrend = ys.activity.map((y, index) => ({ label: String(index), value: 180 - y }))

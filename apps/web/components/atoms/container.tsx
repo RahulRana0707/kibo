@@ -1,7 +1,7 @@
 import { cn } from "@kibo/ui/lib/utils"
 
 const widths = {
-  default: "max-w-[1200px]",
+  default: "max-w-300",
   narrow: "max-w-[760px]",
 }
 

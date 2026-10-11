@@ -1,28 +1,35 @@
 import type { LucideIcon } from "lucide-react"
 import {
-  BlocksIcon,
-  BookIcon,
+  BookOpenIcon,
   BotIcon,
   CalendarIcon,
   ChartColumnIcon,
+  GiftIcon,
   LayersIcon,
-  LayoutGridIcon,
+  LayoutDashboardIcon,
   MessageSquareIcon,
+  MonitorPlayIcon,
+  PlugIcon,
   RadioIcon,
   SettingsIcon,
   ShieldIcon,
-  TagIcon,
   UserIcon,
   UsersIcon,
-  VideoIcon,
 } from "lucide-react"
 
 export type AppNavItem = {
   label: string
   href: string
   icon: LucideIcon
-  /** False until the feature ships; the item shows as "Soon". */
+  /** False until the feature ships; the item shows Soon. */
   ready: boolean
+  count?: number
+  /** Warning only for queues that need action. */
+  countTone?: "default" | "warning"
+  /** Exists on a higher plan: a lock opens the upgrade. */
+  lockedPlan?: string
+  /** Shown first in the phone menu: live work. */
+  live?: boolean
 }
 
 export const appNavigation: { title?: string; items: AppNavItem[] }[] = [
@@ -31,22 +38,30 @@ export const appNavigation: { title?: string; items: AppNavItem[] }[] = [
       {
         label: "Dashboard",
         href: "/dashboard",
-        icon: LayoutGridIcon,
+        icon: LayoutDashboardIcon,
         ready: true,
+        live: true,
       },
-      { label: "Live console", href: "/live", icon: RadioIcon, ready: false },
+      {
+        label: "Live console",
+        href: "/live",
+        icon: RadioIcon,
+        ready: false,
+        live: true,
+      },
     ],
   },
   {
     title: "Bot",
     items: [
       { label: "Bots", href: "/bots", icon: BotIcon, ready: false },
-      { label: "Knowledge", href: "/knowledge", icon: BookIcon, ready: false },
+      { label: "Knowledge", href: "/knowledge", icon: BookOpenIcon, ready: false },
       {
         label: "Moderation",
         href: "/moderation",
         icon: ShieldIcon,
         ready: false,
+        live: true,
       },
       {
         label: "Engagement",
@@ -59,31 +74,21 @@ export const appNavigation: { title?: string; items: AppNavItem[] }[] = [
   {
     title: "Insights",
     items: [
-      { label: "Streams", href: "/streams", icon: VideoIcon, ready: false },
-      {
-        label: "Analytics",
-        href: "/analytics",
-        icon: ChartColumnIcon,
-        ready: false,
-      },
+      { label: "Streams", href: "/streams", icon: MonitorPlayIcon, ready: false },
+      { label: "Analytics", href: "/analytics", icon: ChartColumnIcon, ready: false },
       { label: "Community", href: "/community", icon: UsersIcon, ready: false },
     ],
   },
   {
     title: "Grow",
     items: [
-      {
-        label: "Schedule",
-        href: "/schedule",
-        icon: CalendarIcon,
-        ready: false,
-      },
-      { label: "Sponsors", href: "/sponsors", icon: TagIcon, ready: false },
+      { label: "Schedule", href: "/schedule", icon: CalendarIcon, ready: false },
+      { label: "Sponsors", href: "/sponsors", icon: GiftIcon, ready: false },
       { label: "Overlays", href: "/overlays", icon: LayersIcon, ready: false },
       {
         label: "Integrations",
         href: "/integrations-settings",
-        icon: BlocksIcon,
+        icon: PlugIcon,
         ready: false,
       },
     ],
@@ -92,12 +97,7 @@ export const appNavigation: { title?: string; items: AppNavItem[] }[] = [
     title: "Workspace",
     items: [
       { label: "Team", href: "/team", icon: UserIcon, ready: false },
-      {
-        label: "Settings",
-        href: "/settings",
-        icon: SettingsIcon,
-        ready: false,
-      },
+      { label: "Settings", href: "/settings", icon: SettingsIcon, ready: false },
     ],
   },
 ]
