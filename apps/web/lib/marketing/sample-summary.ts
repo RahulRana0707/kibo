@@ -61,5 +61,7 @@ const ys = {
   mood: [120, 112, 100, 104, 90, 80, 76, 70, 52, 20, 40, 46, 50],
   activity: [150, 140, 130, 135, 110, 115, 90, 95, 70, 30, 60, 75, 85],
 }
+export type StreamSummary = typeof sampleSummary
+
 export const moodTrend = ys.mood.map((y, index) => ({ label: String(index), value: 180 - y }))
 export const activityTrend = ys.activity.map((y, index) => ({ label: String(index), value: 180 - y }))

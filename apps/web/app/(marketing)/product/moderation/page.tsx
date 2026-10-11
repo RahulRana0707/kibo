@@ -83,7 +83,7 @@ export default function ModerationPage() {
           />
           <AutoGrid min="260px">
             {filters.map((item) => (
-              <FeatureItem key={item.title} boxed title={item.title}>
+              <FeatureItem key={item.title} boxed="raised" title={item.title}>
                 {item.body}
               </FeatureItem>
             ))}

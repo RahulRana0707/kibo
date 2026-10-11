@@ -25,14 +25,19 @@ function PostMeta({ post, long }: { post: PostSummary; long?: boolean }) {
   )
 }
 
-/** A post in the blog grid, or the wide featured post with `featured`. */
+/**
+ * A post in the blog grid, or the wide featured post with `featured`.
+ * `meta={false}` drops the category and date, for “Keep reading” lists.
+ */
 export function PostCard({
   post,
   featured = false,
+  meta = true,
   headingLevel = "h3",
 }: {
   post: PostSummary
   featured?: boolean
+  meta?: boolean
   headingLevel?: "h2" | "h3"
 }) {
   const Title = headingLevel
@@ -65,7 +70,7 @@ export function PostCard({
       className={cn("group flex flex-col gap-3 text-foreground no-underline")}
     >
       <Placeholder label="Cover image" />
-      <PostMeta post={post} />
+      {meta ? <PostMeta post={post} /> : null}
       <Title className="text-heading group-hover:underline">{post.title}</Title>
     </Link>
   )

@@ -35,7 +35,6 @@ export function PageHero({
       className={cn(
         "flex min-w-0 flex-col gap-6",
         layout === "split" && "flex-[1_1_440px]",
-        layout === "stacked" && "max-w-[760px]",
         centered && "mx-auto max-w-[820px] items-center text-center"
       )}
     >
@@ -44,7 +43,7 @@ export function PageHero({
       <Heading as="h1" size="hero">
         {title}
       </Heading>
-      <Lede>{lede}</Lede>
+      <Lede className={layout === "stacked" ? "max-w-[56ch]" : undefined}>{lede}</Lede>
       {actions ? (
         <div
           className={cn("flex flex-wrap gap-3", centered && "justify-center")}

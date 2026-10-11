@@ -113,7 +113,7 @@ export default function ProductPage() {
     <>
       <PageHero
         layout="stacked"
-        className="pb-12"
+        className="pt-24 pb-12"
         eyebrow="Product"
         title={
           <span className="block max-w-[16ch]">

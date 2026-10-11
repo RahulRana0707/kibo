@@ -68,7 +68,7 @@ export function PullQuote({
 }) {
   return (
     <figure className="flex flex-col gap-4">
-      <blockquote className="text-title font-medium">“{quote}”</blockquote>
+      <blockquote className="text-title font-medium text-balance">“{quote}”</blockquote>
       <Attribution person={person} />
     </figure>
   )

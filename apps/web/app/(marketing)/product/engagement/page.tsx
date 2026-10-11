@@ -94,7 +94,7 @@ export default function EngagementPage() {
           <Heading>Everything in one bot</Heading>
           <AutoGrid min="260px">
             {tools.map((item) => (
-              <FeatureItem key={item.title} boxed title={item.title}>
+              <FeatureItem key={item.title} boxed="raised" title={item.title}>
                 {item.body}
               </FeatureItem>
             ))}

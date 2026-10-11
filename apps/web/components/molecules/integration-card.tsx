@@ -31,8 +31,10 @@ function Logo({ integration, muted }: { integration: Integration; muted?: boolea
 }
 
 /**
- * One integration in the marketing directory. Links to its page when
- * available; coming-soon ones show a muted logo and a Soon label.
+ * One integration in the marketing directory: logo, category (or Soon) top
+ * right, name and one line. Links to its page when available; coming-soon
+ * ones show a muted logo. `compact` is the logo beside the name and category,
+ * for strips and related lists.
  */
 export function IntegrationCard({
   integration,
@@ -41,20 +43,32 @@ export function IntegrationCard({
   integration: Integration
   compact?: boolean
 }) {
-  const body = (
+  const muted = !integration.available
+  const name = (
+    <span className="font-semibold group-hover:underline group-hover:underline-offset-4">
+      {integration.name}
+    </span>
+  )
+  const body = compact ? (
     <>
-      <Logo integration={integration} muted={!integration.available} />
-      <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="flex flex-wrap items-center justify-between gap-2">
-          <span className="font-semibold">{integration.name}</span>
-          {compact ? null : integration.available ? (
-            <Badge variant="success">Available</Badge>
-          ) : (
-            <SoonLabel />
-          )}
+      <Logo integration={integration} muted={muted} />
+      <span className="flex min-w-0 flex-col">
+        {name}
+        <span className="text-caption text-muted-foreground">
+          {integration.category}
         </span>
-        {!compact && integration.description ? (
-          <span className="text-caption text-muted-foreground">
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="flex items-start justify-between gap-3">
+        <Logo integration={integration} muted={muted} />
+        {muted ? <SoonLabel /> : <Badge>{integration.category}</Badge>}
+      </span>
+      <span className="flex flex-col gap-2">
+        <span className="text-heading">{name}</span>
+        {integration.description ? (
+          <span className="text-body-sm text-muted-foreground">
             {integration.description}
           </span>
         ) : null}
@@ -64,8 +78,9 @@ export function IntegrationCard({
 
   const className = cn(
     cardClassName,
-    "items-start gap-3 p-4",
-    compact && "items-center rounded-lg p-3"
+    compact
+      ? "items-center gap-3 rounded-lg p-3"
+      : "flex-col gap-3 p-5 max-sm:p-4"
   )
 
   return integration.available ? (
@@ -73,7 +88,7 @@ export function IntegrationCard({
       href={`/integrations/${integration.slug}`}
       className={cn(
         className,
-        "transition-shadow duration-fast hover:shadow-border-hover"
+        "group transition-shadow duration-fast hover:shadow-border-hover"
       )}
     >
       {body}

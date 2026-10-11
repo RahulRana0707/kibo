@@ -1,40 +1,31 @@
 import Link from "next/link"
 import {
+  BlocksIcon,
   BookIcon,
   ChartColumnIcon,
   MessageSquareIcon,
-  PauseIcon,
-  PlayIcon,
   RadioIcon,
   ShieldIcon,
   StarIcon,
-  BlocksIcon,
 } from "lucide-react"
 
-import { Badge } from "@kibo/ui/components/badge"
 import { buttonVariants } from "@kibo/ui/components/button"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Container } from "@/components/atoms/container"
-import { DemoButton } from "@/components/atoms/demo-button"
-import { IconTile } from "@/components/atoms/icon-tile"
-import { MessageTag } from "@/components/atoms/message-tag"
-import { Panel } from "@kibo/ui/components/panel"
-import { PlatformIcon, type Platform } from "@/components/atoms/platform-icon"
-import { Section } from "@/components/atoms/section"
-import { Confidence, SourceChip } from "@/components/atoms/source-chip"
+import { type Platform } from "@/components/atoms/platform-icon"
 import { Stat } from "@/components/atoms/stat"
-import { StatusPill } from "@/components/atoms/status-pill"
-import { Eyebrow, Heading, Lede } from "@kibo/ui/components/typography"
-import { ChatFeed, ChatMessage } from "@/components/molecules/chat-message"
 import { FeatureItem, FeatureLinkCard } from "@/components/molecules/feature"
+import { IntegrationCard } from "@/components/molecules/integration-card"
 import { PlanCard } from "@/components/molecules/plan-card"
-import { SectionHeading } from "@/components/molecules/section-heading"
 import { TestimonialCard } from "@/components/molecules/testimonial"
+import { ChatShowcase } from "@/components/organisms/marketing/chat-showcase"
 import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
 import { FaqList, type Faq } from "@/components/organisms/marketing/faq-list"
-import { HeroChatDemo } from "@/components/organisms/marketing/hero-chat-demo"
+import { LandingHero } from "@/components/organisms/marketing/landing-hero"
+import { MarketingSection } from "@/components/organisms/marketing/marketing-section"
 import { PlatformStrip } from "@/components/organisms/marketing/platform-strip"
+import { TrustControls } from "@/components/organisms/marketing/trust-controls"
+import { getIntegration } from "@/lib/marketing/integrations"
 import { plans } from "@/lib/marketing/plans"
 
 const problems = [
@@ -55,7 +46,7 @@ const problems = [
 const steps = [
   {
     title: "Connect",
-    body: "Sign in with YouTube or Twitch. Kibo asks only for chat access and explains every permission in plain words.",
+    body: "Create an account, then connect YouTube or Twitch. Kibo asks only for chat access and explains every permission in plain words.",
   },
   {
     title: "Teach",
@@ -127,14 +118,14 @@ const impact = [
   { value: "1.8 s", label: "median time to answer" },
 ]
 
-const integrations: { platform: Platform; name: string; category: string }[] = [
-  { platform: "youtube", name: "YouTube Live", category: "Streaming" },
-  { platform: "twitch", name: "Twitch", category: "Streaming" },
-  { platform: "discord", name: "Discord", category: "Community" },
-  { platform: "obs", name: "OBS", category: "Overlays" },
-  { platform: "notion", name: "Notion", category: "Knowledge" },
-  { platform: "spotify", name: "Spotify", category: "Music" },
-]
+const featuredIntegrations = [
+  "youtube",
+  "twitch",
+  "discord",
+  "obs",
+  "notion",
+  "spotify",
+].map((slug) => getIntegration(slug)!)
 
 // Placeholder testimonials from the design. Replace with real creators before launch.
 const testimonials = [
@@ -206,319 +197,147 @@ const faqs: Faq[] = [
 export default function LandingPage() {
   return (
     <>
-      <Section className="pt-20">
-        <Container className="flex flex-wrap items-center gap-16">
-          <div className="flex min-w-0 flex-[1_1_460px] flex-col gap-6">
-            <Eyebrow>Too much chat. Not enough attention.</Eyebrow>
-            <Heading as="h1" size="hero">
-              Your AI community manager for live chat
-            </Heading>
-            <Lede className="max-w-[52ch]">
-              Kibo joins your YouTube and Twitch chat, answers viewers from your
-              own FAQs, catches spam and toxicity, and hands you a summary after
-              every stream.
-            </Lede>
-            <div className="flex flex-wrap gap-3">
-              <Link href="/signup" className={buttonVariants({ size: "lg" })}>
-                Start free trial
-              </Link>
-              <Link
-                href="/product/live-console"
-                className={buttonVariants({ variant: "secondary", size: "lg" })}
-              >
-                <PlayIcon aria-hidden="true" data-icon="inline-start" />
-                Watch the demo
-              </Link>
-            </div>
-            <p className="text-caption text-muted-foreground">
-              14-day free trial · Approval mode on by default · Pause anytime
-            </p>
-          </div>
-          <HeroChatDemo />
-        </Container>
-      </Section>
-
+      <LandingHero />
       <PlatformStrip />
 
-      <Section>
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="The problem"
-            title="Chat grows faster than you can read it"
-            lede="Small creators have no moderators. Big creators need a lot of them. Everyone answers the same questions every single stream."
-          />
-          <AutoGrid min="300px">
-            {problems.map((problem) => (
-              <Panel key={problem.title} variant="surface">
-                <h3 className="text-heading">{problem.title}</h3>
-                <p className="text-body-sm text-muted-foreground">
-                  {problem.body}
-                </p>
-              </Panel>
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
+      <MarketingSection
+        eyebrow="The problem"
+        title="Chat grows faster than you can read it"
+        lede="Small creators have no moderators. Big creators need a lot of them. Everyone answers the same questions every single stream."
+      >
+        <AutoGrid min="300px">
+          {problems.map((problem) => (
+            <FeatureItem key={problem.title} boxed title={problem.title}>
+              {problem.body}
+            </FeatureItem>
+          ))}
+        </AutoGrid>
+      </MarketingSection>
 
-      <Section tone="alt">
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="How it works"
-            title="Live in three steps"
-            align="center"
-          />
-          <AutoGrid as="ol" min="300px">
-            {steps.map((step, index) => (
-              <li key={step.title}>
-                <Panel className="h-full">
-                  <IconTile>{index + 1}</IconTile>
-                  <h3 className="text-heading">{step.title}</h3>
-                  <p className="text-body-sm text-muted-foreground">
-                    {step.body}
-                  </p>
-                </Panel>
-              </li>
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
-
-      <Section tone="dark">
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="See it in chat"
-            title="Answers, moderates and welcomes — in your voice"
-          />
-          <div className="flex flex-wrap items-start gap-6">
-            <Panel className="min-w-0 flex-[999_1_560px] p-3 max-sm:p-3">
-              <ChatFeed>
-                <ChatMessage
-                  author="lowkeyLiam"
-                  platform="twitch"
-                  tag={<MessageTag tone="question">Question</MessageTag>}
-                  time="9:02 PM"
-                >
-                  when do you stream next week
-                </ChatMessage>
-                <ChatMessage
-                  author="Pip"
-                  bot
-                  time="9:02 PM"
-                  source="Schedule · Weekly"
-                  confidence={98}
-                >
-                  @lowkeyLiam Tue, Thu and Sat at 7 PM IST. Sunday is cozy-games
-                  day. Full schedule: !schedule
-                </ChatMessage>
-                <ChatMessage
-                  author="saltyspud"
-                  platform="youtube"
-                  tag={<MessageTag tone="toxic">Toxic</MessageTag>}
-                  time="9:03 PM"
-                  quiet
-                >
-                  Message hidden · held for review
-                </ChatMessage>
-                <ChatMessage
-                  author="momo_draws"
-                  platform="twitch"
-                  tag={<Badge className="h-5">First message</Badge>}
-                  time="9:03 PM"
-                >
-                  omg the ace
-                </ChatMessage>
-                <ChatMessage author="Pip" bot time="9:03 PM">
-                  Welcome @momo_draws! You picked a good minute to show up.
-                </ChatMessage>
-              </ChatFeed>
-            </Panel>
-            <div className="flex min-w-0 flex-[1_1_320px] flex-col gap-6">
-              <FeatureItem title="Answers from your knowledge">
-                Every reply links to the FAQ, link or note it came from.
+      <MarketingSection
+        tone="alt"
+        eyebrow="How it works"
+        title="Live in three steps"
+        align="center"
+      >
+        <AutoGrid as="ol" min="300px">
+          {steps.map((step, index) => (
+            <li key={step.title}>
+              <FeatureItem
+                boxed="raised"
+                icon={index + 1}
+                title={step.title}
+                className="h-full"
+              >
+                {step.body}
               </FeatureItem>
-              <FeatureItem title="Moderates in the background">
-                Spam, links and toxicity handled by your rules, with one-click
-                undo.
-              </FeatureItem>
-              <FeatureItem title="Makes newcomers feel seen">
-                First-time chatters get a welcome, so nobody talks into the
-                void.
-              </FeatureItem>
-            </div>
-          </div>
-        </Container>
-      </Section>
+            </li>
+          ))}
+        </AutoGrid>
+      </MarketingSection>
 
-      <Section>
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="Product"
-            title="Everything your chat needs, in one place"
-          />
-          <AutoGrid min="340px">
-            {features.map((feature) => (
-              <FeatureLinkCard key={feature.href} {...feature} />
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
+      <MarketingSection
+        tone="dark"
+        eyebrow="See it in chat"
+        title="Answers, moderates and welcomes — in your voice"
+      >
+        <ChatShowcase />
+      </MarketingSection>
 
-      <Section tone="alt">
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="Impact"
-            title="Time back for the part only you can do"
-          />
-          <AutoGrid>
-            {impact.map((item) => (
-              <Stat
-                key={item.label}
-                value={item.value}
-                label={item.label}
-                labelFirst={false}
-                size="xl"
-              />
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
+      <MarketingSection
+        eyebrow="Product"
+        title="Everything your chat needs, in one place"
+      >
+        <AutoGrid min="340px">
+          {features.map((feature) => (
+            <FeatureLinkCard key={feature.href} {...feature} />
+          ))}
+        </AutoGrid>
+      </MarketingSection>
 
-      <Section>
-        <Container className="flex flex-col gap-8">
-          <div className="flex flex-wrap items-start justify-between gap-6">
-            <SectionHeading
-              eyebrow="Integrations"
-              title="Plays well with your setup"
-              lede="Streaming platforms, OBS and stream tools, Discord, Notion, Spotify and more."
+      <MarketingSection
+        tone="alt"
+        eyebrow="Impact"
+        title="Time back for the part only you can do"
+      >
+        <AutoGrid>
+          {impact.map((item) => (
+            <Stat
+              key={item.label}
+              value={item.value}
+              label={item.label}
+              labelFirst={false}
+              size="xl"
             />
-            <Link
-              href="/integrations"
-              className={buttonVariants({ variant: "secondary" })}
-            >
-              Browse integrations
-            </Link>
-          </div>
-          <AutoGrid as="ul" min="200px" gap="tight">
-            {integrations.map((item) => (
-              <li key={item.platform}>
-                <Panel className="flex-row items-center gap-3 p-4 max-sm:p-4">
-                  <PlatformIcon platform={item.platform} size="lg" />
-                  <span className="flex flex-col gap-1">
-                    <span className="font-medium">{item.name}</span>
-                    <span className="text-caption text-muted-foreground">
-                      {item.category}
-                    </span>
-                  </span>
-                </Panel>
-              </li>
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
+          ))}
+        </AutoGrid>
+      </MarketingSection>
 
-      <Section tone="alt">
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="Trust and control"
-            title="You stay in charge of your chat"
-          />
-          <AutoGrid min="320px">
-            <Panel>
-              <h3 className="text-heading">Approval mode</h3>
-              <p className="text-body-sm text-muted-foreground">
-                Kibo drafts, you approve. Every reply waits for a click until
-                you switch it to Auto.
-              </p>
-              <Panel
-                variant="well"
-                className="flex-row flex-wrap items-center justify-between"
-              >
-                <span className="text-caption">
-                  “@GG_Rohan 0.32 at 800 DPI…”
-                </span>
-                <span className="flex gap-2">
-                  <DemoButton variant="ghost">Reject</DemoButton>
-                  <DemoButton variant="primary">Approve</DemoButton>
-                </span>
-              </Panel>
-            </Panel>
-            <Panel>
-              <h3 className="text-heading">Kill switch</h3>
-              <p className="text-body-sm text-muted-foreground">
-                Pause the bot instantly from any screen — or your phone —
-                mid-stream.
-              </p>
-              <Panel
-                variant="well"
-                className="flex-row flex-wrap items-center justify-between"
-              >
-                <StatusPill tone="live">Live</StatusPill>
-                <DemoButton>
-                  <PauseIcon />
-                  Pause bot
-                </DemoButton>
-              </Panel>
-            </Panel>
-            <Panel>
-              <h3 className="text-heading">Why it said this</h3>
-              <p className="text-body-sm text-muted-foreground">
-                Every reply shows the knowledge it used and how sure it was.
-                Unsure? It stays quiet and asks you.
-              </p>
-              <Panel
-                variant="well"
-                className="flex-row flex-wrap items-center gap-3"
-              >
-                <SourceChip>FAQ · Valorant settings</SourceChip>
-                <Confidence value={94} suffix="sure" />
-              </Panel>
-            </Panel>
-          </AutoGrid>
-        </Container>
-      </Section>
+      <MarketingSection
+        gap="tight"
+        eyebrow="Integrations"
+        title="Plays well with your setup"
+        lede="Streaming platforms, OBS and stream tools, Discord, Notion, Spotify and more."
+        action={
+          <Link
+            href="/integrations"
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            Browse integrations
+          </Link>
+        }
+      >
+        <AutoGrid as="ul" min="200px" gap="tight">
+          {featuredIntegrations.map((integration) => (
+            <li key={integration.slug}>
+              <IntegrationCard integration={integration} compact />
+            </li>
+          ))}
+        </AutoGrid>
+      </MarketingSection>
 
-      <Section>
-        <Container className="flex flex-col gap-12">
-          <SectionHeading
-            eyebrow="Creators"
-            title="Made with streamers, for streamers"
-          />
-          <AutoGrid min="320px">
-            {testimonials.map((item) => (
-              <TestimonialCard key={item.person.name} {...item} />
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
+      <MarketingSection
+        tone="alt"
+        eyebrow="Trust and control"
+        title="You stay in charge of your chat"
+      >
+        <TrustControls />
+      </MarketingSection>
 
-      <Section tone="alt">
-        <Container className="flex flex-col gap-12">
-          <div className="flex flex-wrap items-start justify-between gap-6">
-            <SectionHeading
-              eyebrow="Pricing"
-              title="Start free, grow when chat does"
-            />
-            <Link
-              href="/pricing"
-              className={buttonVariants({ variant: "secondary" })}
-            >
-              Compare plans
-            </Link>
-          </div>
-          <AutoGrid min="300px">
-            {plans.map((plan) => (
-              <PlanCard key={plan.code} plan={plan} compact />
-            ))}
-          </AutoGrid>
-        </Container>
-      </Section>
+      <MarketingSection
+        eyebrow="Creators"
+        title="Made with streamers, for streamers"
+      >
+        <AutoGrid min="320px">
+          {testimonials.map((item) => (
+            <TestimonialCard key={item.person.name} {...item} />
+          ))}
+        </AutoGrid>
+      </MarketingSection>
 
-      <Section>
-        <Container width="narrow" className="flex flex-col gap-6">
-          <Heading>Questions, answered</Heading>
-          <FaqList items={faqs} />
-        </Container>
-      </Section>
+      <MarketingSection
+        tone="alt"
+        eyebrow="Pricing"
+        title="Start free, grow when chat does"
+        action={
+          <Link
+            href="/pricing"
+            className={buttonVariants({ variant: "secondary" })}
+          >
+            Compare plans
+          </Link>
+        }
+      >
+        <AutoGrid min="300px">
+          {plans.map((plan) => (
+            <PlanCard key={plan.code} plan={plan} compact />
+          ))}
+        </AutoGrid>
+      </MarketingSection>
+
+      <MarketingSection width="narrow" gap="tight" title="Questions, answered">
+        <FaqList items={faqs} />
+      </MarketingSection>
 
       <CtaBanner
         flush

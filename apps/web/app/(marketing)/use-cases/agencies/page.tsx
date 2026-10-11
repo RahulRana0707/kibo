@@ -125,7 +125,7 @@ export default function AgenciesUseCasePage() {
           <SectionHeading title="Built for running many channels" />
           <AutoGrid min="260px">
             {capabilities.map((item) => (
-              <FeatureItem key={item.title} boxed title={item.title}>
+              <FeatureItem key={item.title} boxed="raised" title={item.title}>
                 {item.body}
               </FeatureItem>
             ))}

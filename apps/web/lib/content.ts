@@ -129,6 +129,8 @@ export async function getPlainText(collection: Collection, slug: string) {
   return source
     .replace(/^export const metadata[\s\S]*?\n}\n/m, "")
     .replace(/<[^>]+>/g, " ")
+    // Keep a link's text, drop its target
+    .replace(/!?\[([^\]]*)\]\([^)]*\)/g, "$1")
     .replace(/[#*_`>]/g, "")
     .replace(/\s+/g, " ")
     .trim()

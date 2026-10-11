@@ -50,7 +50,8 @@ export function FeatureLinkCard({
 
 /**
  * A titled point explained in place; it never links. `boxed` puts it on a
- * surface; `layout="inline"` puts a small icon beside the text.
+ * surface (`boxed="raised"` for a panel inside an alt section);
+ * `layout="inline"` puts a small icon beside the text.
  */
 export function FeatureItem({
   icon,
@@ -63,7 +64,7 @@ export function FeatureItem({
   icon?: React.ReactNode
   title: React.ReactNode
   children: React.ReactNode
-  boxed?: boolean
+  boxed?: boolean | "raised"
   layout?: "stacked" | "inline"
   className?: string
 }) {
@@ -72,7 +73,8 @@ export function FeatureItem({
       className={cn(
         "flex min-w-0 gap-2",
         layout === "inline" ? "flex-row items-start gap-3" : "flex-col",
-        boxed && "rounded-xl bg-surface p-6 max-sm:p-4",
+        boxed && "rounded-xl p-6 max-sm:p-4",
+        boxed === "raised" ? "bg-raised shadow-border" : boxed && "bg-surface",
         className
       )}
     >

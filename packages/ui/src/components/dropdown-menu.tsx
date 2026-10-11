@@ -108,17 +108,24 @@ function DropdownMenuItem({
       )}
       {...props}
     >
-      {description ? (
-        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
-          <span className="flex items-center gap-2.5">{children}</span>
-          <span className="text-caption text-muted-foreground">
-            {description}
-          </span>
-        </span>
-      ) : (
+      {/* asChild slots onto exactly one element, so it takes children as-is */}
+      {props.asChild ? (
         children
+      ) : (
+        <>
+          {description ? (
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <span className="flex items-center gap-2.5">{children}</span>
+              <span className="text-caption text-muted-foreground">
+                {description}
+              </span>
+            </span>
+          ) : (
+            children
+          )}
+          {soon ? <SoonLabel className="ms-auto" /> : null}
+        </>
       )}
-      {soon ? <SoonLabel className="ms-auto" /> : null}
     </DropdownMenuPrimitive.Item>
   )
 }

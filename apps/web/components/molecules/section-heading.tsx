@@ -5,7 +5,8 @@ import { Eyebrow, Heading, Lede } from "@kibo/ui/components/typography"
 /**
  * Eyebrow, heading and lede as one unit, opening a marketing section or an
  * app panel group. `action` sits at the end of the heading's last line
- * (under the lede when centered) and stacks below on phones.
+ * (under the lede when centered) and stacks below on phones. `wide` fills
+ * the container with roomier spacing, for a page that opens on a heading.
  */
 export function SectionHeading({
   eyebrow,
@@ -15,6 +16,7 @@ export function SectionHeading({
   as = "h2",
   size = "display",
   align = "start",
+  wide = false,
   className,
 }: {
   eyebrow?: React.ReactNode
@@ -24,12 +26,14 @@ export function SectionHeading({
   as?: "h1" | "h2" | "h3"
   size?: "hero" | "display" | "title"
   align?: "start" | "center"
+  wide?: boolean
   className?: string
 }) {
   const copy = (
     <hgroup
       className={cn(
-        "flex max-w-180 flex-col gap-3",
+        "flex flex-col",
+        wide ? "gap-6" : "max-w-180 gap-3",
         align === "center" && "mx-auto items-center text-center"
       )}
     >
