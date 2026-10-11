@@ -3,62 +3,114 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { Slot } from "radix-ui"
 
 import { cn } from "@kibo/ui/lib/utils"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
+import { Spinner } from "@kibo/ui/components/spinner"
+
+// Unavailable buttons (loading, soon, disabled with a reason) use
+// aria-disabled so they stay focusable and can say why.
+const unavailable =
+  "disabled:cursor-not-allowed disabled:bg-sunken disabled:text-disabled disabled:shadow-none aria-disabled:cursor-not-allowed aria-disabled:bg-sunken aria-disabled:text-disabled aria-disabled:shadow-none aria-busy:cursor-progress"
 
 const buttonVariants = cva(
-  "group/button inline-flex shrink-0 items-center justify-center rounded-md border border-transparent bg-clip-padding text-xs/relaxed font-medium whitespace-nowrap transition-all outline-none select-none focus-visible:border-ring focus-visible:ring-2 focus-visible:ring-ring/30 active:not-aria-[haspopup]:translate-y-px disabled:pointer-events-none disabled:opacity-50 aria-invalid:border-destructive aria-invalid:ring-2 aria-invalid:ring-destructive/20 dark:aria-invalid:border-destructive/50 dark:aria-invalid:ring-destructive/40 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4",
+  `group/button inline-flex shrink-0 press items-center justify-center gap-2 rounded-md border border-transparent font-medium whitespace-nowrap no-underline select-none [-webkit-tap-highlight-color:transparent] ${unavailable} [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg:not([class*='size-'])]:size-4`,
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
-        outline:
-          "border-border hover:bg-input/50 hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:bg-input/30",
+        primary: "bg-primary text-primary-foreground hover:bg-primary-hover",
         secondary:
-          "bg-secondary text-secondary-foreground hover:bg-[color-mix(in_oklch,var(--secondary),var(--foreground)_5%)] aria-expanded:bg-secondary aria-expanded:text-secondary-foreground",
+          "bg-raised text-foreground shadow-border hover:shadow-border-hover aria-expanded:shadow-border-hover",
         ghost:
-          "hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:hover:bg-muted/50",
-        destructive:
-          "bg-destructive/10 text-destructive hover:bg-destructive/20 focus-visible:border-destructive/40 focus-visible:ring-destructive/20 dark:bg-destructive/20 dark:hover:bg-destructive/30 dark:focus-visible:ring-destructive/40",
-        link: "text-primary underline-offset-4 hover:underline",
+          "bg-transparent text-foreground hover:bg-hovered active:bg-pressed disabled:bg-transparent aria-disabled:bg-transparent aria-expanded:bg-hovered",
+        destructive: "bg-destructive text-on-accent hover:bg-destructive-hover",
+        link: "h-auto! px-0! text-link underline-offset-2 hover:text-primary-hover hover:underline disabled:bg-transparent aria-disabled:bg-transparent",
       },
       size: {
+        xs: "h-7 gap-1 rounded-sm px-2 text-caption leading-none [&_svg:not([class*='size-'])]:size-3.5",
+        sm: "h-8 rounded-[8px] px-3 text-caption leading-none has-data-[icon=inline-end]:pe-2.5 has-data-[icon=inline-start]:ps-2.5",
         default:
-          "h-7 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3.5",
-        xs: "h-5 gap-1 rounded-sm px-2 text-[0.625rem] has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-2.5",
-        sm: "h-6 gap-1 px-2 text-xs/relaxed has-data-[icon=inline-end]:pr-1.5 has-data-[icon=inline-start]:pl-1.5 [&_svg:not([class*='size-'])]:size-3",
-        lg: "h-8 gap-1 px-2.5 text-xs/relaxed has-data-[icon=inline-end]:pr-2 has-data-[icon=inline-start]:pl-2 [&_svg:not([class*='size-'])]:size-4",
-        icon: "size-7 [&_svg:not([class*='size-'])]:size-3.5",
-        "icon-xs": "size-5 rounded-sm [&_svg:not([class*='size-'])]:size-2.5",
-        "icon-sm": "size-6 [&_svg:not([class*='size-'])]:size-3",
-        "icon-lg": "size-8 [&_svg:not([class*='size-'])]:size-4",
+          "h-10 px-4 text-body-sm leading-none has-data-[icon=inline-end]:pe-3.5 has-data-[icon=inline-start]:ps-3.5",
+        lg: "h-12 rounded-[12px] px-5 text-body leading-none has-data-[icon=inline-end]:pe-4.5 has-data-[icon=inline-start]:ps-4.5",
+        "icon-xs":
+          "size-7 rounded-sm text-muted-foreground hover:text-foreground",
+        "icon-sm":
+          "size-8 rounded-[8px] text-muted-foreground hover:text-foreground",
+        icon: "size-10 text-muted-foreground hover:text-foreground [&_svg:not([class*='size-'])]:size-5",
+        "icon-lg":
+          "size-11 rounded-[12px] text-muted-foreground hover:text-foreground [&_svg:not([class*='size-'])]:size-5",
+      },
+      block: {
+        true: "w-full",
+        false: "",
       },
     },
     defaultVariants: {
-      variant: "default",
+      variant: "primary",
       size: "default",
+      block: false,
     },
   }
 )
 
-function Button({
-  className,
-  variant = "default",
-  size = "default",
-  asChild = false,
-  ...props
-}: React.ComponentProps<"button"> &
+type ButtonProps = React.ComponentProps<"button"> &
   VariantProps<typeof buttonVariants> & {
     asChild?: boolean
-  }) {
+    /** Shows a spinner; pass the in-progress label (“Saving…”) as children. */
+    loading?: boolean
+    /**
+     * Not available yet: aria-disabled with a Soon label. Write the reason
+     * nearby and link it with aria-describedby.
+     */
+    soon?: boolean
+  }
+
+function Button({
+  className,
+  variant = "primary",
+  size = "default",
+  block = false,
+  asChild = false,
+  loading = false,
+  soon = false,
+  onClick,
+  children,
+  ...props
+}: ButtonProps) {
   const Comp = asChild ? Slot.Root : "button"
+  const unavailable = loading || soon || props["aria-disabled"] === true
 
   return (
     <Comp
       data-slot="button"
       data-variant={variant}
       data-size={size}
-      className={cn(buttonVariants({ variant, size, className }))}
+      className={cn(buttonVariants({ variant, size, block, className }))}
       {...props}
-    />
+      aria-disabled={unavailable || undefined}
+      aria-busy={loading || undefined}
+      // Only wrap a handler that exists, so server components can render
+      // buttons without one.
+      onClick={
+        onClick
+          ? (event: React.MouseEvent<HTMLButtonElement>) => {
+              if (unavailable) {
+                event.preventDefault()
+                return
+              }
+              onClick(event)
+            }
+          : undefined
+      }
+    >
+      {asChild ? (
+        children
+      ) : (
+        <>
+          {loading ? <Spinner /> : null}
+          {children}
+          {soon ? <SoonLabel /> : null}
+        </>
+      )}
+    </Comp>
   )
 }
 

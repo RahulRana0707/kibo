@@ -34,6 +34,12 @@ export class AuthService {
       }),
       emailAndPassword: {
         enabled: true,
+        // Matches the sign-up form: at least 10 characters.
+        minPasswordLength: 10,
+      },
+      session: {
+        // "Keep me logged in for 30 days" on the log-in form.
+        expiresIn: 60 * 60 * 24 * 30,
       },
       baseURL: env.API_URL,
       basePath: '/api/auth',

@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Geist, Geist_Mono, Montserrat } from "next/font/google"
+import { DM_Mono, DM_Sans } from "next/font/google"
 
 import "@kibo/ui/globals.css"
 import { ThemeProvider } from "@/components/theme-provider"
@@ -7,18 +7,23 @@ import { Toaster } from "@kibo/ui/components/sonner"
 import { TooltipProvider } from "@kibo/ui/components/tooltip"
 import { cn } from "@kibo/ui/lib/utils"
 
-const geistHeading = Geist({ subsets: ["latin"], variable: "--font-heading" })
-
-const montserrat = Montserrat({ subsets: ["latin"], variable: "--font-sans" })
-
-const fontMono = Geist_Mono({
+const dmSans = DM_Sans({
   subsets: ["latin"],
-  variable: "--font-mono",
+  variable: "--font-dm-sans",
+  style: ["normal", "italic"],
+  // Optical sizing tightens large type, as the design renders it
+  axes: ["opsz"],
+})
+
+const dmMono = DM_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-dm-mono",
 })
 
 export const metadata: Metadata = {
   title: {
-    default: "Kibo — Your AI Community Manager",
+    default: "Kibo · AI community manager for streamers",
     template: "%s | Kibo",
   },
   description:
@@ -27,14 +32,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     siteName: "Kibo",
-    title: "Kibo — Your AI Community Manager",
+    title: "Kibo · AI community manager for streamers",
     description:
       "Kibo is an AI-powered community manager for streamers and creators. Let Kibo handle the chat so you can focus on creating.",
     url: "https://getkibo.com",
   },
   twitter: {
     card: "summary",
-    title: "Kibo — Your AI Community Manager",
+    title: "Kibo · AI community manager for streamers",
     description:
       "Kibo is an AI-powered community manager for streamers and creators.",
   },
@@ -48,14 +53,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      data-scroll-behavior="smooth"
       suppressHydrationWarning
-      className={cn(
-        "antialiased",
-        fontMono.variable,
-        "font-sans",
-        montserrat.variable,
-        geistHeading.variable
-      )}
+      className={cn(dmSans.variable, dmMono.variable)}
     >
       <body>
         <ThemeProvider

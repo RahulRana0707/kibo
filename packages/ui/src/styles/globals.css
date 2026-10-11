@@ -3,80 +3,199 @@
 @import "shadcn/tailwind.css";
 
 @custom-variant dark (&:is(.dark *));
-@source "../../../apps/**/*.{ts,tsx}";
+@source "../../../apps/**/*.{ts,tsx,mdx}";
 @source "../../../components/**/*.{ts,tsx}";
 @source "../**/*.{ts,tsx}";
 
+/*
+ * Violet design system.
+ *
+ * Two tiers: primitives (neutral, violet, red, green, amber steps) and the
+ * semantic --vi-* roles that point at them. Components use only the
+ * semantic roles, through the Tailwind names in @theme below.
+ *
+ * Spacing uses Tailwind's 4px scale, which matches Violet's:
+ * space-1 = 1, space-2 = 2, space-3 = 3, space-4 = 4, space-5 = 6,
+ * space-6 = 8, space-7 = 12, space-8 = 16, space-9 = 24.
+ */
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.508 0.118 165.612);
-  --primary-foreground: oklch(0.979 0.021 166.113);
-  --secondary: oklch(0.967 0.001 286.375);
-  --secondary-foreground: oklch(0.21 0.006 285.885);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.845 0.143 164.978);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.596 0.145 163.225);
-  --chart-4: oklch(0.508 0.118 165.612);
-  --chart-5: oklch(0.432 0.095 166.913);
-  --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.596 0.145 163.225);
-  --sidebar-primary-foreground: oklch(0.979 0.021 166.113);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --neutral-1: #fcfcfe;
+  --neutral-2: #f2f2f6;
+  --neutral-3: #e8e7ec;
+  --neutral-4: #dddce2;
+  --neutral-5: #d3d2d8;
+  --neutral-6: #c7c6cd;
+  --neutral-7: #b4b3bb;
+  --neutral-8: #84838d;
+  --neutral-9: #7a7983;
+  --neutral-10: #6c6a75;
+  --neutral-11: #5d5c66;
+  --neutral-12: #23212b;
+
+  --violet-3: #e8e5f8;
+  --violet-4: #ddd9f6;
+  --violet-7: #b5a9ef;
+  --violet-9: #7c2bfb;
+  --violet-10: #7012e8;
+  --violet-11: #6124c5;
+  --violet-12: #251848;
+
+  --red-3: #f8e2e0;
+  --red-7: #ed9b94;
+  --red-9: #ce1125;
+  --red-10: #b70e20;
+  --red-11: #9d1e23;
+  --green-3: #daeede;
+  --green-7: #82c795;
+  --green-9: #0e8544;
+  --green-11: #1b6738;
+  --amber-3: #f6e5d3;
+  --amber-7: #dfa86c;
+  --amber-9: #9a600b;
+  --amber-11: #764c16;
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.432 0.095 166.913);
-  --primary-foreground: oklch(0.979 0.021 166.113);
-  --secondary: oklch(0.274 0.006 286.033);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.845 0.143 164.978);
-  --chart-2: oklch(0.696 0.17 162.48);
-  --chart-3: oklch(0.596 0.145 163.225);
-  --chart-4: oklch(0.508 0.118 165.612);
-  --chart-5: oklch(0.432 0.095 166.913);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.696 0.17 162.48);
-  --sidebar-primary-foreground: oklch(0.262 0.051 172.552);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --neutral-1: #0f0f13;
+  --neutral-2: #17161b;
+  --neutral-3: #202025;
+  --neutral-4: #2a292f;
+  --neutral-5: #34333a;
+  --neutral-6: #403f46;
+  --neutral-7: #504f57;
+  --neutral-8: #6c6a74;
+  --neutral-9: #86858f;
+  --neutral-10: #9897a2;
+  --neutral-11: #c7c6cf;
+  --neutral-12: #f0f0f3;
+
+  --violet-3: #221a3b;
+  --violet-4: #2c214e;
+  --violet-7: #543999;
+  --violet-9: #793fea;
+  --violet-10: #8055e8;
+  --violet-11: #c7c1ea;
+  --violet-12: #f0eff5;
+
+  --red-3: #331715;
+  --red-7: #813330;
+  --red-9: #c42e32;
+  --red-10: #d2383a;
+  --red-11: #ebb9b4;
+  --green-3: #16241a;
+  --green-7: #305b3c;
+  --green-9: #29824a;
+  --green-11: #7ee19b;
+  --amber-3: #281e14;
+  --amber-7: #654a2b;
+  --amber-9: #956324;
+  --amber-11: #ebbe8e;
+}
+
+/* Roles are re-declared on .dark so a nested dark section resolves against its own primitives. */
+:root,
+.dark {
+  --vi-bg-page: var(--neutral-1);
+  --vi-bg-surface: var(--neutral-2);
+  --vi-bg-raised: var(--neutral-1);
+  --vi-bg-sunken: var(--neutral-3);
+  --vi-bg-hover: var(--neutral-4);
+  --vi-bg-active: var(--neutral-5);
+  --vi-bg-overlay: #0f0e1680;
+  --vi-bg-inverse: var(--neutral-12);
+
+  --vi-text-primary: var(--neutral-12);
+  --vi-text-secondary: var(--neutral-11);
+  --vi-text-disabled: var(--neutral-8);
+  --vi-text-inverse: var(--neutral-1);
+  --vi-text-on-accent: #ffffff;
+
+  --vi-border-subtle: var(--neutral-6);
+  --vi-separator: var(--neutral-6);
+  --vi-border: var(--neutral-7);
+  --vi-border-strong: var(--neutral-8);
+  --vi-focus-ring: var(--violet-9);
+
+  --vi-accent-subtle: var(--violet-3);
+  --vi-accent-subtle-hover: var(--violet-4);
+  --vi-accent-border: var(--violet-7);
+  --vi-accent-solid: var(--violet-9);
+  --vi-accent-solid-hover: var(--violet-10);
+  --vi-accent-text: var(--violet-11);
+
+  --vi-danger-subtle: var(--red-3);
+  --vi-danger-border: var(--red-7);
+  --vi-danger-solid: var(--red-9);
+  --vi-danger-solid-hover: var(--red-10);
+  --vi-danger-text: var(--red-11);
+  --vi-success-subtle: var(--green-3);
+  --vi-success-border: var(--green-7);
+  --vi-success-solid: var(--green-9);
+  --vi-success-text: var(--green-11);
+  --vi-warning-subtle: var(--amber-3);
+  --vi-warning-border: var(--amber-7);
+  --vi-warning-solid: var(--amber-9);
+  --vi-warning-text: var(--amber-11);
+
+  --vi-shadow-border:
+    0 0 0 1px oklch(0 0 0 / 0.06), 0 1px 2px -1px oklch(0 0 0 / 0.06),
+    0 2px 4px 0 oklch(0 0 0 / 0.04);
+  --vi-shadow-border-hover:
+    0 0 0 1px oklch(0 0 0 / 0.08), 0 1px 2px -1px oklch(0 0 0 / 0.08),
+    0 2px 4px 0 oklch(0 0 0 / 0.06);
+  --vi-shadow-raised:
+    0 0 0 1px oklch(0 0 0 / 0.06), 0 4px 8px -2px oklch(0 0 0 / 0.08),
+    0 16px 32px -8px oklch(0 0 0 / 0.12);
+  --vi-image-outline: oklch(0 0 0 / 0.1);
+
+  /* shadcn roles, pointed at Violet */
+  --background: var(--vi-bg-page);
+  --foreground: var(--vi-text-primary);
+  --card: var(--vi-bg-raised);
+  --card-foreground: var(--vi-text-primary);
+  --popover: var(--vi-bg-raised);
+  --popover-foreground: var(--vi-text-primary);
+  --primary: var(--vi-accent-solid);
+  --primary-foreground: var(--vi-text-on-accent);
+  --secondary: var(--vi-bg-sunken);
+  --secondary-foreground: var(--vi-text-primary);
+  --muted: var(--vi-bg-surface);
+  --muted-foreground: var(--vi-text-secondary);
+  --accent: var(--vi-bg-hover);
+  --accent-foreground: var(--vi-text-primary);
+  --destructive: var(--vi-danger-solid);
+  --border: var(--vi-separator);
+  --input: var(--vi-border-strong);
+  --ring: var(--vi-focus-ring);
+  --chart-1: var(--violet-9);
+  --chart-2: var(--violet-7);
+  --chart-3: var(--green-9);
+  --chart-4: var(--amber-9);
+  --chart-5: var(--neutral-9);
+  --sidebar: var(--vi-bg-surface);
+  --sidebar-foreground: var(--vi-text-primary);
+  --sidebar-primary: var(--vi-accent-solid);
+  --sidebar-primary-foreground: var(--vi-text-on-accent);
+  --sidebar-accent: var(--vi-bg-hover);
+  --sidebar-accent-foreground: var(--vi-text-primary);
+  --sidebar-border: var(--vi-separator);
+  --sidebar-ring: var(--vi-focus-ring);
+}
+
+.dark {
+  --vi-bg-raised: var(--neutral-3);
+  --vi-bg-overlay: #00000099;
+  --vi-focus-ring: var(--violet-11);
+
+  --vi-shadow-border: 0 0 0 1px oklch(1 0 0 / 0.08);
+  --vi-shadow-border-hover: 0 0 0 1px oklch(1 0 0 / 0.13);
+  --vi-shadow-raised:
+    0 0 0 1px oklch(1 0 0 / 0.1), 0 16px 32px -8px oklch(0 0 0 / 0.6);
+  --vi-image-outline: oklch(1 0 0 / 0.1);
 }
 
 @theme inline {
+  /* shadcn names */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -100,13 +219,6 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  --radius-sm: calc(var(--radius) * 0.6);
-  --radius-md: calc(var(--radius) * 0.8);
-  --radius-lg: var(--radius);
-  --radius-xl: calc(var(--radius) * 1.4);
-  --radius-2xl: calc(var(--radius) * 1.8);
-  --radius-3xl: calc(var(--radius) * 2.2);
-  --radius-4xl: calc(var(--radius) * 2.6);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -115,23 +227,194 @@
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
-  --font-sans: var(--font-sans);
-  --font-heading: var(--font-heading);
+
+  /* Violet roles shadcn has no name for */
+  --color-page: var(--vi-bg-page);
+  --color-surface: var(--vi-bg-surface);
+  --color-raised: var(--vi-bg-raised);
+  --color-sunken: var(--vi-bg-sunken);
+  --color-hovered: var(--vi-bg-hover);
+  --color-pressed: var(--vi-bg-active);
+  --color-overlay: var(--vi-bg-overlay);
+  --color-inverse: var(--vi-bg-inverse);
+  --color-inverse-foreground: var(--vi-text-inverse);
+  --color-disabled: var(--vi-text-disabled);
+  --color-on-accent: var(--vi-text-on-accent);
+  --color-separator: var(--vi-separator);
+  --color-border-subtle: var(--vi-border-subtle);
+  --color-border-control: var(--vi-border);
+  --color-border-strong: var(--vi-border-strong);
+  --color-primary-subtle: var(--vi-accent-subtle);
+  --color-primary-subtle-hover: var(--vi-accent-subtle-hover);
+  --color-primary-border: var(--vi-accent-border);
+  --color-primary-hover: var(--vi-accent-solid-hover);
+  --color-link: var(--vi-accent-text);
+  --color-destructive-subtle: var(--vi-danger-subtle);
+  --color-destructive-border: var(--vi-danger-border);
+  --color-destructive-hover: var(--vi-danger-solid-hover);
+  --color-destructive-text: var(--vi-danger-text);
+  --color-success: var(--vi-success-solid);
+  --color-success-subtle: var(--vi-success-subtle);
+  --color-success-border: var(--vi-success-border);
+  --color-success-text: var(--vi-success-text);
+  --color-warning: var(--vi-warning-solid);
+  --color-warning-subtle: var(--vi-warning-subtle);
+  --color-warning-border: var(--vi-warning-border);
+  --color-warning-text: var(--vi-warning-text);
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+
+  --shadow-border: var(--vi-shadow-border);
+  --shadow-border-hover: var(--vi-shadow-border-hover);
+  --shadow-raised: var(--vi-shadow-raised);
+
+  --ease-out: ease-out;
+  --ease-emphasized: cubic-bezier(0.2, 0, 0, 1);
+
+  --font-sans: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-heading: var(--font-dm-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-dm-mono), ui-monospace, "SF Mono", monospace;
+
+  /* Violet type styles: text-hero is for marketing pages only */
+  --text-hero: 3.5rem;
+  --text-hero--line-height: 1.1;
+  --text-hero--letter-spacing: -0.02em;
+  --text-hero--font-weight: 600;
+  --text-display: 2.25rem;
+  --text-display--line-height: 1.1;
+  --text-display--letter-spacing: -0.02em;
+  --text-display--font-weight: 600;
+  --text-title: 1.5rem;
+  --text-title--line-height: 1.2;
+  --text-title--letter-spacing: -0.01em;
+  --text-title--font-weight: 600;
+  --text-heading: 1.125rem;
+  --text-heading--line-height: 1.3;
+  --text-heading--font-weight: 600;
+  --text-body: 1rem;
+  --text-body--line-height: 1.5;
+  --text-body-sm: 0.875rem;
+  --text-body-sm--line-height: 1.5;
+  --text-caption: 0.8125rem;
+  --text-caption--line-height: 1.4;
+  --text-overline: 0.75rem;
+  --text-overline--line-height: 1.3;
+  --text-overline--letter-spacing: 0.05em;
+  --text-overline--font-weight: 600;
+  --text-code: 0.8125rem;
+  --text-code--line-height: 1.5;
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border;
   }
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background font-sans text-foreground;
+  }
+  :focus-visible {
+    outline: 2px solid var(--vi-focus-ring);
+    outline-offset: 2px;
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
   }
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@utility tabular {
+  font-variant-numeric: tabular-nums;
+}
+
+@utility image-outline {
+  outline: 1px solid var(--vi-image-outline);
+  outline-offset: -1px;
+}
+
+/* Violet motion durations: hover on rows and ghosts, press and exits,
+   sheets and drawers, entrances and icon cross-fades. */
+@utility duration-instant {
+  transition-duration: 100ms;
+}
+@utility duration-fast {
+  transition-duration: 150ms;
+}
+@utility duration-moderate {
+  transition-duration: 200ms;
+}
+@utility duration-slow {
+  transition-duration: 300ms;
+}
+
+@utility press {
+  transition-property: scale, background-color, box-shadow, color;
+  transition-duration: 150ms;
+  transition-timing-function: ease-out;
+  @media (prefers-reduced-motion: no-preference) {
+    &:not(:disabled):not([aria-disabled="true"]):active {
+      scale: 0.96;
+    }
+  }
+}
+
+/* Skeletons pulse 1 → 0.55 → 1 and only appear after 300ms, so fast loads
+   don't flash. */
+@keyframes vi-pulse {
+  50% {
+    opacity: 0.55;
+  }
+}
+
+@keyframes vi-appear {
+  from {
+    visibility: hidden;
+  }
+  to {
+    visibility: visible;
+  }
+}
+
+@utility animate-skeleton {
+  animation: vi-appear 0ms 300ms both;
+  @media (prefers-reduced-motion: no-preference) {
+    animation:
+      vi-appear 0ms 300ms both,
+      vi-pulse 1.6s ease-out 300ms infinite;
+  }
+}
+
+/* Indeterminate progress: a bar sliding across the track. */
+@keyframes vi-indeterminate {
+  from {
+    translate: -100% 0;
+  }
+  to {
+    translate: 250% 0;
+  }
+}
+
+@utility animate-indeterminate {
+  animation: vi-indeterminate 1.2s ease-in-out infinite;
+  @media (prefers-reduced-motion: reduce) {
+    animation: vi-pulse 1.6s ease-out infinite;
+    translate: 75% 0;
   }
 }
 
@@ -153,27 +436,12 @@
   }
 }
 
-@keyframes kibo-chat-row {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
 @utility animate-accordion-down {
-  animation: accordion-down 180ms cubic-bezier(0.23, 1, 0.32, 1);
+  animation: accordion-down 200ms ease-out;
 }
 
 @utility animate-accordion-up {
-  animation: accordion-up 140ms cubic-bezier(0.23, 1, 0.32, 1);
-}
-
-@utility animate-kibo-chat-row {
-  animation: kibo-chat-row 260ms cubic-bezier(0.23, 1, 0.32, 1) both;
+  animation: accordion-up 150ms ease-out;
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -182,8 +450,7 @@
   }
 
   .animate-accordion-down,
-  .animate-accordion-up,
-  .animate-kibo-chat-row {
+  .animate-accordion-up {
     animation-duration: 1ms;
   }
 }
