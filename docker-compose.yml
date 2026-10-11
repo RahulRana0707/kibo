@@ -1,0 +1,23 @@
+services:
+  postgres:
+    image: postgres:17-alpine
+    container_name: kibo-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: kibo
+      POSTGRES_PASSWORD: kibo
+      POSTGRES_DB: kibo
+    ports:
+      # Host 5435 -> container 5432. 5432 is Homebrew Postgres and 5433 and
+      # 5434 are other projects' containers, so Kibo uses 5435.
+      - '5435:5432'
+    volumes:
+      - kibo_pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U kibo -d kibo']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+volumes:
+  kibo_pgdata:

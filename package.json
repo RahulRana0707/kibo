@@ -7,7 +7,9 @@
     "dev": "turbo dev",
     "lint": "turbo lint",
     "format": "turbo format",
-    "typecheck": "turbo typecheck"
+    "typecheck": "turbo typecheck",
+    "db:up": "docker compose up -d --wait",
+    "db:down": "docker compose stop"
   },
   "devDependencies": {
     "@kibo/eslint-config": "workspace:*",
