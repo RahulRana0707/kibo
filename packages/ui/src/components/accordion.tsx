@@ -1,11 +1,16 @@
 "use client"
 
 import * as React from "react"
+import { ChevronDownIcon } from "lucide-react"
 import { Accordion as AccordionPrimitive } from "radix-ui"
 
 import { cn } from "@kibo/ui/lib/utils"
-import { ChevronDownIcon, ChevronUpIcon } from "lucide-react"
 
+/**
+ * Questions and answers, and advanced settings most people never open.
+ * Never hide something people need to finish a task. FAQs use
+ * type="multiple".
+ */
 function Accordion({
   className,
   ...props
@@ -42,19 +47,15 @@ function AccordionTrigger({
       <AccordionPrimitive.Trigger
         data-slot="accordion-trigger"
         className={cn(
-          "group/accordion-trigger relative flex min-h-14 flex-1 items-center justify-between gap-6 rounded-md py-4 text-start text-body font-medium disabled:cursor-not-allowed disabled:text-disabled **:data-[slot=accordion-trigger-icon]:ms-auto **:data-[slot=accordion-trigger-icon]:size-5 **:data-[slot=accordion-trigger-icon]:text-muted-foreground",
+          "group/accordion-trigger flex min-h-14 flex-1 items-center justify-between gap-6 py-3 text-start text-body font-medium transition-colors duration-instant hover:text-link disabled:cursor-not-allowed disabled:text-disabled",
           className
         )}
         {...props}
       >
         {children}
         <ChevronDownIcon
-          data-slot="accordion-trigger-icon"
-          className="pointer-events-none shrink-0 group-aria-expanded/accordion-trigger:hidden"
-        />
-        <ChevronUpIcon
-          data-slot="accordion-trigger-icon"
-          className="pointer-events-none hidden shrink-0 group-aria-expanded/accordion-trigger:inline"
+          aria-hidden="true"
+          className="pointer-events-none size-5 shrink-0 text-muted-foreground group-data-[state=open]/accordion-trigger:rotate-180 motion-safe:transition-transform motion-safe:duration-moderate motion-safe:ease-emphasized"
         />
       </AccordionPrimitive.Trigger>
     </AccordionPrimitive.Header>
@@ -69,12 +70,12 @@ function AccordionContent({
   return (
     <AccordionPrimitive.Content
       data-slot="accordion-content"
-      className="overflow-hidden text-body-sm text-muted-foreground data-open:animate-accordion-down data-closed:animate-accordion-up"
+      className="overflow-hidden text-[0.9375rem]/[1.6] text-muted-foreground data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down"
       {...props}
     >
       <div
         className={cn(
-          "h-(--radix-accordion-content-height) max-w-[65ch] pt-0 pb-4 [&_a]:text-link [&_a]:underline [&_a]:underline-offset-4 [&_p:not(:last-child)]:mb-4",
+          "max-w-[65ch] pb-4 [&_a]:text-link [&_a]:underline [&_a]:underline-offset-4 [&_p:not(:last-child)]:mb-4",
           className
         )}
       >

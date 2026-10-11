@@ -8,7 +8,7 @@ import { Input } from "@kibo/ui/components/input"
 import { Label } from "@kibo/ui/components/label"
 
 import { DividerText } from "@kibo/ui/components/separator"
-import { Callout } from "@/components/molecules/callout"
+import { Callout } from "@kibo/ui/components/callout"
 import { PasswordField } from "@/components/molecules/password-field"
 import { SocialSignIn } from "@/components/molecules/social-sign-in"
 import { classifyAuthError, isEmail } from "@/lib/auth-errors"

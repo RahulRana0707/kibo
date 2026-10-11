@@ -17,7 +17,7 @@ import { IconTile } from "@/components/atoms/icon-tile"
 import { Panel } from "@kibo/ui/components/panel"
 import { Section } from "@/components/atoms/section"
 import { Heading } from "@kibo/ui/components/typography"
-import { LinkList } from "@/components/molecules/link-list"
+import { LinkPanel } from "@/components/molecules/link-list"
 import { HelpSearchForm } from "@/components/organisms/help-search-form"
 import { getHelpArticles } from "@/lib/content"
 import { helpCategories } from "@/lib/marketing/help"
@@ -96,7 +96,7 @@ export default async function HelpPage() {
         <Container className="flex flex-wrap gap-12">
           <div className="flex min-w-0 flex-[2_1_480px] flex-col gap-4">
             <h2 className="text-title">Popular articles</h2>
-            <LinkList
+            <LinkPanel
               items={popular.map((article) => ({
                 href: hrefOf(article),
                 title: article.metadata.title,

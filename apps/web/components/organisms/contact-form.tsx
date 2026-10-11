@@ -2,7 +2,7 @@
 
 import { useState } from "react"
 import Link from "next/link"
-import { toast } from "sonner"
+import { toast } from "@kibo/ui/components/sonner"
 
 import { Button } from "@kibo/ui/components/button"
 import { Input } from "@kibo/ui/components/input"

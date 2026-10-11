@@ -1,7 +1,7 @@
 "use client"
 
 import { useRouter } from "next/navigation"
-import { toast } from "sonner"
+import { toast } from "@kibo/ui/components/sonner"
 
 import { authClient } from "@/lib/auth-client"
 

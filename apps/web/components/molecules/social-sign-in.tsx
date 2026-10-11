@@ -1,39 +1,75 @@
+"use client"
+
+import { useId } from "react"
+
 import { Button } from "@kibo/ui/components/button"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
+import { cn } from "@kibo/ui/lib/utils"
 
-import { PlatformIcon, type Platform } from "@/components/atoms/platform-icon"
+import { PlatformIcon } from "@/components/atoms/platform-icon"
 
-const providers: { platform: Platform; label: string }[] = [
-  { platform: "google", label: "Google" },
-  { platform: "twitch", label: "Twitch" },
-  { platform: "youtube", label: "YouTube" },
-]
+const providerNames = {
+  google: "Google",
+  twitch: "Twitch",
+  youtube: "YouTube",
+}
+
+type Provider = keyof typeof providerNames
 
 /**
- * Sign-in with Google, Twitch and YouTube. Not connected yet, so each button
- * is disabled and the reason is written beside it.
+ * Continue with Google or Twitch on sign up and log in. Today it is not
+ * available yet: every button is aria-disabled with a Soon label and one
+ * shared reason under the group. YouTube stays out until it exists.
  */
-export function SocialSignIn() {
+export function SocialSignIn({
+  providers = ["google", "twitch"],
+  onSelect,
+  connecting,
+}: {
+  providers?: Provider[]
+  /** When set, the buttons work. Leave unset while sign-in is Soon. */
+  onSelect?: (provider: Provider) => void
+  /** The provider being connected to, which shows a spinner. */
+  connecting?: Provider
+}) {
+  const reasonId = useId()
+  const soon = !onSelect
+
   return (
     <div className="flex flex-col gap-3">
-      {providers.map((provider) => (
-        <Button
-          key={provider.platform}
-          type="button"
-          variant="secondary"
-          disabled
-          aria-describedby="social-sign-in-note"
-          className="w-full disabled:bg-raised disabled:shadow-border"
-        >
-          <PlatformIcon platform={provider.platform} className="opacity-60" />
-          Continue with {provider.label}
-        </Button>
-      ))}
-      <p
-        id="social-sign-in-note"
-        className="text-center text-caption text-muted-foreground"
-      >
-        Google, Twitch and YouTube sign-in are coming soon.
-      </p>
+      {providers.map((provider) => {
+        const name = providerNames[provider]
+        const busy = connecting === provider
+        return (
+          <Button
+            key={provider}
+            type="button"
+            variant="secondary"
+            block
+            loading={busy}
+            aria-disabled={soon || undefined}
+            aria-describedby={soon ? reasonId : undefined}
+            onClick={() => {
+              if (!soon && !connecting) onSelect(provider)
+            }}
+            className={cn(
+              "max-sm:h-12",
+              soon && "aria-disabled:bg-raised aria-disabled:shadow-border"
+            )}
+          >
+            {busy ? null : (
+              <PlatformIcon platform={provider} muted={soon} />
+            )}
+            {busy ? `Connecting to ${name}…` : `Continue with ${name}`}
+            {soon ? <SoonLabel /> : null}
+          </Button>
+        )
+      })}
+      {soon ? (
+        <p id={reasonId} className="text-center text-caption text-muted-foreground">
+          Google and Twitch sign-in are coming soon.
+        </p>
+      ) : null}
     </div>
   )
 }

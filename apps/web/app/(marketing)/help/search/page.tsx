@@ -162,7 +162,7 @@ export default async function HelpSearchPage({ searchParams }: Props) {
           <Panel>
             <Empty>
               <EmptyHeader>
-                <EmptyMedia variant="icon">
+                <EmptyMedia variant="neutral">
                   <SearchIcon />
                 </EmptyMedia>
                 <EmptyTitle>No articles match “{query}”</EmptyTitle>
