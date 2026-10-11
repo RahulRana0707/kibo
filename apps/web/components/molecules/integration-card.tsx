@@ -1,13 +1,41 @@
 import Link from "next/link"
-import { CodeIcon } from "lucide-react"
+import { CodeIcon, LockIcon } from "lucide-react"
 
 import { Badge } from "@kibo/ui/components/badge"
+import { SoonLabel } from "@kibo/ui/components/soon-label"
 import { cn } from "@kibo/ui/lib/utils"
 
 import { GlyphTile, PlatformIcon } from "@/components/atoms/platform-icon"
+import { StatusPill } from "@/components/atoms/status-pill"
 import type { Integration } from "@/lib/marketing/integrations"
 
-/** One integration in the directory. Links to its page when available. */
+const appStates = {
+  "not-connected": { tone: "offline", word: "Not connected" },
+  connecting: { tone: "connecting", word: "Connecting" },
+  connected: { tone: "live", word: "Connected" },
+  reconnect: { tone: "reconnect", word: "Needs reconnect" },
+  error: { tone: "error", word: "Error" },
+} as const
+
+const cardClassName =
+  "flex rounded-xl border border-transparent bg-raised text-foreground no-underline shadow-border"
+
+function Logo({ integration, muted }: { integration: Integration; muted?: boolean }) {
+  return integration.platform ? (
+    <PlatformIcon platform={integration.platform} size="lg" muted={muted} />
+  ) : (
+    <GlyphTile>
+      <CodeIcon />
+    </GlyphTile>
+  )
+}
+
+/**
+ * One integration in the marketing directory: logo, category (or Soon) top
+ * right, name and one line. Links to its page when available; coming-soon
+ * ones show a muted logo. `compact` is the logo beside the name and category,
+ * for strips and related lists.
+ */
 export function IntegrationCard({
   integration,
   compact = false,
@@ -15,26 +43,32 @@ export function IntegrationCard({
   integration: Integration
   compact?: boolean
 }) {
-  const body = (
+  const muted = !integration.available
+  const name = (
+    <span className="font-semibold group-hover:underline group-hover:underline-offset-4">
+      {integration.name}
+    </span>
+  )
+  const body = compact ? (
     <>
-      {integration.platform ? (
-        <PlatformIcon platform={integration.platform} size="lg" />
-      ) : (
-        <GlyphTile>
-          <CodeIcon />
-        </GlyphTile>
-      )}
-      <span className="flex min-w-0 flex-1 flex-col gap-1">
-        <span className="flex flex-wrap items-center justify-between gap-2">
-          <span className="font-semibold">{integration.name}</span>
-          {compact ? null : integration.available ? (
-            <Badge variant="success">Available</Badge>
-          ) : (
-            <Badge>Coming soon</Badge>
-          )}
+      <Logo integration={integration} muted={muted} />
+      <span className="flex min-w-0 flex-col">
+        {name}
+        <span className="text-caption text-muted-foreground">
+          {integration.category}
         </span>
-        {!compact && integration.description ? (
-          <span className="text-caption text-muted-foreground">
+      </span>
+    </>
+  ) : (
+    <>
+      <span className="flex items-start justify-between gap-3">
+        <Logo integration={integration} muted={muted} />
+        {muted ? <SoonLabel /> : <Badge>{integration.category}</Badge>}
+      </span>
+      <span className="flex flex-col gap-2">
+        <span className="text-heading">{name}</span>
+        {integration.description ? (
+          <span className="text-body-sm text-muted-foreground">
             {integration.description}
           </span>
         ) : null}
@@ -43,8 +77,10 @@ export function IntegrationCard({
   )
 
   const className = cn(
-    "flex items-start gap-3 rounded-xl border border-transparent bg-raised p-4 text-foreground no-underline shadow-border",
-    compact && "items-center"
+    cardClassName,
+    compact
+      ? "items-center gap-3 rounded-lg p-3"
+      : "flex-col gap-3 p-5 max-sm:p-4"
   )
 
   return integration.available ? (
@@ -52,12 +88,83 @@ export function IntegrationCard({
       href={`/integrations/${integration.slug}`}
       className={cn(
         className,
-        "transition-shadow duration-150 hover:shadow-border-hover"
+        "group transition-shadow duration-fast hover:shadow-border-hover"
       )}
     >
       {body}
     </Link>
   ) : (
     <div className={className}>{body}</div>
+  )
+}
+
+/**
+ * One integration in the app: logo, status pill and the one action for
+ * its state. A reconnect or error state edges the card in its tone;
+ * `lockedPlan` gates it behind a higher plan.
+ */
+export function AppIntegrationCard({
+  integration,
+  state,
+  account,
+  detail,
+  action,
+  lockedPlan,
+}: {
+  integration: Integration
+  state: keyof typeof appStates
+  /** The connected account, such as “miraplays”. */
+  account?: string
+  /** One line under the name: what it does or what went wrong. */
+  detail?: React.ReactNode
+  /** One small button; at most one primary (Reconnect). */
+  action?: React.ReactNode
+  lockedPlan?: string
+}) {
+  const status = appStates[state]
+
+  return (
+    <article
+      aria-label={`${integration.name}, ${lockedPlan ? `${lockedPlan} plan required` : status.word}${account ? `, ${account}` : ""}`}
+      className={cn(
+        cardClassName,
+        "min-h-50 flex-col gap-3 p-5",
+        state === "reconnect" &&
+          "shadow-[inset_0_0_0_1px_var(--vi-warning-border)]",
+        state === "error" && "shadow-[inset_0_0_0_1px_var(--vi-danger-border)]"
+      )}
+    >
+      <div className="flex items-start justify-between gap-3">
+        <Logo integration={integration} />
+        {lockedPlan ? (
+          <Badge variant="outline">
+            <LockIcon />
+            {lockedPlan}
+          </Badge>
+        ) : (
+          <StatusPill tone={status.tone} size="sm">
+            {status.word}
+          </StatusPill>
+        )}
+      </div>
+      <div className="flex flex-1 flex-col gap-1">
+        <h3 className="text-heading">{integration.name}</h3>
+        {account ? (
+          <p className="text-caption text-muted-foreground">{account}</p>
+        ) : null}
+        {detail ? (
+          <p
+            className={cn(
+              "text-caption text-muted-foreground",
+              state === "error" && "text-destructive-text",
+              state === "reconnect" && "text-warning-text"
+            )}
+          >
+            {detail}
+          </p>
+        ) : null}
+      </div>
+      {action ? <div className="flex flex-wrap gap-2">{action}</div> : null}
+    </article>
   )
 }

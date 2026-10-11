@@ -6,20 +6,20 @@ import { buttonVariants } from "@kibo/ui/components/button"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { Container } from "@/components/atoms/container"
-import { Monogram } from "@/components/atoms/monogram"
-import { Panel } from "@/components/atoms/panel"
+import { Avatar } from "@kibo/ui/components/avatar"
+import { Panel } from "@kibo/ui/components/panel"
 import { Section } from "@/components/atoms/section"
 import { Stat } from "@/components/atoms/stat"
 import { StatusPill } from "@/components/atoms/status-pill"
-import { Eyebrow } from "@/components/atoms/typography"
+import { Eyebrow } from "@kibo/ui/components/typography"
 import { FeatureItem } from "@/components/molecules/feature"
 import { ListRow } from "@/components/molecules/list-row"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { PullQuote } from "@/components/molecules/testimonial"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
-import { UseCaseNav } from "@/components/organisms/use-case-nav"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
+import { UseCaseNav } from "@/components/organisms/marketing/use-case-nav"
 
 export const metadata: Metadata = {
   title: "Kibo for agencies",
@@ -37,19 +37,19 @@ const roster = [
   {
     name: "Dev Kapoor",
     initials: "DK",
-    status: "ready" as const,
+    status: "offline" as const,
     label: "Ready",
   },
   {
     name: "Lena Sato",
     initials: "LS",
-    status: "error" as const,
+    status: "reconnect" as const,
     label: "Needs reconnect",
   },
   {
     name: "The Bake Bros",
     initials: "TB",
-    status: "ready" as const,
+    status: "offline" as const,
     label: "Ready",
   },
 ]
@@ -106,7 +106,7 @@ export default function AgenciesUseCasePage() {
                 <ListRow
                   key={creator.name}
                   className="px-2"
-                  leading={<Monogram initials={creator.initials} size="sm" />}
+                  leading={<Avatar name={creator.initials} initials={creator.initials} size="sm" />}
                   trailing={
                     <StatusPill tone={creator.status}>
                       {creator.label}
@@ -125,7 +125,7 @@ export default function AgenciesUseCasePage() {
           <SectionHeading title="Built for running many channels" />
           <AutoGrid min="260px">
             {capabilities.map((item) => (
-              <FeatureItem key={item.title} boxed title={item.title}>
+              <FeatureItem key={item.title} boxed="raised" title={item.title}>
                 {item.body}
               </FeatureItem>
             ))}

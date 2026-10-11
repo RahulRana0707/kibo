@@ -3,10 +3,10 @@ import { notFound } from "next/navigation"
 
 import { Container } from "@/components/atoms/container"
 import { Prose } from "@/components/atoms/prose"
-import { Heading } from "@/components/atoms/typography"
-import { Callout } from "@/components/molecules/callout"
+import { Heading } from "@kibo/ui/components/typography"
+import { Callout } from "@kibo/ui/components/callout"
 import { TabLinks } from "@/components/molecules/tab-links"
-import { TableOfContents } from "@/components/organisms/table-of-contents"
+import { TableOfContents } from "@/components/organisms/marketing/table-of-contents"
 import { getHeadings, getLegalDocument, getLegalDocuments } from "@/lib/content"
 
 type Props = { params: Promise<{ slug: string }> }

@@ -6,7 +6,7 @@ import { Separator } from "@kibo/ui/components/separator"
 import { Container } from "@/components/atoms/container"
 import { CheckList } from "@/components/molecules/check-list"
 import { SectionHeading } from "@/components/molecules/section-heading"
-import { ContactForm } from "@/components/organisms/contact-form"
+import { ContactForm } from "@/components/organisms/marketing/contact-form"
 
 export const metadata: Metadata = {
   title: "Contact sales",

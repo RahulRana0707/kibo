@@ -3,7 +3,7 @@ import Link from "next/link"
 import { Badge } from "@kibo/ui/components/badge"
 import { cn } from "@kibo/ui/lib/utils"
 
-import { Monogram } from "@/components/atoms/monogram"
+import { Avatar } from "@kibo/ui/components/avatar"
 import { Placeholder } from "@/components/atoms/placeholder"
 
 export type PostSummary = {
@@ -25,14 +25,19 @@ function PostMeta({ post, long }: { post: PostSummary; long?: boolean }) {
   )
 }
 
-/** A post in the blog grid, or the wide featured post with `featured`. */
+/**
+ * A post in the blog grid, or the wide featured post with `featured`.
+ * `meta={false}` drops the category and date, for “Keep reading” lists.
+ */
 export function PostCard({
   post,
   featured = false,
+  meta = true,
   headingLevel = "h3",
 }: {
   post: PostSummary
   featured?: boolean
+  meta?: boolean
   headingLevel?: "h2" | "h3"
 }) {
   const Title = headingLevel
@@ -51,7 +56,7 @@ export function PostCard({
           </Title>
           <p className="text-muted-foreground">{post.description}</p>
           <span className="flex items-center gap-2 text-caption">
-            <Monogram initials={post.author.initials} size="sm" />
+            <Avatar name={post.author.initials} initials={post.author.initials} size="sm" />
             {post.author.name}, {post.author.role}
           </span>
         </div>
@@ -65,7 +70,7 @@ export function PostCard({
       className={cn("group flex flex-col gap-3 text-foreground no-underline")}
     >
       <Placeholder label="Cover image" />
-      <PostMeta post={post} />
+      {meta ? <PostMeta post={post} /> : null}
       <Title className="text-heading group-hover:underline">{post.title}</Title>
     </Link>
   )

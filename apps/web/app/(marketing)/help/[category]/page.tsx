@@ -2,11 +2,11 @@ import type { Metadata } from "next"
 import { notFound } from "next/navigation"
 
 import { Container } from "@/components/atoms/container"
-import { Heading, Lede } from "@/components/atoms/typography"
+import { Heading, Lede } from "@kibo/ui/components/typography"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
-import { LinkList } from "@/components/molecules/link-list"
+import { LinkPanel } from "@/components/molecules/link-list"
 import { SearchField } from "@/components/molecules/search-field"
-import { SideNav } from "@/components/molecules/side-nav"
+import { SideNav } from "@/components/molecules/tab-links"
 import { getHelpArticles } from "@/lib/content"
 import { getHelpCategory, helpCategories } from "@/lib/marketing/help"
 
@@ -73,7 +73,7 @@ export default async function HelpCategoryPage({ params }: Props) {
               return inSection.length > 0 ? (
                 <section key={section} className="flex flex-col gap-3">
                   <h2 className="text-heading">{section}</h2>
-                  <LinkList
+                  <LinkPanel
                     items={inSection.map((article) => ({
                       href: `/help/${category.slug}/${article.slug}`,
                       title: article.metadata.title,

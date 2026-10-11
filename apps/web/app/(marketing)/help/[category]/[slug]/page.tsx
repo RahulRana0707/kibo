@@ -4,10 +4,10 @@ import { notFound } from "next/navigation"
 
 import { Container } from "@/components/atoms/container"
 import { Prose } from "@/components/atoms/prose"
-import { Heading } from "@/components/atoms/typography"
+import { Heading } from "@kibo/ui/components/typography"
 import { Breadcrumbs } from "@/components/molecules/breadcrumbs"
-import { SideNav } from "@/components/molecules/side-nav"
-import { ArticleFeedback } from "@/components/organisms/article-feedback"
+import { SideNav } from "@/components/molecules/tab-links"
+import { ArticleFeedback } from "@/components/molecules/article-feedback"
 import { getHelpArticle, getHelpArticles } from "@/lib/content"
 import { getHelpCategory } from "@/lib/marketing/help"
 

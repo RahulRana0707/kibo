@@ -10,15 +10,15 @@ import { Section } from "@/components/atoms/section"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { TrialLink } from "@/components/molecules/trial-link"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
 import {
   AnswerFlow,
   PersonalityChips,
   ReplyModes,
   VoiceComparison,
-} from "@/components/organisms/previews/answers"
+} from "@/components/organisms/marketing/previews/answers"
 
 export const metadata: Metadata = {
   title: "AI Answers",

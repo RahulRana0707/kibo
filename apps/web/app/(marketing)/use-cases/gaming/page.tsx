@@ -6,20 +6,20 @@ import { buttonVariants } from "@kibo/ui/components/button"
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { Container } from "@/components/atoms/container"
 import { MessageTag } from "@/components/atoms/message-tag"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { PlatformIcon } from "@/components/atoms/platform-icon"
 import { Section } from "@/components/atoms/section"
-import { Code } from "@/components/atoms/typography"
+import { Code } from "@kibo/ui/components/typography"
 import { ChatFeed, ChatMessage } from "@/components/molecules/chat-message"
 import { DetailList } from "@/components/molecules/detail-list"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { PullQuote } from "@/components/molecules/testimonial"
 import { TrialLink } from "@/components/molecules/trial-link"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
-import { UseCaseNav } from "@/components/organisms/use-case-nav"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
+import { UseCaseNav } from "@/components/organisms/marketing/use-case-nav"
 
 export const metadata: Metadata = {
   title: "Kibo for gaming streamers",
@@ -78,7 +78,7 @@ export default function GamingUseCasePage() {
         <Container className="flex flex-col gap-12">
           <SectionHeading title="What gaming streamers set up first" />
           <AutoGrid min="260px">
-            <FeatureItem boxed title="Settings & gear FAQs">
+            <FeatureItem boxed="raised" title="Settings & gear FAQs">
               Sens, DPI, crosshair code, keybinds, PC specs and peripherals.
             </FeatureItem>
             <div className="flex min-w-0 flex-col gap-2 rounded-xl border border-transparent bg-raised p-6 shadow-border max-sm:p-4">
@@ -93,17 +93,17 @@ export default function GamingUseCasePage() {
                 game info.
               </p>
             </div>
-            <FeatureItem boxed title="Backseat rule">
+            <FeatureItem boxed="raised" title="Backseat rule">
               A friendly reminder first, then timeouts for repeat offenders.
             </FeatureItem>
-            <FeatureItem boxed title="Viewer queue">
+            <FeatureItem boxed="raised" title="Viewer queue">
               <Code>!join</Code> for customs and community nights, with a fair
               rotation.
             </FeatureItem>
-            <FeatureItem boxed title="Predictions">
+            <FeatureItem boxed="raised" title="Predictions">
               “Will Mira clutch this round?” with live results on stream.
             </FeatureItem>
-            <FeatureItem boxed title="Clip moments">
+            <FeatureItem boxed="raised" title="Clip moments">
               Chat spikes after aces get marked in your stream summary.
             </FeatureItem>
           </AutoGrid>

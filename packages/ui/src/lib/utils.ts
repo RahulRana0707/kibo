@@ -20,6 +20,9 @@ const twMerge = extendTailwindMerge({
       ],
       shadow: ["border", "border-hover", "raised"],
     },
+    classGroups: {
+      duration: [{ duration: ["instant", "fast", "moderate", "slow"] }],
+    },
   },
 })
 

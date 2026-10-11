@@ -1,10 +1,68 @@
 import Link from "next/link"
-import { ChevronRightIcon } from "lucide-react"
+import { ArrowUpRightIcon, ChevronRightIcon } from "lucide-react"
 
 import { cn } from "@kibo/ui/lib/utils"
 
-/** A panel of divided links, each with an optional second line. */
+/**
+ * A titled column of links: footer columns, related articles, the legal
+ * index. External links get an arrow and say they open a new tab.
+ */
 export function LinkList({
+  title,
+  links,
+  tone = "muted",
+  className,
+}: {
+  title?: string
+  links: { href: string; label: React.ReactNode; external?: boolean; current?: boolean }[]
+  tone?: "muted" | "accent"
+  className?: string
+}) {
+  const titleId = title ? `links-${title.toLowerCase().replace(/\W+/g, "-")}` : undefined
+
+  return (
+    <nav aria-labelledby={titleId} className={cn("flex flex-col gap-2", className)}>
+      {title ? (
+        <p id={titleId} className="text-caption font-semibold text-foreground">
+          {title}
+        </p>
+      ) : null}
+      <ul className="flex flex-col gap-2">
+        {links.map((link) => {
+          const classes = cn(
+            "inline-flex min-h-6 items-center gap-1 no-underline hover:underline max-sm:min-h-11",
+            tone === "accent"
+              ? "text-[0.9375rem] text-link"
+              : "text-body-sm text-muted-foreground hover:text-foreground",
+            link.current && "font-medium text-foreground"
+          )
+          return (
+            <li key={link.href}>
+              {link.external ? (
+                <a href={link.href} target="_blank" rel="noreferrer" className={classes}>
+                  {link.label}
+                  <ArrowUpRightIcon aria-hidden="true" className="size-3" />
+                  <span className="sr-only"> (opens in a new tab)</span>
+                </a>
+              ) : (
+                <Link
+                  href={link.href}
+                  aria-current={link.current ? "page" : undefined}
+                  className={classes}
+                >
+                  {link.label}
+                </Link>
+              )}
+            </li>
+          )
+        })}
+      </ul>
+    </nav>
+  )
+}
+
+/** A panel of divided links, each with an optional second line. */
+export function LinkPanel({
   items,
   className,
 }: {

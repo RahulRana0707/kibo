@@ -1,17 +1,17 @@
 import type { Metadata } from "next"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Chip } from "@/components/atoms/chip"
+import { Chip } from "@kibo/ui/components/chip"
 import { Container } from "@/components/atoms/container"
-import { Panel } from "@/components/atoms/panel"
+import { Panel } from "@kibo/ui/components/panel"
 import { Section } from "@/components/atoms/section"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { TrialLink } from "@/components/molecules/trial-link"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
-import { ModerationLog } from "@/components/organisms/previews/moderation"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
+import { ModerationLog } from "@/components/organisms/marketing/previews/moderation"
 
 export const metadata: Metadata = {
   title: "Moderation",
@@ -83,7 +83,7 @@ export default function ModerationPage() {
           />
           <AutoGrid min="260px">
             {filters.map((item) => (
-              <FeatureItem key={item.title} boxed title={item.title}>
+              <FeatureItem key={item.title} boxed="raised" title={item.title}>
                 {item.body}
               </FeatureItem>
             ))}
@@ -112,7 +112,7 @@ export default function ModerationPage() {
                       →
                     </span>
                   ) : null}
-                  <Chip selected={item.on}>{item.step}</Chip>
+                  <Chip variant={item.on ? "selected" : "default"}>{item.step}</Chip>
                 </li>
               ))}
             </ol>

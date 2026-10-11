@@ -3,19 +3,19 @@ import Link from "next/link"
 
 import { buttonVariants } from "@kibo/ui/components/button"
 
-import { chipLinkClassName } from "@/components/atoms/chip"
-import { Panel } from "@/components/atoms/panel"
+import { chipVariants } from "@kibo/ui/components/chip"
+import { Panel } from "@kibo/ui/components/panel"
 import { PlatformIcon, type Platform } from "@/components/atoms/platform-icon"
 import { SectionHeading } from "@/components/molecules/section-heading"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
-import { SummarySnippet } from "@/components/organisms/previews/analytics"
-import { AnswerSnippet } from "@/components/organisms/previews/answers"
-import { ConsoleSnippet } from "@/components/organisms/previews/console"
-import { PollSnippet } from "@/components/organisms/previews/engagement"
-import { KnowledgeSnippet } from "@/components/organisms/previews/knowledge"
-import { ModerationSnippet } from "@/components/organisms/previews/moderation"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
+import { SummarySnippet } from "@/components/organisms/marketing/previews/analytics"
+import { AnswerSnippet } from "@/components/organisms/marketing/previews/answers"
+import { ConsoleSnippet } from "@/components/organisms/marketing/previews/console"
+import { PollSnippet } from "@/components/organisms/marketing/previews/engagement"
+import { KnowledgeSnippet } from "@/components/organisms/marketing/previews/knowledge"
+import { ModerationSnippet } from "@/components/organisms/marketing/previews/moderation"
 import { productLinks } from "@/lib/marketing/navigation"
 
 export const metadata: Metadata = {
@@ -113,7 +113,7 @@ export default function ProductPage() {
     <>
       <PageHero
         layout="stacked"
-        className="pb-12"
+        className="pt-24 pb-12"
         eyebrow="Product"
         title={
           <span className="block max-w-[16ch]">
@@ -130,7 +130,7 @@ export default function ProductPage() {
               <Link
                 key={link.href}
                 href={link.href}
-                className={chipLinkClassName()}
+                className={chipVariants()}
               >
                 {link.label}
               </Link>

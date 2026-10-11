@@ -11,6 +11,8 @@ const dmSans = DM_Sans({
   subsets: ["latin"],
   variable: "--font-dm-sans",
   style: ["normal", "italic"],
+  // Optical sizing tightens large type, as the design renders it
+  axes: ["opsz"],
 })
 
 const dmMono = DM_Mono({

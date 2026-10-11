@@ -1,8 +1,8 @@
 import type { Metadata } from "next"
 
 import { Container } from "@/components/atoms/container"
-import { Eyebrow, Heading, Lede } from "@/components/atoms/typography"
-import { IntegrationsDirectory } from "@/components/organisms/integrations-directory"
+import { Eyebrow, Heading, Lede } from "@kibo/ui/components/typography"
+import { IntegrationsDirectory } from "@/components/organisms/marketing/integrations-directory"
 
 export const metadata: Metadata = {
   title: "Integrations",

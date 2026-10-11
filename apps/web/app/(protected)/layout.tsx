@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation"
 
-import { SetupBanner } from "@/components/organisms/setup-banner"
+import { SetupBanner } from "@/components/organisms/app-shell/system-banner"
 import { AppTemplate } from "@/components/templates/app-template"
 import { getCurrentSession } from "@/lib/api/auth.server"
 
@@ -21,7 +21,11 @@ export default async function ProtectedLayout({
   }
 
   return (
-    <AppTemplate user={user} banner={<SetupBanner />}>
+    <AppTemplate
+      user={user}
+      workspace={{ id: "personal", name: user.name, role: "Owner" }}
+      banner={<SetupBanner />}
+    >
       {children}
     </AppTemplate>
   )

@@ -12,15 +12,22 @@ import {
 } from "@kibo/ui/components/empty"
 
 import { AutoGrid } from "@/components/atoms/auto-grid"
-import { Panel } from "@/components/atoms/panel"
-import { Heading } from "@/components/atoms/typography"
-import { SetupChecklist } from "@/components/organisms/setup-checklist"
+import { Panel } from "@kibo/ui/components/panel"
+import { Heading } from "@kibo/ui/components/typography"
+import {
+  SetupChecklist,
+  type SetupStep,
+} from "@/components/molecules/setup-checklist"
 import { getCurrentSession } from "@/lib/api/auth.server"
 
 export const metadata: Metadata = { title: "Dashboard" }
 
-const steps = [
-  { title: "Create your bot", detail: "Name it and pick a personality" },
+const steps: SetupStep[] = [
+  {
+    title: "Create your bot",
+    detail: "Name it and pick a personality",
+    status: "current",
+  },
   { title: "Add your first knowledge", detail: "A few FAQs your viewers ask" },
   { title: "Pick a reply mode", detail: "Approval, Auto or Silent" },
   {
@@ -72,7 +79,10 @@ export default async function DashboardPage() {
         </p>
       </div>
 
-      <SetupChecklist title="Get your bot ready" steps={steps} />
+      <SetupChecklist
+        title="Get your bot ready"
+        steps={steps.map((step) => ({ ...step, soon: true }))}
+      />
 
       <AutoGrid min="300px">
         {cards.map((card) => (

@@ -3,17 +3,17 @@ import type { Metadata } from "next"
 import { AutoGrid } from "@/components/atoms/auto-grid"
 import { Container } from "@/components/atoms/container"
 import { Section } from "@/components/atoms/section"
-import { Code, Heading } from "@/components/atoms/typography"
+import { Code, Heading } from "@kibo/ui/components/typography"
 import { FeatureItem } from "@/components/molecules/feature"
 import { SectionHeading } from "@/components/molecules/section-heading"
 import { TrialLink } from "@/components/molecules/trial-link"
-import { CtaBanner } from "@/components/organisms/cta-banner"
-import { FeatureSplit } from "@/components/organisms/feature-split"
-import { PageHero } from "@/components/organisms/page-hero"
+import { CtaBanner } from "@/components/organisms/marketing/cta-banner"
+import { FeatureSplit } from "@/components/organisms/marketing/feature-split"
+import { PageHero } from "@/components/organisms/marketing/page-hero"
 import {
   GiveawayAndLeaderboard,
   GoLivePost,
-} from "@/components/organisms/previews/engagement"
+} from "@/components/organisms/marketing/previews/engagement"
 
 export const metadata: Metadata = {
   title: "Engagement",
@@ -94,7 +94,7 @@ export default function EngagementPage() {
           <Heading>Everything in one bot</Heading>
           <AutoGrid min="260px">
             {tools.map((item) => (
-              <FeatureItem key={item.title} boxed title={item.title}>
+              <FeatureItem key={item.title} boxed="raised" title={item.title}>
                 {item.body}
               </FeatureItem>
             ))}

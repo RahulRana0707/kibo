@@ -1,9 +1,8 @@
 import { BrandLogo } from "@/components/atoms/brand-logo"
 
 /**
- * The split sign-up and log-in layout: a brand panel on the leading side and
- * the form centered on the other. The brand panel stacks above the form when
- * the row stops fitting.
+ * The split sign-up and log-in layout. The form comes first in the DOM; the
+ * brand panel is an aside drawn on the leading side, hidden under 960.
  */
 export function AuthTemplate({
   aside,
@@ -15,20 +14,13 @@ export function AuthTemplate({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-svh flex-wrap bg-background">
-      <aside className="flex flex-[1_1_480px] flex-col justify-between gap-12 bg-surface p-12 max-lg:hidden">
-        <BrandLogo />
-        <div className="flex max-w-[460px] flex-col gap-6">{aside}</div>
-        <p className="text-caption text-muted-foreground">
-          © {new Date().getFullYear()} Kibo
-        </p>
-      </aside>
+    <div className="flex min-h-svh bg-background">
       <main
         id="main"
         className="flex min-w-0 flex-[1_1_520px] flex-col p-6 max-sm:p-4"
       >
         <div className="flex min-h-12 flex-wrap items-center justify-between gap-3">
-          <BrandLogo size="sm" className="lg:hidden" />
+          <BrandLogo size="sm" className="min-[960px]:hidden" />
           <p className="ms-auto text-body-sm text-muted-foreground [&_a]:text-link">
             {switchLink}
           </p>
@@ -37,6 +29,13 @@ export function AuthTemplate({
           {children}
         </div>
       </main>
+      <aside className="order-first flex flex-[1_1_480px] flex-col justify-between gap-12 bg-surface p-12 max-[959px]:hidden">
+        <BrandLogo />
+        <div className="flex max-w-[460px] flex-col gap-5">{aside}</div>
+        <p className="text-caption text-muted-foreground">
+          © {new Date().getFullYear()} Kibo
+        </p>
+      </aside>
     </div>
   )
 }
