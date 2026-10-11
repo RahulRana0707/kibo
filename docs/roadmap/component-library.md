@@ -143,6 +143,8 @@ Every built page was compared side by side with its frame, rendered locally from
   - The landing page's integration strip uses `compact`.
 - **Detail list:** values of 24 characters or fewer stay beside their label down to 220px wide (the board's rule), so the integration sidebar reads label left, value right.
 - **Feature item:** `boxed="raised"` for boxes inside an alt section, where the surface box disappeared (moderation, engagement and both use cases).
+- **“Most popular” plan:** follows the pricing frame (accent-subtle fill, 1px accent-border inset), not the plan card board’s 2px ring.
+- **App sidebar:** the logo, workspace switcher and plan card stay fixed; only the navigation scrolls.
 - **Smaller fixes:**
   - The /product hero is padded 96 and its chips sit on one line.
   - The /about heading spans the column (`SectionHeading wide`).
@@ -157,7 +159,6 @@ Every built page was compared side by side with its frame, rendered locally from
 Intended differences from the frames, because a newer board says otherwise:
 
 - the footer (`bg-page`, platform marks)
-- the “Most popular” plan (a 2px accent inset)
 - social sign-in (Google and Twitch, Soon)
 - the article feedback buttons (“Yes” / “No”)
 - the reconnect status tone (warning)
