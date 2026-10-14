@@ -12,11 +12,17 @@
 - `gh` commands: run them as RahulRana0707 without switching the active account, by prefixing `GH_TOKEN="$(gh auth token --user RahulRana0707)"`.
 - Never add a Claude or Anthropic co-author or attribution line to commit messages or PR descriptions.
 
+# Local servers
+
+- Fixed ports: the web app on **3050** (`next dev --port 3050`) and the API on **8090** (`PORT` in `apps/api/.env`). The database is on 5435 (below).
+- Start order: `pnpm db:up`, then `pnpm dev` in `apps/api`, then `pnpm dev` in `apps/web`.
+
 # Local database
 
 - Postgres 17 runs in Docker (`docker-compose.yml`, container `kibo-postgres`, host port 5435, user, password and database all `kibo`). Don't use Homebrew Postgres for Kibo.
 - Start it with `pnpm db:up` and stop it with `pnpm db:down`. The data lives in the `kibo_pgdata` volume, so stopping it keeps the data.
-- After creating the volume fresh, apply the schema with `pnpm --filter api db:push`, then seed the development account below.
+- Schema changes are Prisma migrations in `apps/api/prisma/migrations`. Create one with `pnpm --filter api db:migrate` (`prisma migrate dev`). Never use `db push`. After creating the volume fresh, the same command applies every migration; then seed the development account below.
+- API end-to-end tests (`pnpm --filter api test:e2e`) build the API, start it on port 8091 against a separate `kibo_test` database (created and migrated automatically), and never touch dev data. Postgres must be running.
 
 # Development account
 

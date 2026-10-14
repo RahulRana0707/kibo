@@ -21,6 +21,7 @@ model User {
   updatedAt     DateTime  @updatedAt
   sessions      Session[]
   accounts      Account[]
+  members       Member[]
 
   @@unique([email])
   @@map("user")
@@ -72,4 +73,157 @@ model Verification {
 
   @@index([identifier])
   @@map("verification")
+}
+
+// ---------------------------------------------------------------------------
+// Workspaces. Every user gets a personal workspace on sign-up; bots, and
+// later knowledge, streams and team members, belong to a workspace.
+// ---------------------------------------------------------------------------
+
+model Workspace {
+  id           String   @id @default(cuid())
+  name         String
+  personal     Boolean  @default(true)
+  /// Bots that aren't archived may not exceed this. Trial = 1; billing sets it per plan.
+  botLimit     Int      @default(1)
+  defaultBotId String?  @unique
+  defaultBot   Bot?     @relation("DefaultBot", fields: [defaultBotId], references: [id], onDelete: SetNull)
+  /// Display-only details (logo, banner, links…). Validated by @kibo/contracts; never queried.
+  metadata     Json     @default("{}")
+  members      Member[]
+  bots         Bot[]    @relation("WorkspaceBots")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@map("workspace")
+}
+
+enum MemberRole {
+  OWNER
+}
+
+model Member {
+  id          String     @id @default(cuid())
+  workspaceId String
+  userId      String
+  role        MemberRole @default(OWNER)
+  workspace   Workspace  @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt   DateTime   @default(now())
+
+  @@unique([workspaceId, userId])
+  @@index([userId])
+  @@map("member")
+}
+
+// ---------------------------------------------------------------------------
+// Bots
+// ---------------------------------------------------------------------------
+
+enum BotStatus {
+  DRAFT
+  ACTIVE
+  PAUSED
+}
+
+enum Personality {
+  FRIENDLY
+  HYPE
+  CHILL
+  SARCASTIC
+  PROFESSIONAL
+}
+
+enum ReplyMode {
+  AUTO
+  APPROVAL
+  SILENT
+}
+
+enum UnsureAction {
+  DRAFT_FOR_APPROVAL
+  SEND_TO_INBOX
+  REPLY_NOT_SURE
+}
+
+enum Approvers {
+  OWNER
+  MODERATORS
+}
+
+enum Severity {
+  HIGHEST
+  HIGH
+  NORMAL
+}
+
+enum EscalationAction {
+  ALERT_MODS
+  HIDE_AND_REVIEW
+  DRAFT_FOR_APPROVAL
+}
+
+model Bot {
+  id          String     @id @default(cuid())
+  workspaceId String
+  workspace   Workspace  @relation("WorkspaceBots", fields: [workspaceId], references: [id], onDelete: Cascade)
+  defaultFor  Workspace? @relation("DefaultBot")
+  name        String
+  /// Lower-cased name, so names are unique per workspace regardless of case.
+  nameKey     String
+  purpose     String?
+  status      BotStatus  @default(DRAFT)
+  /// Archived when set. Restoring keeps the previous status.
+  archivedAt  DateTime?
+  pausedAt    DateTime?
+  pausedById  String?
+  templateKey String?
+  /// Display-only details (avatar image, accent…). Validated by @kibo/contracts; never queried.
+  metadata    Json       @default("{}")
+
+  // Personality & voice
+  personality           Personality @default(FRIENDLY)
+  voiceNotes            String?
+  /// Reply languages as tags: "en", "hi-Latn" (Hinglish).
+  languages             String[]    @default(["en"])
+  replyInViewerLanguage Boolean     @default(true)
+  welcomeEnabled        Boolean     @default(true)
+  welcomeMessage        String?
+
+  // Replying
+  replyMode             ReplyMode    @default(SILENT)
+  confidenceThreshold   Int          @default(85)
+  unsureAction          UnsureAction @default(SEND_TO_INBOX)
+  approvers             Approvers    @default(OWNER)
+  maxRepliesPerMinute   Int          @default(8)
+  viewerCooldownSeconds Int          @default(30)
+  answerRepeatedOnce    Boolean      @default(true)
+  quietMode             Boolean      @default(false)
+
+  // Safety
+  blockedTopics          String[]         @default([])
+  blockedTopicReply      String
+  ignoreChatInstructions Boolean          @default(true)
+  escalationRules        EscalationRule[]
+
+  createdById String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([workspaceId, nameKey])
+  @@index([workspaceId, archivedAt])
+  @@map("bot")
+}
+
+model EscalationRule {
+  id       String           @id @default(cuid())
+  botId    String
+  bot      Bot              @relation(fields: [botId], references: [id], onDelete: Cascade)
+  trigger  String
+  severity Severity
+  action   EscalationAction
+  position Int
+
+  @@index([botId, position])
+  @@map("escalation_rule")
 }

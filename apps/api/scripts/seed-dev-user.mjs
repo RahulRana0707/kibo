@@ -11,8 +11,8 @@ if (process.env.NODE_ENV === "production") {
   process.exit(1)
 }
 
-const api = process.env.API_URL ?? "http://localhost:4000"
-const web = process.env.WEB_URL ?? "http://localhost:3005"
+const api = process.env.API_URL ?? "http://localhost:8090"
+const web = process.env.WEB_URL ?? "http://localhost:3050"
 const user = {
   name: process.env.DEV_USER_NAME ?? "Mira Okafor",
   email: process.env.DEV_USER_EMAIL ?? "mira@kibo.test",

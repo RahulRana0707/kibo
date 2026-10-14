@@ -1,6 +1,7 @@
+import type { ApiResponse } from "@kibo/contracts"
 import { NextRequest, NextResponse } from "next/server"
 
-const API_URL = process.env.API_URL ?? "http://localhost:4000"
+const API_URL = process.env.API_URL ?? "http://localhost:8090"
 
 async function getProxySession(request: NextRequest) {
   try {
@@ -15,7 +16,11 @@ async function getProxySession(request: NextRequest) {
       return null
     }
 
-    return (await response.json()) as { user?: { id?: string } } | null
+    // The API wraps every answer in { status, result, error }
+    const body = (await response.json()) as ApiResponse<{
+      user?: { id?: string }
+    } | null>
+    return body.status === "success" ? body.result : null
   } catch {
     return null
   }

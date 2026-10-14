@@ -4,7 +4,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "dev": "next dev --port 3005",
+    "dev": "next dev --port 3050",
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
@@ -12,6 +12,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
+    "@kibo/contracts": "workspace:*",
     "@kibo/ui": "workspace:*",
     "@mdx-js/loader": "^3.1.1",
     "@mdx-js/react": "^3.1.1",
