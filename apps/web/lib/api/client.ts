@@ -1,4 +1,4 @@
-import { ApiError } from "@/lib/api/error"
+import { readEnvelope } from "@/lib/api/envelope"
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8090"
 
@@ -6,24 +6,7 @@ function createUrl(path: string) {
   return new URL(path, API_URL).toString()
 }
 
-async function getErrorMessage(response: Response) {
-  try {
-    const body = (await response.json()) as { message?: unknown }
-
-    if (typeof body.message === "string") {
-      return body.message
-    }
-
-    if (Array.isArray(body.message)) {
-      return body.message.join(", ")
-    }
-  } catch {
-    // Use the status text below when the API does not return JSON.
-  }
-
-  return response.statusText || "Request failed"
-}
-
+/** Calls the API from the browser with the session cookie; returns `result`. */
 export async function apiClientFetch<T>(
   path: string,
   init: RequestInit = {}
@@ -37,13 +20,5 @@ export async function apiClientFetch<T>(
     },
   })
 
-  if (!response.ok) {
-    throw new ApiError(await getErrorMessage(response), response.status)
-  }
-
-  if (response.status === 204) {
-    return undefined as T
-  }
-
-  return (await response.json()) as T
+  return readEnvelope<T>(response)
 }

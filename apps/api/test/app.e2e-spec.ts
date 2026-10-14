@@ -1,29 +1,45 @@
-import { Test, TestingModule } from '@nestjs/testing';
-import { INestApplication } from '@nestjs/common';
-import request from 'supertest';
-import { App } from 'supertest/types';
-import { HealthModule } from './../src/health/health.module';
+import { api, closeDatabase, errorOf, resultOf } from './helpers';
 
-describe('Health (e2e)', () => {
-  let app: INestApplication<App>;
-
-  beforeEach(async () => {
-    const moduleFixture: TestingModule = await Test.createTestingModule({
-      imports: [HealthModule],
-    }).compile();
-
-    app = moduleFixture.createNestApplication();
-    await app.init();
+describe('Response envelope (e2e)', () => {
+  afterAll(async () => {
+    await closeDatabase();
   });
 
-  it('/health (GET)', () => {
-    return request(app.getHttpServer()).get('/health').expect(200).expect({
-      ok: true,
-      service: 'kibo-api',
+  it('wraps a successful response', async () => {
+    const response = await api().get('/health').expect(200);
+
+    expect(resultOf(response.body)).toEqual({ ok: true, service: 'kibo-api' });
+  });
+
+  it('wraps a missing session as 401 UNAUTHENTICATED', async () => {
+    const response = await api().get('/bots').expect(401);
+
+    expect(errorOf(response.body).code).toBe('UNAUTHENTICATED');
+  });
+
+  it('wraps an unknown route as 404 NOT_FOUND with a readable message', async () => {
+    const response = await api().get('/no-such-route').expect(404);
+
+    expect(errorOf(response.body)).toEqual({
+      code: 'NOT_FOUND',
+      message: 'That page or item doesn’t exist.',
+      details: null,
     });
   });
 
-  afterEach(async () => {
-    await app.close();
+  it('returns a null session as a success with a null result', async () => {
+    const response = await api().get('/auth/session').expect(200);
+
+    expect(resultOf(response.body)).toBeNull();
+  });
+
+  it('rejects malformed JSON with 400', async () => {
+    const response = await api()
+      .post('/bots')
+      .set('Content-Type', 'application/json')
+      .send('{"name":')
+      .expect(400);
+
+    expect(errorOf(response.body).code).toBe('REQUEST_FAILED');
   });
 });

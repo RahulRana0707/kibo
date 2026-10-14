@@ -1,9 +1,8 @@
 import 'dotenv/config';
 import { NestFactory } from '@nestjs/core';
-import express, { type Request, type Response } from 'express';
 
 import { AppModule } from './app.module';
-import { AuthService } from './auth/auth.service';
+import { configureApp } from './app.setup';
 import { env } from './config/env';
 
 async function bootstrap() {
@@ -11,19 +10,7 @@ async function bootstrap() {
     bodyParser: false,
   });
 
-  app.enableCors({
-    origin: env.WEB_URL,
-    credentials: true,
-  });
-
-  const authHandler = app.get(AuthService).getNodeHandler();
-
-  app.use('/api/auth', (request: Request, response: Response) => {
-    void authHandler(request, response);
-  });
-
-  app.use(express.json());
-  app.use(express.urlencoded({ extended: true }));
+  configureApp(app);
 
   await app.listen(env.PORT);
 }

@@ -2,7 +2,7 @@ import "server-only"
 
 import { headers } from "next/headers"
 
-import { ApiError } from "@/lib/api/error"
+import { readEnvelope } from "@/lib/api/envelope"
 
 const API_URL = process.env.API_URL ?? "http://localhost:8090"
 
@@ -10,24 +10,7 @@ function createUrl(path: string) {
   return new URL(path, API_URL).toString()
 }
 
-async function getErrorMessage(response: Response) {
-  try {
-    const body = (await response.json()) as { message?: unknown }
-
-    if (typeof body.message === "string") {
-      return body.message
-    }
-
-    if (Array.isArray(body.message)) {
-      return body.message.join(", ")
-    }
-  } catch {
-    // Use the status text below when the API does not return JSON.
-  }
-
-  return response.statusText || "Request failed"
-}
-
+/** Calls the API from the server with the visitor's cookie; returns `result`. */
 export async function apiServerFetch<T>(
   path: string,
   init: RequestInit = {}
@@ -39,17 +22,10 @@ export async function apiServerFetch<T>(
     cache: "no-store",
     headers: {
       ...(cookie ? { cookie } : {}),
+      ...(init.body ? { "content-type": "application/json" } : {}),
       ...init.headers,
     },
   })
 
-  if (!response.ok) {
-    throw new ApiError(await getErrorMessage(response), response.status)
-  }
-
-  if (response.status === 204) {
-    return undefined as T
-  }
-
-  return (await response.json()) as T
+  return readEnvelope<T>(response)
 }
