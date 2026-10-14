@@ -2,6 +2,7 @@ import type { Metadata } from "next"
 import { DM_Mono, DM_Sans } from "next/font/google"
 
 import "@kibo/ui/globals.css"
+import { QueryProvider } from "@/components/query-provider"
 import { ThemeProvider } from "@/components/theme-provider"
 import { Toaster } from "@kibo/ui/components/sonner"
 import { TooltipProvider } from "@kibo/ui/components/tooltip"
@@ -64,10 +65,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <TooltipProvider>
-            {children}
-            <Toaster />
-          </TooltipProvider>
+          <QueryProvider>
+            <TooltipProvider>
+              {children}
+              <Toaster />
+            </TooltipProvider>
+          </QueryProvider>
         </ThemeProvider>
       </body>
     </html>

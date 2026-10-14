@@ -54,7 +54,7 @@ export const appNavigation: { title?: string; items: AppNavItem[] }[] = [
   {
     title: "Bot",
     items: [
-      { label: "Bots", href: "/bots", icon: BotIcon, ready: false },
+      { label: "Bots", href: "/bots", icon: BotIcon, ready: true },
       { label: "Knowledge", href: "/knowledge", icon: BookOpenIcon, ready: false },
       {
         label: "Moderation",

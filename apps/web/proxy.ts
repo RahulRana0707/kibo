@@ -29,7 +29,7 @@ async function getProxySession(request: NextRequest) {
 export async function proxy(request: NextRequest) {
   const session = await getProxySession(request)
 
-  const protectedRoutes = ["/dashboard"]
+  const protectedRoutes = ["/dashboard", "/bots"]
   const isProtectedRoute = protectedRoutes.some((route) =>
     request.nextUrl.pathname.startsWith(route)
   )
@@ -58,5 +58,5 @@ export async function proxy(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/signup"],
+  matcher: ["/dashboard/:path*", "/bots/:path*", "/login", "/signup"],
 }

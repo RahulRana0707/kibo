@@ -471,7 +471,7 @@ lib/query/get-query-client.ts, keys.ts, bots.ts, workspace.ts
 | Chunk | Branch | State |
 |---|---|---|
 | 1 | `feat/bots-data` | Done, in review |
-| 2 | `feat/bots-list` | Not started |
+| 2 | `feat/bots-list` | Done, in review |
 | 3 | `feat/bots-create` | Not started |
 | 4 | `feat/bots-settings` | Not started |
 | 5 | `feat/bots-shell` | Not started |
@@ -491,3 +491,14 @@ Built as planned. Five things differ from the plan:
 - **`@kibo/contracts` builds to CommonJS in `dist/`.** Both Nest and Next import that build, so it isn't in `transpilePackages`. Turbo builds it before `dev`, `typecheck` and `test`.
 - **The workspace is resolved by a guard.** `WorkspaceGuard`, placed after `SessionGuard`, puts the workspace on the request, and `@CurrentWorkspace()` reads it. A decorator alone can't run async lookups.
 
+
+### Chunk 2 notes (Oct 14, 2026)
+
+Built as planned, with these differences:
+
+- **Create bot and Browse templates show Soon.** `/bots/new` and `/bots/templates` arrive in chunk 3, which turns these buttons, the empty state's template cards and the phone menu into links.
+- **Bot names don't link yet.** The bot page (`/bots/[botId]`) arrives in chunk 4. For the same reason the row has no Test or Finish setup action; a paused bot shows Resume and an archived one Restore.
+- **Filters change the URL without a server round trip.** The page prefetches the list for the URL it was opened with. After that, the chips and search update the address with `history.replaceState` and read from the TanStack cache, keeping the previous list on screen while the next one loads.
+- **Replies, answer rate and platforms show "—" and "None yet".** They fill in when streams (Module 4) exist.
+- **Mutation hooks arrive with their screens.** Chunk 2 adds `useBotAction` (pause, resume, archive, restore, duplicate, set as default) and `useDeleteBot`. Create, update and escalation rules come with chunks 3 and 4.
+- **`lib/query/query-client.ts` holds the shared defaults.** The browser provider and the per-request server client (`get-query-client.ts`) both build from it. `lib/query/fetcher.ts` types the fetcher that query options take, so the same options run on the server with `apiServerFetch`.
