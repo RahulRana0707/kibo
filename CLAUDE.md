@@ -12,6 +12,11 @@
 - `gh` commands: run them as RahulRana0707 without switching the active account, by prefixing `GH_TOKEN="$(gh auth token --user RahulRana0707)"`.
 - Never add a Claude or Anthropic co-author or attribution line to commit messages or PR descriptions.
 
+# Local servers
+
+- Fixed ports: the web app on **3050** (`next dev --port 3050`) and the API on **8090** (`PORT` in `apps/api/.env`). The database is on 5435 (below).
+- Start order: `pnpm db:up`, then `pnpm dev` in `apps/api`, then `pnpm dev` in `apps/web`.
+
 # Local database
 
 - Postgres 17 runs in Docker (`docker-compose.yml`, container `kibo-postgres`, host port 5435, user, password and database all `kibo`). Don't use Homebrew Postgres for Kibo.
