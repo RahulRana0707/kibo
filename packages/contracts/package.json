@@ -1,0 +1,30 @@
+{
+  "name": "@kibo/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Request and response contracts shared by the Kibo API and web app.",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json --watch --preserveWatchOutput",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "peerDependencies": {
+    "zod": "^4.4.3"
+  },
+  "devDependencies": {
+    "@kibo/typescript-config": "workspace:*",
+    "typescript": "^5",
+    "vitest": "^3.2.4",
+    "zod": "^4.4.3"
+  }
+}
