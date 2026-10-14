@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { prismaAdapter } from 'better-auth/adapters/prisma';
 import { betterAuth } from 'better-auth';
 import { fromNodeHeaders, toNodeHandler } from 'better-auth/node';
@@ -6,6 +6,7 @@ import type { IncomingHttpHeaders } from 'node:http';
 
 import { env } from '../config/env';
 import { PrismaService } from '../prisma/prisma.service';
+import { ensurePersonalWorkspace } from '../workspaces/personal-workspace';
 
 type AuthSession = {
   user: {
@@ -26,6 +27,7 @@ type AuthApi = {
 @Injectable()
 export class AuthService {
   private readonly auth: AuthApi;
+  private readonly logger = new Logger(AuthService.name);
 
   constructor(private readonly prisma: PrismaService) {
     this.auth = betterAuth({
@@ -45,6 +47,24 @@ export class AuthService {
       basePath: '/api/auth',
       secret: env.BETTER_AUTH_SECRET,
       trustedOrigins: [env.WEB_URL, env.API_URL],
+      databaseHooks: {
+        user: {
+          create: {
+            // Every account starts with a personal workspace. If this fails the
+            // sign-up still succeeds: WorkspaceGuard creates it on first use.
+            after: async (user) => {
+              try {
+                await ensurePersonalWorkspace(this.prisma, user);
+              } catch (error) {
+                this.logger.error(
+                  `Couldn't create a personal workspace for ${user.id}`,
+                  error instanceof Error ? error.stack : String(error),
+                );
+              }
+            },
+          },
+        },
+      },
     });
   }
 
