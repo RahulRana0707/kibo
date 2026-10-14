@@ -1,6 +1,6 @@
 import { ApiError } from "@/lib/api/error"
 
-const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:4000"
+const API_URL = process.env.NEXT_PUBLIC_API_URL ?? "http://localhost:8090"
 
 function createUrl(path: string) {
   return new URL(path, API_URL).toString()
